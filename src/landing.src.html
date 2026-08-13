@@ -1,0 +1,900 @@
+<title>KOSH KUSE — первый дом заботы о кошке</title>
+
+<style>
+  /* Values Sans — фирменный гротеск. Пока файлов нет, стек ниже подхватывает
+     шрифт, если он установлен у зрителя, иначе откатывается на системный.
+     Когда появятся лицензированные .woff2, положить их в fonts/ и раскомментировать: */
+  /*
+  @font-face{font-family:"Values Sans";src:url("fonts/ValuesSans-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:"Values Sans";src:url("fonts/ValuesSans-Medium.woff2")  format("woff2");font-weight:500;font-style:normal;font-display:swap}
+  @font-face{font-family:"Values Sans";src:url("fonts/ValuesSans-Bold.woff2")    format("woff2");font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Values Sans";src:url("fonts/ValuesSans-Black.woff2")   format("woff2");font-weight:800;font-style:normal;font-display:swap}
+  */
+  :root{
+    /* Палитра бренда — строго монохром + один акцент */
+    --black:#000000;
+    --ink-1:#0B0B0C;
+    --ink-2:#1A1A1D;
+    --white:#FFFFFF;
+    --stone:#E5E5E6;
+    --stone-soft:#F2F2F3;
+    --rose:#FFE2E9;
+    --grey-on-dark:#9A9A9C;
+    --grey-on-light:#5C5C5F;
+    --hair-dark:rgba(255,255,255,.14);
+    --hair-light:rgba(0,0,0,.12);
+
+    --serif:ui-serif,"New York","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:"Values Sans","ValuesSans",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+    --pad:clamp(1.25rem,5vw,4rem);
+    --band:clamp(4.5rem,9vw,8.5rem);
+    --maxw:1240px;
+    --ease:cubic-bezier(.2,.6,.2,1);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  body{
+    margin:0;
+    background:var(--black);
+    color:var(--white);
+    font-family:var(--sans);
+    font-size:clamp(1rem,.96rem + .2vw,1.075rem);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{max-width:100%;height:auto;display:block}
+  a{color:inherit}
+  /* якоря не должны уезжать под липкую шапку */
+  section[id]{scroll-margin-top:4.5rem}
+
+  /* ─────────── типографика ─────────── */
+  .label{
+    font-family:var(--sans);
+    font-size:.7rem;
+    font-weight:600;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--grey-on-dark);
+    margin:0;
+  }
+  .band--light .label,.band--stone .label{color:var(--grey-on-light)}
+
+  h1,h2,h3{margin:0;font-weight:400;text-wrap:balance}
+
+  .h-display{
+    font-family:var(--serif);
+    font-size:clamp(2.15rem,1.1rem + 3.9vw,3.95rem);
+    line-height:1.08;
+    letter-spacing:-.02em;
+  }
+  .h-section{
+    font-family:var(--serif);
+    font-size:clamp(1.9rem,1rem + 3.4vw,3.35rem);
+    line-height:1.1;
+    letter-spacing:-.015em;
+  }
+  .h-card{
+    font-family:var(--sans);
+    font-size:1.0625rem;
+    font-weight:700;
+    letter-spacing:.005em;
+  }
+  .lede{
+    font-size:clamp(1.05rem,.98rem + .45vw,1.3rem);
+    line-height:1.55;
+    color:var(--grey-on-dark);
+    max-width:34em;
+    margin:0;
+  }
+  .band--light .lede,.band--stone .lede{color:var(--grey-on-light)}
+  .prose{max-width:60ch;margin:0}
+
+  /* ─────────── каркас ─────────── */
+  .band{padding-block:var(--band);padding-inline:var(--pad)}
+  .band--dark{background:var(--black);color:var(--white)}
+  .band--light{background:var(--white);color:var(--black)}
+  .band--stone{background:var(--stone-soft);color:var(--black)}
+  .wrap{max-width:var(--maxw);margin-inline:auto}
+  .stack{display:flex;flex-direction:column;gap:clamp(1.75rem,3vw,3rem)}
+  .stack--tight{gap:1rem}
+
+  /* ─────────── шапка ─────────── */
+  .top{
+    position:sticky;top:0;z-index:50;
+    background:rgba(0,0,0,.82);
+    backdrop-filter:saturate(140%) blur(14px);
+    -webkit-backdrop-filter:saturate(140%) blur(14px);
+    border-bottom:1px solid var(--hair-dark);
+    color:var(--white);
+  }
+  .top__in{
+    max-width:var(--maxw);margin-inline:auto;
+    padding:.95rem var(--pad);
+    display:flex;align-items:center;gap:1.5rem;
+  }
+  .mark{
+    font-weight:800;font-size:.9rem;letter-spacing:.24em;
+    text-decoration:none;white-space:nowrap;
+  }
+  .top nav{margin-left:auto;display:flex;align-items:center;gap:1.75rem}
+  .top nav a{
+    font-size:.82rem;color:var(--grey-on-dark);text-decoration:none;
+    transition:color .25s var(--ease);
+  }
+  .top nav a:hover,.top nav a:focus-visible{color:var(--white)}
+  @media (max-width:820px){.top nav a:not(.btn){display:none}}
+
+  /* ─────────── кнопки ─────────── */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:.5rem;
+    font-family:var(--sans);font-size:.86rem;font-weight:600;letter-spacing:.02em;
+    padding:.78rem 1.4rem;border-radius:999px;
+    border:1px solid transparent;text-decoration:none;cursor:pointer;
+    transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease);
+  }
+  .btn--rose{background:var(--rose);color:var(--black)}
+  .btn--rose:hover{transform:translateY(-1px);background:#fff}
+  .btn--ghost-dark{background:transparent;color:var(--white);border-color:var(--hair-dark)}
+  .btn--ghost-dark:hover{border-color:var(--white)}
+  .btn--solid-dark{background:var(--black);color:var(--white)}
+  .btn--solid-dark:hover{transform:translateY(-1px);background:var(--ink-2)}
+  .btn--ghost-light{background:transparent;color:var(--black);border-color:var(--hair-light)}
+  .btn--ghost-light:hover{border-color:var(--black)}
+  :focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:4px}
+  .band--light :focus-visible,.band--stone :focus-visible{outline-color:#000}
+
+  /* ─────────── герой ─────────── */
+  .hero{
+    background:var(--black);
+    padding:clamp(3.5rem,7vw,6.5rem) var(--pad) 0;
+    overflow:hidden;
+  }
+  .hero__in{
+    max-width:var(--maxw);margin-inline:auto;
+    display:grid;gap:clamp(2.5rem,5vw,4.5rem);
+    grid-template-columns:minmax(0,1.05fr) minmax(0,.72fr);
+    align-items:end;
+  }
+  @media (max-width:900px){
+    .hero__in{grid-template-columns:1fr;align-items:start}
+  }
+  .hero__text{display:flex;flex-direction:column;gap:1.9rem;padding-bottom:clamp(3rem,6vw,5.5rem)}
+  .hero__eyebrow{display:flex;align-items:center;gap:.7rem}
+  .hero__eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--rose);flex:none}
+  .hero h1 em{font-style:normal;color:var(--rose)}
+  .hero__cta{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+  .hero__note{font-size:.82rem;color:var(--grey-on-dark);margin:0}
+  .hero__figure{position:relative;align-self:end}
+  .hero__figure img{
+    width:100%;filter:grayscale(1) contrast(1.02);
+  }
+  @media (max-width:900px){.hero__figure{max-width:26rem}}
+
+  /* ─────────── знамя движения ─────────── */
+  .flag{
+    background:var(--black);
+    padding:clamp(3rem,6vw,5.5rem) var(--pad) clamp(3.5rem,7vw,6rem);
+    border-top:1px solid var(--hair-dark);
+  }
+  .flag__type{
+    font-family:var(--sans);
+    font-weight:800;
+    font-size:clamp(2rem,11.1vw,9.4rem);
+    line-height:.94;
+    letter-spacing:-.035em;
+    margin:0 0 1.5rem;
+    display:flex;flex-wrap:wrap;gap:0 .28em;
+  }
+  .flag__type span:last-child{color:var(--rose)}
+  .flag__sub{
+    font-family:var(--serif);
+    font-size:clamp(1.05rem,.95rem + .7vw,1.55rem);
+    line-height:1.4;max-width:30em;color:var(--white);margin:0;
+  }
+
+  /* ─────────── манифест ─────────── */
+  .manifesto__in{
+    max-width:var(--maxw);margin-inline:auto;
+    display:grid;gap:clamp(2rem,5vw,4.5rem);
+    grid-template-columns:minmax(0,.34fr) minmax(0,1fr);
+    align-items:start;
+  }
+  @media (max-width:900px){.manifesto__in{grid-template-columns:1fr}}
+  .manifesto__body{
+    font-family:var(--serif);
+    font-size:clamp(1.15rem,1rem + .7vw,1.6rem);
+    line-height:1.5;
+    display:flex;flex-direction:column;gap:1.5rem;max-width:32em;
+  }
+  .manifesto__body p{margin:0}
+  .manifesto__body strong{font-weight:400;color:var(--rose)}
+  .manifesto__aside{display:flex;flex-direction:column;gap:1.5rem}
+  .manifesto__aside img{width:100%;max-width:15rem}
+
+  /* ─────────── три столпа ─────────── */
+  .pillars{
+    display:grid;gap:1.25rem;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  @media (max-width:900px){.pillars{grid-template-columns:1fr}}
+  .pillar{
+    border-radius:22px;padding:2rem 1.75rem;
+    display:flex;flex-direction:column;gap:.4rem;
+    background:var(--stone);color:var(--black);
+  }
+  .pillar--dark{background:var(--black);color:var(--white)}
+  .pillar p{margin:0;font-size:.95rem;color:var(--grey-on-light)}
+  .pillar--dark p{color:var(--grey-on-dark)}
+  .pillar__img{margin-top:1.75rem;display:flex;align-items:flex-end;justify-content:center;flex:1;min-height:15rem}
+  .pillar__img img{width:auto;max-width:100%;max-height:17rem}
+  .pillar--dark .pillar__img img{border-radius:10px}
+
+  /* ─────────── тарифы ─────────── */
+  .tiers{display:grid;gap:1.25rem;grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (max-width:820px){.tiers{grid-template-columns:1fr}}
+  .tier{
+    border-radius:22px;padding:clamp(1.6rem,3vw,2.4rem);
+    display:flex;flex-direction:column;gap:1.15rem;
+    background:var(--white);border:1px solid var(--hair-light);color:var(--black);
+  }
+  .tier--flag{background:var(--black);color:var(--white);border-color:var(--black);grid-column:span 2}
+  .tier--wide{grid-column:span 2}
+  @media (max-width:820px){.tier--flag,.tier--wide{grid-column:span 1}}
+  .tier__head{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap}
+  .tier__name{font-family:var(--serif);font-size:clamp(1.5rem,1.2rem + 1vw,2.1rem);line-height:1.1}
+  .pill{
+    font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    padding:.32rem .7rem;border-radius:999px;white-space:nowrap;
+    border:1px solid var(--hair-light);color:var(--grey-on-light);
+  }
+  .pill--open{background:var(--black);color:var(--white);border-color:var(--black)}
+  .pill--rose{background:var(--rose);color:var(--black);border-color:var(--rose)}
+  .tier--flag .pill{border-color:var(--hair-dark);color:var(--grey-on-dark)}
+  .tier--flag .pill--rose{background:var(--rose);color:var(--black);border-color:var(--rose)}
+  .tier__price{
+    font-family:var(--sans);font-weight:700;
+    font-size:clamp(1.7rem,1.3rem + 1.5vw,2.6rem);
+    letter-spacing:-.02em;font-variant-numeric:tabular-nums;
+    display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap;
+  }
+  .tier__price small{font-size:.9rem;font-weight:400;letter-spacing:0;color:var(--grey-on-light)}
+  .tier--flag .tier__price small{color:var(--grey-on-dark)}
+  .tier__desc{margin:0;color:var(--grey-on-light);max-width:44ch}
+  .tier--flag .tier__desc{color:var(--grey-on-dark);max-width:52ch}
+  .tier__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem;font-size:.93rem}
+  .tier--flag .tier__list,.tier--wide .tier__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem 2rem}
+  @media (max-width:700px){.tier--flag .tier__list,.tier--wide .tier__list{grid-template-columns:1fr}}
+  .tier__list li{display:flex;gap:.6rem;align-items:flex-start}
+  .tier__list li::before{content:"—";color:var(--grey-on-light);flex:none}
+  .tier--flag .tier__list li::before{content:"—";color:var(--rose)}
+  .tier__foot{margin-top:auto;padding-top:.5rem;display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+  .tier__wait{font-size:.85rem;color:var(--grey-on-light);margin:0;max-width:68ch}
+
+  /* ─────────── таблица ─────────── */
+  .tablewrap{overflow-x:auto;border:1px solid var(--hair-light);border-radius:18px;background:var(--white)}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:.9rem}
+  caption{text-align:left;padding:0 0 1rem;color:var(--grey-on-light);font-size:.9rem}
+  th,td{padding:.85rem 1rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--hair-light)}
+  thead th{
+    position:sticky;top:3.3rem;z-index:2;background:var(--white);
+    font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--grey-on-light);border-bottom:1px solid var(--black);
+  }
+  thead th:first-child{left:0;z-index:3}
+  thead th:first-child{text-align:left}
+  tbody th{
+    font-weight:400;color:var(--black);
+    position:sticky;left:0;background:var(--white);min-width:17rem;
+  }
+  td{text-align:center;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.no{color:#B0B0B3}
+  td.yes{font-weight:700}
+  td.ask{color:var(--grey-on-light);font-size:.85rem}
+  tr.group th{
+    background:var(--stone);color:var(--black);
+    font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  }
+  tr.group td{background:var(--stone)}
+  tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
+  .table-note{margin:1rem 0 0;font-size:.85rem;color:var(--grey-on-light);max-width:70ch}
+
+  /* ─────────── механика ─────────── */
+  .mech{display:grid;gap:1.25rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:900px){.mech{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:620px){.mech{grid-template-columns:1fr}}
+  .mech__card{
+    background:var(--white);border:1px solid var(--hair-light);border-radius:18px;
+    padding:1.5rem;display:flex;flex-direction:column;gap:.45rem;
+  }
+  .mech__card p{margin:0;font-size:.93rem;color:var(--grey-on-light)}
+  .mech__card--wide{grid-column:span 2;flex-direction:row;gap:1.5rem;align-items:center}
+  @media (max-width:620px){.mech__card--wide{grid-column:span 1;flex-direction:column;align-items:flex-start}}
+  .mech__card--wide img{width:10rem;flex:none;border-radius:12px}
+  .mech__card--wide div{display:flex;flex-direction:column;gap:.45rem}
+
+  /* ─────────── ритуал отчёта ─────────── */
+  .ritual__in{
+    max-width:var(--maxw);margin-inline:auto;
+    display:grid;gap:clamp(2.5rem,5vw,4.5rem);
+    grid-template-columns:minmax(0,1fr) minmax(0,.85fr);
+    align-items:center;
+  }
+  @media (max-width:900px){.ritual__in{grid-template-columns:1fr}}
+  .report{
+    background:var(--rose);color:var(--black);border-radius:22px;
+    padding:clamp(1.75rem,3vw,2.5rem);
+    display:flex;flex-direction:column;gap:1.25rem;
+    box-shadow:0 40px 90px -50px rgba(255,226,233,.5);
+  }
+  .report__top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+  .report__mark{font-weight:800;font-size:.72rem;letter-spacing:.24em}
+  .report__month{font-family:var(--serif);font-size:clamp(1.6rem,1.3rem + 1vw,2.2rem);line-height:1;margin:0}
+  .report__who{font-size:.85rem;color:rgba(0,0,0,.62);margin:0}
+  .report__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.65rem;font-size:.95rem}
+  .report__list li{display:flex;gap:.75rem;align-items:flex-start}
+  .report__list li::before{content:"✓";font-weight:700;flex:none}
+  .report__verdict{
+    font-family:var(--serif);font-size:1.25rem;line-height:1.35;
+    margin:0;padding-top:1.1rem;border-top:1px solid rgba(0,0,0,.18);
+  }
+
+  /* ─────────── доказательства ─────────── */
+  .proof{display:grid;gap:1.25rem 2.5rem;grid-template-columns:repeat(4,minmax(0,1fr))}
+  @media (max-width:900px){.proof{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:560px){.proof{grid-template-columns:1fr}}
+  .proof__item{display:flex;flex-direction:column;gap:.5rem;padding-top:1.1rem;border-top:1px solid var(--hair-light)}
+  .proof__item p{margin:0;font-size:.93rem;color:var(--grey-on-light)}
+
+  /* ─────────── клуб ─────────── */
+  .rituals{display:grid;gap:1.25rem;grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:900px){.rituals{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:620px){.rituals{grid-template-columns:1fr}}
+  .ritual-card{
+    border:1px solid var(--hair-dark);border-radius:18px;padding:1.5rem;
+    display:flex;flex-direction:column;gap:.45rem;background:var(--ink-1);
+  }
+  .ritual-card p{margin:0;font-size:.93rem;color:var(--grey-on-dark)}
+
+  /* ─────────── приглашение ─────────── */
+  .invite__in{
+    max-width:var(--maxw);margin-inline:auto;
+    display:grid;gap:clamp(2.5rem,5vw,4rem);
+    grid-template-columns:minmax(0,1fr) minmax(0,.9fr);
+    align-items:start;
+  }
+  @media (max-width:900px){.invite__in{grid-template-columns:1fr}}
+  form{display:flex;flex-direction:column;gap:1rem}
+  .field{display:flex;flex-direction:column;gap:.4rem}
+  .field label{font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--grey-on-dark)}
+  .field input,.field select{
+    font-family:var(--sans);font-size:1rem;color:var(--white);
+    background:transparent;border:0;border-bottom:1px solid var(--hair-dark);
+    padding:.7rem 0;border-radius:0;
+    transition:border-color .25s var(--ease);
+  }
+  .field input::placeholder{color:#57575A}
+  .field input:focus,.field select:focus{outline:none;border-bottom-color:var(--rose)}
+  .field select option{background:var(--ink-1);color:var(--white)}
+  .form__row{display:grid;gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (max-width:560px){.form__row{grid-template-columns:1fr}}
+  .form__foot{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:.5rem}
+  .form__fine{font-size:.78rem;color:var(--grey-on-dark);margin:0;max-width:34ch}
+  .done{
+    border:1px solid var(--rose);border-radius:18px;padding:1.5rem;
+    display:none;flex-direction:column;gap:.5rem;
+  }
+  .done.is-on{display:flex}
+  .done p{margin:0}
+  .done p:first-child{font-family:var(--serif);font-size:1.35rem}
+  .done p:last-child{color:var(--grey-on-dark);font-size:.93rem}
+  form.is-off{display:none}
+
+  /* ─────────── подвал ─────────── */
+  .foot{
+    background:var(--black);border-top:1px solid var(--hair-dark);
+    padding:3rem var(--pad);
+  }
+  .foot__in{
+    max-width:var(--maxw);margin-inline:auto;
+    display:flex;flex-wrap:wrap;gap:1.5rem 2.5rem;align-items:baseline;justify-content:space-between;
+  }
+  .foot__line{font-size:.82rem;color:var(--grey-on-dark);margin:0}
+  .foot__clm{font-weight:800;letter-spacing:.2em;font-size:.72rem}
+  .foot__clm span{color:var(--rose)}
+
+  /* ─────────── появление ─────────── */
+  .js-reveal .reveal{opacity:0;transform:translateY(16px)}
+  .js-reveal .reveal.is-in{
+    opacity:1;transform:none;
+    transition:opacity .85s var(--ease),transform .85s var(--ease);
+  }
+  @media (prefers-reduced-motion:reduce){
+    .js-reveal .reveal{opacity:1;transform:none}
+    .js-reveal .reveal.is-in{transition:none}
+  }
+</style>
+
+<header class="top">
+  <div class="top__in">
+    <a class="mark" href="#top">KOSH KUSE</a>
+    <nav>
+      <a href="#inside">Что входит</a>
+      <a href="#tiers">Тарифы</a>
+      <a href="#table">Сравнение</a>
+      <a href="#club">Клуб</a>
+      <a class="btn btn--rose" href="#invite">Оставить заявку</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ГЕРОЙ -->
+  <section class="hero">
+    <div class="hero__in">
+      <div class="hero__text">
+        <div class="hero__eyebrow">
+          <span class="dot"></span>
+          <p class="label">Первый дом заботы о кошке</p>
+        </div>
+        <h1 class="h-display">
+          Вы не обязаны разбираться в коллагене.<br>
+          Вы обязаны её любить.<br>
+          <em>Остальное — наша работа.</em>
+        </h1>
+        <p class="lede">
+          Рацион, вода, снеки, врачи, анализы и умные приборы — одной подпиской.
+          Мы берём на себя всё, что вы сделали бы сами, будь у вас время и знания ветеринара.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--rose" href="#tiers">Выбрать тариф</a>
+          <a class="btn btn--ghost-dark" href="#invite">Запросить приглашение</a>
+        </div>
+        <p class="hero__note">Знакомство — коробка на 14 порций, 3&nbsp;000&nbsp;₽. Если она не ела — вернём деньги.</p>
+      </div>
+      <figure class="hero__figure">
+        <img src="__IMG_HERO__" alt="Женщина в чёрной водолазке с белой кошкой на плече" width="562" height="1000">
+      </figure>
+    </div>
+  </section>
+
+  <!-- ЗНАМЯ ДВИЖЕНИЯ -->
+  <section class="flag reveal">
+    <div class="wrap">
+      <h2 class="flag__type"><span>CAT LIVES</span><span>MATTER</span></h2>
+      <p class="flag__sub">
+        Первая экосистема, создающая самый высокий стандарт заботы
+        четырёхлапому члену семьи.
+      </p>
+    </div>
+  </section>
+
+  <!-- МАНИФЕСТ -->
+  <section class="band band--dark manifesto">
+    <div class="manifesto__in">
+      <div class="manifesto__aside reveal">
+        <p class="label">Манифест</p>
+        <img src="__IMG_PAWS__" alt="Четыре кошачьи лапы на чёрном фоне" width="650" height="1000">
+      </div>
+      <div class="manifesto__body reveal">
+        <p>Кошки не умеют просить. Они не жалуются, не болеют напоказ, не требуют внимания, когда вам некогда. Они просто ждут. Каждый день. Столько, сколько нужно.</p>
+        <p>Мы считаем, что такая любовь заслуживает ответа. Не «корма». Не «товаров для животных». <strong>Ответа.</strong></p>
+        <p>Поэтому мы собрали первую систему заботы, в которой продумано всё: еда, вода, врачи, анализы и самые продвинутые приборы — всё, что вы сделали бы сами, если бы у вас было время и знания.</p>
+        <p>Это самая дорогая забота о кошке в стране. Потому что она — не питомец. Она — член семьи.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЧТО ВХОДИТ -->
+  <section class="band band--light" id="inside">
+    <div class="wrap stack">
+      <div class="stack stack--tight reveal">
+        <p class="label">Что входит</p>
+        <h2 class="h-section">Самый высокий стандарт заботы —<br>по одной кнопке</h2>
+      </div>
+      <div class="pillars reveal">
+        <article class="pillar">
+          <h3 class="h-card">Полный рацион по подписке</h3>
+          <p>Еда · Вода · Снеки · Добавки</p>
+          <div class="pillar__img"><img src="__IMG_RATION__" alt="Бутылка функциональной воды, пауч рациона, банка и снеки" width="534" height="676"></div>
+        </article>
+        <article class="pillar pillar--dark">
+          <h3 class="h-card">Ветеринарный уход</h3>
+          <p>Врачи · Анализы · Консультации</p>
+          <div class="pillar__img"><img src="__IMG_VET__" alt="Кабинет ветеринарной клиники, кошка на смотровом столе" width="644" height="870"></div>
+        </article>
+        <article class="pillar">
+          <h3 class="h-card">Приборы</h3>
+          <p>Ошейник · Лоток · Кормушка · Приложение</p>
+          <div class="pillar__img"><img src="__IMG_GADGETS__" alt="Умная кормушка, лоток, телефон с приложением и ошейник" width="660" height="726"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ТАРИФЫ -->
+  <section class="band band--stone" id="tiers">
+    <div class="wrap stack">
+      <div class="stack stack--tight reveal">
+        <p class="label">Тарифы</p>
+        <h2 class="h-section">Три уровня дома — и вход в него</h2>
+        <p class="lede">Начать можно с одной коробки. «Дом» — то, ради чего всё построено. «Патронаж» открываем по мере того, как набираем именных кураторов.</p>
+      </div>
+
+      <div class="tiers reveal">
+
+        <article class="tier tier--flag">
+          <div class="tier__head">
+            <h3 class="tier__name">Дом</h3>
+            <span class="pill pill--rose">Флагман</span>
+            <span class="pill">Открыт</span>
+          </div>
+          <p class="tier__price">26 000 ₽ <small>в месяц</small></p>
+          <p class="tier__desc">Полная система: стол, здоровье и сервис. Медкарта, домашние чекапы, живой ветеринар и страховка — всё в одной подписке.</p>
+          <ul class="tier__list">
+            <li>Рацион под кошку, пересчёт раз в квартал</li>
+            <li>Функциональная вода и вечерние снеки</li>
+            <li>Полная медкарта: анализы, динамика, история</li>
+            <li>Домашний чекап дважды в год, без переноски</li>
+            <li>Живой ветеринар в чате, ответ до часа</li>
+            <li>Индикаторы здоровья в лоток с разбором врача</li>
+            <li>Зоопсихолог по поводам</li>
+            <li>Страховка для кошки</li>
+          </ul>
+          <div class="tier__foot">
+            <a class="btn btn--rose" href="#invite">Оформить «Дом»</a>
+            <a class="btn btn--ghost-dark" href="#table">Сравнить тарифы</a>
+          </div>
+        </article>
+
+        <article class="tier">
+          <div class="tier__head">
+            <h3 class="tier__name">Знакомство</h3>
+            <span class="pill pill--open">Вход</span>
+          </div>
+          <p class="tier__price">3 000 ₽ <small>разовая коробка</small></p>
+          <p class="tier__desc">Четырнадцать порций, функциональная вода и инструкция плавного перехода на семь дней. Чек-ин на десятый день, первая коробка подписки — через четырнадцать.</p>
+          <ul class="tier__list">
+            <li>Рацион на две недели</li>
+            <li>Профиль кошки в приложении</li>
+            <li>AI-консьерж круглосуточно</li>
+            <li>Вернём деньги, если она не ела</li>
+          </ul>
+          <div class="tier__foot">
+            <a class="btn btn--solid-dark" href="#invite">Начать знакомство</a>
+          </div>
+        </article>
+
+        <article class="tier">
+          <div class="tier__head">
+            <h3 class="tier__name">Стол</h3>
+            <span class="pill">По приглашению</span>
+          </div>
+          <p class="tier__price">19 000 ₽ <small>в месяц</small></p>
+          <p class="tier__desc">Всё про еду и ритуал: рацион, вода, снеки, календарь обработок и прививок. Вход в клуб и два приглашения каждый месяц.</p>
+          <ul class="tier__list">
+            <li>Рацион, вода, вечерние снеки</li>
+            <li>Календарь невидимой заботы</li>
+            <li>Базовый ежемесячный отчёт</li>
+            <li>Доступ в Community и два приглашения в месяц</li>
+          </ul>
+          <div class="tier__foot">
+            <a class="btn btn--ghost-light" href="#invite">Запросить приглашение</a>
+          </div>
+        </article>
+
+        <article class="tier tier--wide">
+          <div class="tier__head">
+            <h3 class="tier__name">Патронаж</h3>
+            <span class="pill">Только по приглашению</span>
+          </div>
+          <p class="tier__price">46 000 ₽ <small>в месяц</small></p>
+          <p class="tier__desc">Именной куратор-ветеринар, который ведёт вашу кошку. Расширенные чекапы четыре раза в год, ответ за тридцать минут, приоритет в партнёрских клиниках.</p>
+          <ul class="tier__list">
+            <li>Именной куратор-ветеринар</li>
+            <li>Чекап четыре раза в год, расширенная панель</li>
+            <li>Зоопсихолог без лимита, приоритет</li>
+            <li>Отчёт с личным вердиктом куратора</li>
+          </ul>
+          <div class="tier__foot">
+            <a class="btn btn--ghost-light" href="#invite">Встать в лист ожидания</a>
+          </div>
+          <p class="tier__wait">Только по приглашению. Один куратор ведёт не больше сорока кошек — поэтому мы открываем места по мере того, как растёт врачебная команда.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ТАБЛИЦА -->
+  <section class="band band--light" id="table">
+    <div class="wrap stack">
+      <div class="stack stack--tight reveal">
+        <p class="label">Сравнение</p>
+        <h2 class="h-section">Что входит в каждый тариф</h2>
+      </div>
+      <div class="reveal">
+        <div class="tablewrap">
+          <table>
+            <caption class="visually-hidden-caption"></caption>
+            <thead>
+              <tr>
+                <th scope="col">Фича</th>
+                <th scope="col">Знакомство</th>
+                <th scope="col">Стол</th>
+                <th scope="col">Дом</th>
+                <th scope="col">Патронаж</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group"><th scope="rowgroup">Рацион и стол</th><td colspan="4"></td></tr>
+              <tr><th scope="row">Рацион под кошку, пересчёт раз в квартал</th><td>14 порций</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Упаковка и доставка</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Инструкция плавного перехода, 7 дней</th><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><th scope="row">Возврат денег, если она не ела</th><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><th scope="row">Функциональная вода: гидратация, профилактика МКБ</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Вечерние снеки — ритуал встречи</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Персональные добавки: шерсть, суставы, возраст</th><td class="ask">по запросу</td><td class="ask">по запросу</td><td class="ask">по запросу</td><td class="ask">по запросу</td></tr>
+              <tr><th scope="row">Лимитированный подарок дома дважды в год</th><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+
+              <tr class="group"><th scope="rowgroup">Здоровье</th><td colspan="4"></td></tr>
+              <tr><th scope="row">Календарь невидимой заботы: обработки и прививки вовремя</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Профиль кошки в приложении</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Полная медкарта: анализы, динамика, вся история</th><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Индикаторы здоровья в лоток, разбор врача</th><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Домашний чекап: анализы без переноски</th><td class="no">—</td><td class="no">—</td><td class="yes">2 раза в год</td><td class="yes">4 раза · расширенная панель</td></tr>
+              <tr><th scope="row">Именной куратор-ветеринар</th><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+
+              <tr class="group"><th scope="rowgroup">Сервис</th><td colspan="4"></td></tr>
+              <tr><th scope="row">AI-консьерж круглосуточно</th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Живой ветеринар: чат и телемедицина</th><td class="no">—</td><td class="no">—</td><td class="yes">ответ до 1 часа</td><td class="yes">ответ до 30 минут</td></tr>
+              <tr><th scope="row">Зоопсихолог</th><td class="no">—</td><td class="no">—</td><td class="yes">по поводам</td><td class="yes">без лимита · приоритет</td></tr>
+              <tr><th scope="row">Приоритет в партнёрских клиниках, сопровождение</th><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Ежемесячный отчёт</th><td class="no">—</td><td class="yes">базовый</td><td class="yes">расширенный</td><td class="yes">+ вердикт куратора</td></tr>
+              <tr><th scope="row">Страховка для кошки</th><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Доступ в Community</th><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><th scope="row">Приглашения в клуб</th><td class="no">—</td><td class="yes">2 в месяц</td><td class="yes">2 в месяц</td><td class="yes">2 в месяц</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          По запросу, отдельно от подписки: разовый домашний чекап — 8&nbsp;900&nbsp;₽, сессия зоопсихолога — 4&nbsp;900&nbsp;₽,
+          месяц персональных добавок — 1&nbsp;900&nbsp;₽.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- МЕХАНИКА -->
+  <section class="band band--stone">
+    <div class="wrap stack">
+      <div class="stack stack--tight reveal">
+        <p class="label">Как устроена подписка</p>
+        <h2 class="h-section">Ничего, о чём нужно помнить</h2>
+      </div>
+      <div class="mech reveal">
+        <article class="mech__card">
+          <h3 class="h-card">Пауза, пропуск, смена рецепта</h3>
+          <p>В два клика, в приложении. Уезжаете — ставите на паузу. Не подошёл рецепт — меняете.</p>
+        </article>
+        <article class="mech__card">
+          <h3 class="h-card">Отгрузки</h3>
+          <p>Один или два раза в месяц — как удобнее. Курьер приезжает в выбранное окно.</p>
+        </article>
+        <article class="mech__card">
+          <h3 class="h-card">Продление</h3>
+          <p>Напоминание за четыре дня, списание за два. Никаких неожиданностей в выписке.</p>
+        </article>
+        <article class="mech__card">
+          <h3 class="h-card">Вторая кошка</h3>
+          <p>12&nbsp;000&nbsp;₽ в месяц. Сервис не удваивается — доплата только за стол.</p>
+        </article>
+        <article class="mech__card">
+          <h3 class="h-card">Год вперёд</h3>
+          <p>Тринадцатый месяц в подарок. Это не скидка — это жест дома.</p>
+        </article>
+        <article class="mech__card mech__card--wide">
+          <img src="__IMG_PACK__" alt="Пауч рациона KOSH KUSE" width="801" height="1000">
+          <div>
+            <h3 class="h-card">Коробка</h3>
+            <p>Тактильность, вес, тишина. Коробка складывается в домик, а ленту она утащит в первые пять минут. Доставка — это визит, а не пакет из магазина.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- РИТУАЛ ОТЧЁТА -->
+  <section class="band band--dark">
+    <div class="ritual__in">
+      <div class="stack stack--tight reveal">
+        <p class="label">Фирменный жест</p>
+        <h2 class="h-section">Раз в месяц — короткий отчёт</h2>
+        <p class="lede">
+          Не сводка данных, а ответ на единственный вопрос, который вы себе задаёте.
+          С именем, фотографией и подписью врача.
+        </p>
+      </div>
+      <div class="report reveal">
+        <div class="report__top">
+          <span class="report__mark">KOSH KUSE</span>
+          <span class="report__mark">2027</span>
+        </div>
+        <div>
+          <h3 class="report__month">Февраль</h3>
+          <p class="report__who">Филипп, 4 года · дом Евы</p>
+        </div>
+        <ul class="report__list">
+          <li>Рацион пересчитан по весу: 4,2 кг, норма</li>
+          <li>Обработка от паразитов — вовремя</li>
+          <li>Анализы: без отклонений, динамика ровная</li>
+          <li>Вода: 94% от суточной нормы</li>
+          <li>Шерсть на расчёске — меньше, чем в декабре</li>
+        </ul>
+        <p class="report__verdict">Всё в порядке. Вы — хорошая мама.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ДОКАЗАТЕЛЬСТВА -->
+  <section class="band band--light">
+    <div class="wrap stack">
+      <div class="stack stack--tight reveal">
+        <p class="label">Во что здесь можно верить</p>
+        <h2 class="h-section">Доказательства носят как часы</h2>
+      </div>
+      <div class="proof reveal">
+        <div class="proof__item">
+          <h3 class="h-card">Свой траулер</h3>
+          <p>Рыба конкретного улова. Партия ограничена тем, что поднял на борт один рейс.</p>
+        </div>
+        <div class="proof__item">
+          <h3 class="h-card">Технологи с именами</h3>
+          <p>Кандидатские, публикации, научный совет. Каждый рецепт подписан человеком.</p>
+        </div>
+        <div class="proof__item">
+          <h3 class="h-card">Результат за две недели</h3>
+          <p>Шерсть на расчёске и анализы до и после — то, что вы проверите сами.</p>
+        </div>
+        <div class="proof__item">
+          <h3 class="h-card">Тридцать кошек до запуска</h3>
+          <p>Первая партия прошла через дневники, замеры и анализы, прежде чем мы открыли двери.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КЛУБ -->
+  <section class="band band--dark" id="club">
+    <div class="wrap stack">
+      <div class="stack stack--tight reveal">
+        <p class="label">Клуб</p>
+        <h2 class="h-section">Мы не продаём — мы приглашаем</h2>
+        <p class="lede">
+          Первую тысячу мы выращиваем, а не покупаем: нетворк, ужины, рекомендации.
+          Закрытость — не ограничение, а способ остаться домом, а не магазином.
+        </p>
+      </div>
+      <div class="rituals reveal">
+        <article class="ritual-card">
+          <h3 class="h-card">Ужины раз в месяц</h3>
+          <p>В «Рыбе моей» — такт сердца клуба.</p>
+        </article>
+        <article class="ritual-card">
+          <h3 class="h-card">Сопровождение</h3>
+          <p>Зумы, чаты, личные касания. Мы вас не отпускаем.</p>
+        </article>
+        <article class="ritual-card">
+          <h3 class="h-card">Кот-отель на выходные</h3>
+          <p>Кошки заселяются в отель, вы едете в спа.</p>
+        </article>
+        <article class="ritual-card">
+          <h3 class="h-card">Фотосессии-события</h3>
+          <p>Чёрные кошки — белые платья.</p>
+        </article>
+        <article class="ritual-card">
+          <h3 class="h-card">Выставка</h3>
+          <p>Стенд для своих и лекция о философии дома.</p>
+        </article>
+        <article class="ritual-card">
+          <h3 class="h-card">Закрытый онлайн-дом</h3>
+          <p>Место, где ядро показывает своих кошек.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРИГЛАШЕНИЕ -->
+  <section class="band band--dark" id="invite" style="border-top:1px solid var(--hair-dark)">
+    <div class="invite__in">
+      <div class="stack stack--tight reveal">
+        <p class="label">Заявка</p>
+        <h2 class="h-section">Вход — по приглашению</h2>
+        <p class="lede">
+          «Дом» открыт: оставьте контакт, и мы свяжемся в течение дня.
+          «Стол» и «Патронаж» — по приглашению и листу ожидания.
+        </p>
+      </div>
+
+      <div class="reveal">
+        <form id="waitlist" novalidate>
+          <div class="form__row">
+            <div class="field">
+              <label for="f-name">Как вас зовут</label>
+              <input id="f-name" name="name" type="text" placeholder="Ева" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="f-cat">Как зовут её</label>
+              <input id="f-cat" name="cat" type="text" placeholder="Филипп" autocomplete="off">
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-contact">Telegram или почта</label>
+            <input id="f-contact" name="contact" type="text" placeholder="@eva или eva@mail.ru" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="f-tier">Что вам интересно</label>
+            <select id="f-tier" name="tier">
+              <option value="dom">Дом — 26 000 ₽ в месяц</option>
+              <option value="znakomstvo">Знакомство — коробка за 3 000 ₽</option>
+              <option value="stol">Стол — 19 000 ₽ в месяц</option>
+              <option value="patronage">Патронаж — лист ожидания</option>
+            </select>
+          </div>
+          <div class="form__foot">
+            <button class="btn btn--rose" type="submit">Оставить заявку</button>
+            <p class="form__fine">Мы напишем один раз. Рассылок у нас нет.</p>
+          </div>
+        </form>
+
+        <div class="done" id="done" role="status" aria-live="polite" tabindex="-1">
+          <p>Записали.</p>
+          <p>Мы напишем вам в течение дня — с одного адреса, без рассылок.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__in">
+    <p class="foot__line"><span class="mark">KOSH KUSE</span> · Москва, 2026</p>
+    <p class="foot__clm">CAT LIVES <span>MATTER</span></p>
+    <p class="foot__line">Это не корм.</p>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js-reveal');
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  var form = document.getElementById('waitlist');
+  var done = document.getElementById('done');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.querySelector('#f-name');
+    var contact = form.querySelector('#f-contact');
+    if (!name.value.trim()) { name.focus(); return; }
+    if (!contact.value.trim()) { contact.focus(); return; }
+    form.classList.add('is-off');
+    done.classList.add('is-on');
+    done.focus();
+  });
+</script>

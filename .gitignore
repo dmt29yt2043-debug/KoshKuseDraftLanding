@@ -1,0 +1,17 @@
+# секреты и доступы — в этом репозитории им не место (он публичный)
+.env
+.env.*
+*.pem
+*.key
+id_*
+*service-account*.json
+
+# шрифты под лицензией — не распространяем
+fonts/*.woff
+fonts/*.woff2
+fonts/*.otf
+fonts/*.ttf
+
+# служебное
+.DS_Store
+__pycache__/
