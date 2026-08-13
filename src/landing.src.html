@@ -48,6 +48,7 @@
   }
 
   img{max-width:100%;height:auto;display:block}
+  figure{margin:0}  /* браузер по умолчанию даёт figure поля 1em 40px */
   a{color:inherit}
   /* якоря не должны уезжать под липкую шапку */
   section[id]{scroll-margin-top:4.5rem}
@@ -111,10 +112,13 @@
     -webkit-backdrop-filter:saturate(140%) blur(14px);
     border-bottom:1px solid var(--hair-dark);
     color:var(--white);
+    padding-inline:var(--pad);
   }
+  /* поля — на .top, ограничение ширины — на .top__in: та же схема, что у .band + .wrap,
+     иначе логотип уезжает вправо на одну ширину поля относительно контента страницы */
   .top__in{
     max-width:var(--maxw);margin-inline:auto;
-    padding:.95rem var(--pad);
+    padding-block:.95rem;
     display:flex;align-items:center;gap:1.5rem;
   }
   .mark{
@@ -459,7 +463,7 @@
         <p class="hero__note">Знакомство — коробка на 14 порций, 3&nbsp;000&nbsp;₽. Если она не ела — вернём деньги.</p>
       </div>
       <figure class="hero__figure">
-        <img src="__IMG_HERO__" alt="Женщина в чёрной водолазке с белой кошкой на плече" width="562" height="1000">
+        <img src="__IMG_HERO__" alt="Женщина в чёрной водолазке с белой кошкой на плече" width="560" height="1000">
       </figure>
     </div>
   </section>
