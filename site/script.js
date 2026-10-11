@@ -348,7 +348,7 @@
 
   /* приложение: на узком экране — один «живой» телефон с вкладками; листается свайпом и сам, пока его не трогали */
   var phones=site.querySelector('.phones'),phTabs=$('ph-tabs'),phItems=[].slice.call(phones.querySelectorAll('.ph-item')),
-      phBtns=[].slice.call(phTabs.querySelectorAll('button')),phI=0,phLive=false,phTimer=null,phTouched=false,PH=['Рацион','Медкарта','Гаджеты'];
+      phBtns=[].slice.call(phTabs.querySelectorAll('button')),phI=0,phLive=false,phTimer=null,phTouched=false,PH=['Рацион','Медкарта','Устройства'];
   function phStop(){if(phTimer){clearInterval(phTimer);phTimer=null}}
   function phSet(i,user){
     if(user){phTouched=true;phStop()}
@@ -451,7 +451,7 @@
     need('name',!!val('name'),'Как к вам обращаться');
     need('city',!!val('city'),'В каком вы городе');
     if(val('method')==='phone'){var dg=val('phone').replace(/\D/g,'');need('phone',dg.length>=10&&dg.length<=15,'Проверьте номер — в нём 10–15 цифр')}
-    else{var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');need('telegram',/^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t),'Ник в Telegram — латиница, цифры и _, от 5 символов')}
+    else{var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');need('telegram',/^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t),'Имя в Telegram — латиница, цифры и _, от 5 символов')}
     need('cat_name',!!val('cat_name'),m?'Напишите, как его зовут':'Напишите, как её зовут');
     need('goal',!!val('goal'),'Выберите, что ближе всего');
     need('consent',val('consent')===true,'Без согласия мы не сможем с вами связаться');

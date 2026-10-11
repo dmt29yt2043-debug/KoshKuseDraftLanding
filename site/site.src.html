@@ -681,6 +681,8 @@ html.intro-on{background:var(--ivory)}
 .fo-card span{font-size:12.5px;line-height:1.4;color:var(--muted)}
 /* пометки для владельца: чего в источниках нет — видно на черновике, снимается перед запуском */
 mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;border-radius:4px;font-style:normal}
+mark.fo-draft{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:6px 10px;border-radius:999px}
+.qf-hint{font-size:12.5px;line-height:1.4;color:var(--muted)}
 /* ---------- V3: первый месяц — шаги ---------- */
 .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;counter-reset:st}
 .step{position:relative;padding:0 0 30px 44px}
@@ -843,7 +845,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
 </svg>
 
 
-<div class="bar"><span class="lbl">KOSH KUSÉ</span><div class="seg" id="seg"><button data-v="m" class="on">Мобильная · 390</button><button data-v="d">Десктоп · 1280</button><button data-v="o">Все экраны</button></div><span class="size" id="size"></span><label class="chk"><input type="checkbox" id="labels"> Метки блоков</label><a class="open-site" href="?site">Открыть как сайт</a></div>
+<div class="bar"><span class="lbl">KOSH KUSÉ</span><div class="seg" id="seg"><button type="button" data-v="m" class="on">Мобильная · 390</button><button type="button" data-v="d">Десктоп · 1280</button><button type="button" data-v="o">Все экраны</button></div><span class="size" id="size"></span><label class="chk"><input type="checkbox" id="labels"> Метки блоков</label><a class="open-site" href="?site">Открыть как сайт</a></div>
 <div class="overview" id="overview"></div>
 
 <div class="stage" id="stage"><div class="frame m" id="frame"><div class="site" id="site">
@@ -862,7 +864,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
     </nav>
     <div class="nav-right">
       <a href="#waitlist" class="btn btn-primary nav-cta">Подать заявку</a>
-      <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+      <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
     </div>
   </div>
   <div class="menu" id="menu">
@@ -887,7 +889,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   <div class="wrap hero-text">
     <span class="kicker hero-in">Набор первых участников · По приглашению</span>
     <h1 class="h-display"><span class="line"><span>Больше счастливых</span></span><span class="line"><span>лет вместе</span></span></h1>
-    <p class="sub hero-in d1">Владимир Перельман и команда KOSH KUSÉ собирают владельцев кошек, чтобы вместе создать систему заботы: натуральная еда, ветеринарный сервис и аксессуары — как одно целое. Вы любите. Мы помогаем со всем остальным.</p>
+    <p class="sub hero-in d1">Владимир Перельман и команда KOSH KUSÉ собирают владельцев кошек, чтобы вместе создать систему заботы, которая объединит рацион, ветеринарную поддержку и умные устройства. Вы любите. Мы помогаем со всем остальным.</p>
     <div class="hero-cta hero-in d2">
       <a href="#waitlist" class="btn btn-primary" id="hero-cta">Подать заявку <span class="arr" aria-hidden="true">→</span></a>
       <span class="scroll-cue" aria-hidden="true"><i></i>Листайте</span>
@@ -900,17 +902,17 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
 <section class="founders" id="founders" data-block="founders"><span class="blk" aria-hidden="true">01 · FOUNDERS</span>
   <div class="wrap fo-grid">
     <div class="fo-letter">
-      <span class="kicker rv">Приглашение основателей</span>
+      <span class="kicker rv">Приглашение основателя и команды</span>
       <h2 class="h-sec rv" style="--i:1">Мы зовём не покупателей, а соавторов</h2>
       <p class="rv" style="--i:2">Много лет моя работа — чтобы людям было хорошо за столом. Кошки ждут того же: настоящей еды и внимания к себе. KOSH KUSÉ — система заботы, которую мы собираем вместе с первыми участниками: рацион, ветеринарная поддержка и устройства, замечающие то, что мы можем пропустить.</p>
       <p class="rv" style="--i:3">Мы ищем тех, кто готов пробовать решения раньше других, говорить, что не так, и видеть, как их замечания меняют продукт. Это и есть клуб.</p>
       <div class="fo-sign rv" style="--i:4"><b>Владимир Перельман</b><span>основатель KOSH KUSÉ · ресторатор, основатель группы Perelman People</span></div>
-      <span class="fo-draft rv" style="--i:4">Черновик обращения · утверждают основатели</span>
+      <mark class="todo fo-draft rv" style="--i:4">черновик обращения · утверждают основатель и команда</mark>
     </div>
     <div class="fo-people rv" style="--i:2">
-      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Владимир Перельман</b><span>основатель · голос клуба<br><mark class="todo">фото с его кошкой</mark></span></div>
-      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Макс Снигирёв</b><span>сооснователь · основатель JAMI<br><mark class="todo">роль в проекте</mark></span></div>
-      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Вадим Устюжанин</b><span>сооснователь · ex-CEO JAMI, 7 лет с Mars<br><mark class="todo">роль в проекте</mark></span></div>
+      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Владимир Перельман</b><span>основатель · ресторатор<br><mark class="todo">роль в продукте и клубе</mark> · <mark class="todo">фото с его кошкой</mark></span></div>
+      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Макс Снигирёв</b><span>команда · основатель JAMI<br><mark class="todo">роль в проекте</mark></span></div>
+      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Вадим Устюжанин</b><span>команда · бывший CEO JAMI, 7 лет с Mars<br><mark class="todo">роль в проекте</mark></span></div>
     </div>
   </div>
 </section>
@@ -923,8 +925,8 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
       <h2 class="h-sec rv" style="--i:1">Любовь, которая не умеет просить, заслуживает ответа</h2>
     </div>
     <div class="clm-copy">
-      <p class="ink">Кошки не умеют просить. Они не жалуются, не болеют напоказ, не требуют внимания. Они просто ждут. Такая любовь заслуживает ответа — не «корма», не «товаров для животных», а ответа.</p>
-      <p class="ink">Мы собираем первую систему заботы, в которой продумано всё: еда, ветеринарный сервис, аксессуары. Это самая полная забота о кошке — потому что она не питомец, а член семьи.</p>
+      <p class="ink">Кошки не умеют просить. Они не жалуются, не болеют напоказ, не требуют внимания. Такая любовь заслуживает ответа — не «корма», не «товаров для животных», а ответа.</p>
+      <p class="ink">Мы собираем систему заботы, в которой продумано всё: еда, ветеринарный сервис, аксессуары. Это забота о кошке целиком — потому что она член семьи.</p>
     </div>
   </div>
   <div class="wrap"><p class="fn">* Cat Lives Matter (англ.) — «Жизни кошек важны»</p></div>
@@ -935,7 +937,8 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   <div class="wrap proof">
     <span class="kicker rv">Польза для неё и для вас</span>
     <h2 class="h-sec rv" style="--i:1">Мы убрали всё, что мешает</h2>
-    <p class="lede rv" style="--i:2">Продлить жизнь — значит убрать всё, что её сокращает. Плохая еда, обезвоживание, слишком поздно замеченная болезнь. Мы научились заботиться о своём здоровье. Нашим кошкам это нужно не меньше — а вам нужно спокойствие, что всё под присмотром.</p>
+    <p class="lede rv" style="--i:2">Продлить жизнь — значит убрать всё, что её сокращает: плохую еду, обезвоживание, незамеченные вовремя перемены. Нашим кошкам это нужно не меньше, чем нам, а вам — спокойствие, что всё под присмотром.</p>
+    <p class="sec-sub rv" style="--i:3">Так задумана система целиком. Что доступно первым участникам уже сейчас — в разделе «Что уже готово».</p>
   </div>
   <!-- пять пунктов карточкой-историей: фото на всю карточку, текст поверх; без JS — лента со свайпом -->
   <div class="hx" id="hx">
@@ -943,11 +946,11 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
       <div class="hx-card">
         <div class="hx-rail" id="hx-rail"></div>
       <ol class="hx-track" id="hx-track">
-        <li class="hx-slide"><img {{img:c-food}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-food-->" loading="lazy"><div class="hx-cap"><span class="hx-num">01 / 05</span><h3 class="h-card">Еда без лишнего</h3><p>Филе дикого минтая. Ни консервантов, ни усилителей вкуса.</p></div></li>
+        <li class="hx-slide"><img {{img:c-food}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-food-->" loading="lazy"><div class="hx-cap"><span class="hx-num">01 / 05</span><h3 class="h-card">Еда без лишнего</h3><p>Филе дикого минтая. Ни консервантов, ни усилителей вкуса. Вам — не вчитываться в составы с тревогой.</p></div></li>
         <li class="hx-slide"><img {{img:c-water}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-water-->" loading="lazy"><div class="hx-cap"><span class="hx-num">02 / 05</span><h3 class="h-card">Молочная сыворотка</h3><p>Молочная сыворотка восполняет минеральный баланс.</p></div></li>
         <li class="hx-slide"><img {{img:c-early}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-early-->" loading="lazy"><div class="hx-cap"><span class="hx-num">03 / 05</span><h3 class="h-card">Заметить вовремя</h3><p>Анализы на дому, без переноски и стресса. Медкарта — у врача и у вас.</p></div></li>
-        <li class="hx-slide"><img {{img:c-move}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-move-->" loading="lazy"><div class="hx-cap"><span class="hx-num">04 / 05</span><h3 class="h-card">Вес и движение</h3><p>Кормушка, лоток и трекер ведут дневник: порции, вес, визиты, сон и движение.</p></div></li>
-        <li class="hx-slide"><img {{img:c-calm}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-calm-->" loading="lazy"><div class="hx-cap"><span class="hx-num">05 / 05</span><h3 class="h-card">Спокойствие — тоже здоровье</h3><p>Зоопсихолог разберётся в привычках и поведении.</p></div></li>
+        <li class="hx-slide"><img {{img:c-move}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-move-->" loading="lazy"><div class="hx-cap"><span class="hx-num">04 / 05</span><h3 class="h-card">Вес и движение</h3><p>Кормушка, лоток и трекер ведут дневник: порции, вес, визиты, сон и движение. Вы замечаете перемены первыми.</p></div></li>
+        <li class="hx-slide"><img {{img:c-calm}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-calm-->" loading="lazy"><div class="hx-cap"><span class="hx-num">05 / 05</span><h3 class="h-card">Спокойствие — тоже здоровье</h3><p>Зоопсихолог разберётся в привычках и поведении. Вам — меньше догадок.</p></div></li>
       </ol>
       </div>
     </div>
@@ -959,23 +962,23 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   <div class="wrap sec-head left">
     <span class="kicker rv">Первые участники</span>
     <h2 class="h-sec rv" style="--i:1">Что значит быть первым</h2>
-    <p class="sec-sub rv" style="--i:2">Клуб собирается небольшим, чтобы слышать каждого. Первые участники пробуют решения раньше других, говорят, что не так, и видят, как их замечания меняют продукт.</p>
+    <p class="sec-sub rv" style="--i:2">Клуб собирается небольшим, чтобы слышать каждого. Первые видят, как их замечания меняют продукт.</p>
   </div>
   <div class="wrap">
     <ol class="steps rv" style="--i:2">
-      <li class="step"><b>Знакомство</b><p>Короткая встреча или созвон: о вас, о ней и о том, что хочется улучшить.</p><span class="when">первая неделя</span></li>
-      <li class="step"><b>Потребности</b><p>Вместе разбираем рацион, здоровье и привычки. Из этого складывается её программа.</p><span class="when">вторая неделя</span></li>
-      <li class="step"><b>Сервис или пилот</b><p>Начинаем с того, что уже доступно: рацион с переходом за семь дней. Что в пилоте — пробуете первыми, по желанию.</p><span class="when">с третьей недели</span></li>
-      <li class="step"><b>Встреча по результатам</b><p>Через месяц: что сработало, что менять. Ваши замечания идут в работу команды.</p><span class="when">конец месяца</span></li>
+      <li class="step"><b>Знакомство</b><p>Короткая встреча или звонок: о вас, о ней и о том, что хочется улучшить.</p><span class="when">в первые дни</span></li>
+      <li class="step"><b>Что ей нужно</b><p>Вместе разбираем рацион, здоровье и привычки. Из этого складывается её программа.</p><span class="when">в первые недели</span></li>
+      <li class="step"><b>Начало</b><p>Начинаем с того, что уже доступно: рацион с переходом за семь дней. Что в пилоте — пробуете первыми, по желанию.</p><span class="when">затем</span></li>
+      <li class="step"><b>Разговор о результатах</b><p>Что сработало, что менять. Ваши замечания идут в работу команды.</p><span class="when">через месяц</span></li>
     </ol>
-    <p class="sec-sub rv" style="--i:3">Участие добровольное: от одной встречи в месяц до пилотов и обсуждений. Сколько это занимает времени — <mark class="todo">уточняем с командой</mark>.</p>
+    <p class="sec-sub rv" style="--i:3">Участие добровольное: от редких встреч до пилотов и обсуждений. Ритм первого месяца и сколько он занимает времени — <mark class="todo">согласуем с командой</mark>.</p>
   </div>
   <div class="wrap" style="margin-top:34px">
     <div class="fmts">
       <div class="fmt rv"><div class="fimg unveil"><img {{img:meeting}} sizes="(min-width:900px) 290px, 46vw" alt="Две женщины разговаривают за столом у окна, между ними на столе сидит полосатая кошка" loading="lazy"></div><b>Сопровождение</b><span>Созвоны, чат и личные встречи — по вашему ритму.</span><span class="tag">с первой недели</span></div>
       <div class="fmt rv" style="--i:1"><div class="fimg unveil" style="--i:1"><img {{img:couple}} sizes="(min-width:900px) 290px, 46vw" alt="Пара готовит на светлой кухне, у их ног сидит бело-рыжая кошка" loading="lazy"></div><b>Пилоты дома</b><span>Пробуете новое первыми и рассказываете, как это у вас.</span><span class="tag">по желанию</span></div>
-      <div class="fmt rv" style="--i:2"><div class="fimg unveil" style="--i:2"><img {{img:dinner}} sizes="(min-width:900px) 290px, 46vw" alt="Люди разного возраста разговаривают за длинным столом в светлом ресторане" loading="lazy"></div><b>Ужины клуба</b><span>Раз в месяц — за одним столом с основателями и гостями.</span><span class="tag"><mark class="todo">дата первого</mark></span></div>
-      <div class="fmt rv" style="--i:3"><div class="fimg unveil" style="--i:3"><img {{img:man-phone}} sizes="(min-width:900px) 290px, 46vw" alt="Мужчина с телефоном сидит у дивана, серо-белая кошка трётся о его плечо" loading="lazy"></div><b>Закрытый онлайн-дом</b><span>Место, где участники показывают своих кошек и задают вопросы.</span><span class="tag"><mark class="todo">формат уточняется</mark></span></div>
+      <div class="fmt rv" style="--i:2"><div class="fimg unveil" style="--i:2"><img {{img:dinner}} sizes="(min-width:900px) 290px, 46vw" alt="Люди разного возраста разговаривают за длинным столом в светлом ресторане" loading="lazy"></div><b>Ужины клуба</b><span>Раз в месяц — за одним столом с другими участниками и гостями.</span><span class="tag"><mark class="todo">дата первого</mark></span></div>
+      <div class="fmt rv" style="--i:3"><div class="fimg unveil" style="--i:3"><img {{img:man-phone}} sizes="(min-width:900px) 290px, 46vw" alt="Мужчина с телефоном сидит у дивана, серо-белая кошка трётся о его плечо" loading="lazy"></div><b>Закрытый чат дома</b><span>Место, где участники показывают своих кошек и задают вопросы.</span><span class="tag"><mark class="todo">формат уточняется</mark></span></div>
     </div>
     <p class="sec-sub rv" style="margin-top:28px">Здесь будут изменения, которые появились благодаря первым участникам. Пока их нет — клуб только собирается.</p>
   </div>
@@ -990,11 +993,11 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   </div>
   <div class="wrap">
     <div class="status rv" style="--i:2">
-      <div class="st-card now"><span class="st-k"><i></i>Доступно первым</span><h3>Рацион и стол</h3><ul><li>Рацион из филе дикого минтая — собственное производство запущено</li><li>Переход за семь дней, чек-ин на десятый</li><li>Доставка курьером в выбранное окно</li></ul><span class="when">первая когорта — осень 2026 · <mark class="todo">дата</mark></span></div>
-      <div class="st-card"><span class="st-k"><i></i>Проходит пилот</span><h3>Проверка и приложение</h3><ul><li>Полевой тест: дневники, анализы до и после</li><li>Независимые лабораторные испытания рецептуры по стандарту FEDIAF</li><li>Приложение: профиль, медкарта, напоминания</li></ul><span class="when">результаты — после теста, участникам первыми</span></div>
-      <div class="st-card"><span class="st-k"><i></i>Следующий этап</span><h3>Устройства и врачи</h3><ul><li>Кормушка, лоток и трекер <mark class="todo">статус</mark></li><li>Домашний чекап и живой ветеринар в чате <mark class="todo">статус</mark></li><li>Именной куратор-ветеринар</li></ul><span class="when">сроки объявим участникам · <mark class="todo">уточнить</mark></span></div>
+      <div class="st-card now"><span class="st-k"><i></i>Доступно первым</span><h3>Рацион и стол</h3><ul><li>Рацион из филе дикого минтая — собственное производство запущено <mark class="todo">подтвердить на дату публикации</mark></li><li>Рацион проходит полевой тест и испытания FEDIAF — результаты после теста</li><li>Переход за семь дней, разговор на десятый день</li><li>Доставка курьером по Москве в выбранное окно</li></ul><span class="when">первый набор — осень 2026 · <mark class="todo">дата</mark></span></div>
+      <div class="st-card"><span class="st-k"><i></i>Проходит пилот</span><h3>Проверка и приложение</h3><ul><li>Полевой тест: дневники, анализы до и после</li><li>Независимые лабораторные испытания рецептуры по стандарту FEDIAF</li><li>Молочная сыворотка и снеки <mark class="todo">статус</mark></li></ul><span class="when">результаты — после теста, участникам первыми</span></div>
+      <div class="st-card"><span class="st-k"><i></i>Следующий этап</span><h3>Устройства и врачи</h3><ul><li>Приложение: профиль, медкарта, напоминания <mark class="todo">статус</mark></li><li>Кормушка, лоток и трекер <mark class="todo">статус</mark></li><li>Домашний осмотр, ветеринар в чате, зоопсихолог <mark class="todo">статус</mark></li><li>Именной куратор-ветеринар</li><li>Ужины и закрытый чат клуба, помощь приютам через фонд <mark class="todo">партнёр</mark></li></ul><span class="when">сроки объявим участникам · <mark class="todo">уточнить</mark></span></div>
     </div>
-    <p class="sec-sub rv" style="margin-top:22px">Условия: участие платное, по подписке на рацион и сервис. Состав и стоимость расскажем при знакомстве — <mark class="todo">цены</mark>; устройства — <mark class="todo">входят в подписку или отдельно</mark>. Город запуска — Москва. Заявка ни к чему не обязывает.</p>
+    <p class="sec-sub rv" style="margin-top:22px">Участие платное, по подписке на рацион и сервис; город запуска — Москва. Условия и стоимость — ниже, в правилах приглашения.</p>
   </div>
   <div class="wrap sec-head" style="margin-top:72px">
     <span class="kicker rv">Из чего состоит система</span>
@@ -1002,7 +1005,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   </div>
   <div class="pstack" id="pstack">
     <article class="pcard" style="--k:0">
-      <div class="pimg unveil"><img {{img:p-food}} sizes="(min-width:900px) 380px, 94vw" alt="Керамическая миска с кусочками белой рыбы, графин молочной сыворотки, льняной мешочек со снеками и коробка с винной лентой на травертиновом столе; к миске тянется белая кошка" loading="lazy"><div class="hspots" id="hspots"><button type="button" class="hs-dot" style="--x:61%;--y:64%" aria-expanded="false" aria-controls="hs-1"><span class="sr">Что в миске</span></button><div class="hs-card hs-c hs-up" id="hs-1" role="note" style="--x:61%;--y:64%"><b>Филе дикого минтая</b>Витамины и минералы — в составе, консервантов и усилителей вкуса нет.</div><button type="button" class="hs-dot" style="--x:43%;--y:42%" aria-expanded="false" aria-controls="hs-2"><span class="sr">Что в графине</span></button><div class="hs-card hs-c" id="hs-2" role="note" style="--x:43%;--y:42%"><b>Молочная сыворотка</b>Восполняет минеральный баланс.</div><button type="button" class="hs-dot" style="--x:30%;--y:76%" aria-expanded="false" aria-controls="hs-3"><span class="sr">Что в мешочке</span></button><div class="hs-card hs-r hs-up" id="hs-3" role="note" style="--x:30%;--y:76%"><b>Снеки из рыбной чешуи</b>Для зубов и пищеварения.</div></div></div>
+      <div class="pimg unveil"><img {{img:p-food}} sizes="(min-width:900px) 380px, 94vw" alt="Керамическая миска с кусочками белой рыбы, графин молочной сыворотки, льняной мешок со снеками и коробка с винной лентой на травертиновом столе; к миске тянется белая кошка" loading="lazy"><div class="hspots" id="hspots"><button type="button" class="hs-dot" style="--x:61%;--y:64%" aria-expanded="false" aria-controls="hs-1"><span class="sr">Что в миске</span></button><div class="hs-card hs-c hs-up" id="hs-1" role="note" style="--x:61%;--y:64%"><b>Филе дикого минтая</b>Витамины и минералы — в составе, консервантов и усилителей вкуса нет.</div><button type="button" class="hs-dot" style="--x:43%;--y:42%" aria-expanded="false" aria-controls="hs-2"><span class="sr">Что в графине</span></button><div class="hs-card hs-c" id="hs-2" role="note" style="--x:43%;--y:42%"><b>Молочная сыворотка</b>Восполняет минеральный баланс.</div><button type="button" class="hs-dot" style="--x:30%;--y:76%" aria-expanded="false" aria-controls="hs-3"><span class="sr">Что в мешке</span></button><div class="hs-card hs-r hs-up" id="hs-3" role="note" style="--x:30%;--y:76%"><b>Снеки из рыбной чешуи</b>Для зубов и пищеварения.</div></div></div>
       <div class="ptext">
         <span class="num">01</span>
         <h3 class="h-card">Полноценный рацион</h3>
@@ -1020,7 +1023,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
         <h3 class="h-card">Ветеринарный сервис</h3>
         <ul class="plist">
           <li><b>Анализы на дому</b> без переноски и стресса.</li>
-          <li><b>Горячая линия ветеринара.</b> Медицинская карта кошки всегда под рукой у врача и у вас.</li>
+          <li><b>Горячая линия ветеринара</b> <mark class="todo">формат: чат или телефон</mark>. Медицинская карта кошки всегда под рукой у врача и у вас.</li>
           <li><b>Зоопсихолог.</b> Консультации по поведению и привычкам вашей кошки.</li>
         </ul>
       </div>
@@ -1042,8 +1045,9 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   <div class="wrap app3">
     <span class="kicker rv">Приложение</span>
     <h2 class="h-sec rv" style="--i:1">Одна подписка — одно приложение</h2>
+    <p class="sec-sub rv" style="--i:2;text-align:center;max-width:30em">Макет интерфейса. Что уже работает — в разделе «Что уже готово».</p>
   </div>
-  <div class="ph-tabs" id="ph-tabs" hidden><button type="button" aria-pressed="true">Рацион</button><button type="button" aria-pressed="false">Медкарта</button><button type="button" aria-pressed="false">Гаджеты</button><i class="ph-ind" aria-hidden="true"></i></div>
+  <div class="ph-tabs" id="ph-tabs" hidden><button type="button" aria-pressed="true">Рацион</button><button type="button" aria-pressed="false">Медкарта</button><button type="button" aria-pressed="false">Устройства</button><i class="ph-ind" aria-hidden="true"></i></div>
   <div class="phones" aria-label="Экраны приложения">
     <div class="ph-item rv">
       <div class="phone" aria-hidden="true"><div class="screen">
@@ -1058,7 +1062,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
         <div class="s-card"><div class="s-row"><span>День · 85 г</span><span class="s-tag">съела</span></div></div>
         <div class="s-card"><div class="s-row"><span>Вечер · 85 г</span><em>19:30</em></div></div>
         <div class="s-card"><div class="s-row"><span>Сыворотка · 50 мл</span><span class="s-tag">выпила</span></div></div>
-        <div class="s-nav"><span class="on">Рацион</span><span>Медкарта</span><span>Гаджеты</span><span>Профиль</span></div>
+        <div class="s-nav"><span class="on">Рацион</span><span>Медкарта</span><span>Устройства</span><span>Профиль</span></div>
       </div></div>
       <span>Рацион</span>
     </div>
@@ -1073,20 +1077,20 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
         <div class="s-card"><div class="s-row"><span>Анализы на дому</span><span class="s-tag">готовы</span></div><em>12 марта · следующие в сентябре</em></div>
         <div class="s-card"><div class="s-row"><span>Прививки</span><em>через 18 дней</em></div></div>
         <div class="s-card hl"><div class="s-row"><span>Ветеринар на связи</span><span class="s-tag">чат</span></div></div>
-        <div class="s-nav"><span>Рацион</span><span class="on">Медкарта</span><span>Гаджеты</span><span>Профиль</span></div>
+        <div class="s-nav"><span>Рацион</span><span class="on">Медкарта</span><span>Устройства</span><span>Профиль</span></div>
       </div></div>
       <span>Медкарта</span>
     </div>
     <div class="ph-item rv" style="--i:2">
       <div class="phone" aria-hidden="true"><div class="screen">
-        <div class="s-top"><b>Гаджеты</b><span>Дом</span></div>
+        <div class="s-top"><b>Устройства</b><span>Дом</span></div>
         <div class="s-card"><div class="s-row"><span>Кормушка</span><span class="tog"></span></div><em>Заполнена на 70%</em><div class="bar-mini"><i style="width:70%"></i></div></div>
         <div class="s-card"><div class="s-row"><span>Лоток</span><span class="tog"></span></div><em>4 визита сегодня · в норме</em></div>
         <div class="s-card"><div class="s-row"><span>Трекер</span><span class="tog"></span></div><div class="s-big">3 ч 20 мин</div><em>активности сегодня</em></div>
         <div class="s-card"><div class="s-row"><span>Ночной режим</span><span class="tog off"></span></div></div>
-        <div class="s-nav"><span>Рацион</span><span>Медкарта</span><span class="on">Гаджеты</span><span>Профиль</span></div>
+        <div class="s-nav"><span>Рацион</span><span>Медкарта</span><span class="on">Устройства</span><span>Профиль</span></div>
       </div></div>
-      <span>Гаджеты</span>
+      <span>Устройства</span>
     </div>
   </div>
   <div class="wrap">
@@ -1105,13 +1109,13 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   <div class="wrap sec-head left">
     <span class="kicker rv">Команда и подтверждения</span>
     <h2 class="h-sec rv" style="--i:1">Кто отвечает за решения</h2>
-    <p class="sec-sub rv" style="--i:2">Основатель приглашает и задаёт планку. Составы, технологии и медицина — у специалистов рядом. Один факт — одна строка — подпись человека.</p>
+    <p class="sec-sub rv" style="--i:2">Основатель приглашает и задаёт планку. Составы, технологии и медицина — у специалистов рядом.</p>
   </div>
   <div class="wrap">
     <div class="team rv" style="--i:2">
-      <div class="tm"><div class="fo-ph todo-ph"></div><b>Владимир Перельман</b><span>основатель · голос клуба</span></div>
+      <div class="tm"><div class="fo-ph todo-ph"></div><b>Владимир Перельман</b><span>основатель · ресторатор</span></div>
       <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>технолог рецептуры · кандидат наук</span></div>
-      <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>ветеринар · отвечает в чате</span></div>
+      <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>ветеринар · ответы в чате — <mark class="todo">статус</mark></span></div>
       <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>зоопсихолог</span></div>
     </div>
     <ul class="proof-list rv" style="margin-top:34px">
@@ -1119,8 +1123,9 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
       <li><b>Лаборатория</b>Рецептура проходит независимые испытания по европейскому стандарту FEDIAF. Соответствие подтвердим, когда испытания закончатся.</li>
       <li><b>Патент</b>Заявка на рецептуру подана.</li>
       <li><b>Производство</b>Собственная площадка запущена; на следующий этап роста — партнёрское производство.</li>
-      <li><b>Почему минтай и сыворотка</b><mark class="todo">обоснование состава от технолога</mark></li>
+      <li><b>Почему минтай, сыворотка и снеки</b><mark class="todo">обоснование состава от технолога — без него «для зубов и пищеварения» не публикуем</mark></li>
     </ul>
+    <p class="sec-sub rv" style="margin-top:18px">Имена специалистов добавим с их согласия — <mark class="todo">уточняем</mark>.</p>
   </div>
 </section>
 
@@ -1132,23 +1137,23 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
   </div>
   <div class="wrap">
     <div class="acc rv" style="--i:2">
-      <details open><summary>Почему набор ограничен</summary><div class="acc-b"><p>Первых участников немного, чтобы сопровождать каждого лично и внимательно собирать обратную связь. Закрытость — не ограничение, а способ остаться домом, а не магазином.</p></div></details>
-      <details><summary>Кого мы приглашаем</summary><div class="acc-b"><p>Тех, для кого кошка — член семьи. Кто готов делиться опытом, пробовать и уважать других участников. Знакомство с основателями для этого не нужно.</p></div></details>
-      <details><summary>Как рассматриваем заявки</summary><div class="acc-b"><p>Читаем каждую заявку сами и отвечаем в Telegram или по телефону — <mark class="todo">срок ответа</mark>. Дальше — знакомство. Заявка ни к чему не обязывает.</p></div></details>
+      <details open><summary>Почему набор ограничен</summary><div class="acc-b"><p>Первых участников немного, чтобы сопровождать каждого лично и слышать, что не так. Закрытость — не ограничение, а способ остаться домом, а не магазином.</p></div></details>
+      <details><summary>Кого мы приглашаем</summary><div class="acc-b"><p>Тех, для кого кошка — член семьи. Кто готов делиться опытом, пробовать и уважать других участников — <mark class="todo">критерии согласует команда</mark>. <mark class="todo">подтвердить: заявку может подать любой, рекомендация не нужна</mark>.</p></div></details>
+      <details><summary>Как рассматриваем заявки</summary><div class="acc-b"><p>Мы читаем каждую заявку и отвечаем в Telegram или по телефону — <mark class="todo">срок ответа</mark>. Дальше — знакомство: после него вы получаете полные условия и программу для вашей кошки; до этого никаких платежей. Если мест в первом наборе нет, заявка остаётся в листе ожидания, и мы напишем, когда они появятся.</p></div></details>
       <details><summary>Условия и стоимость</summary><div class="acc-b"><p>Участие платное — по подписке на рацион и сервис. Состав и стоимость расскажем при знакомстве: <mark class="todo">цены и состав</mark>. Устройства — <mark class="todo">входят или отдельно</mark>.</p></div></details>
       <details><summary>Города и доставка</summary><div class="acc-b"><p>Сейчас — Москва. Зона доставки и выездов на дом — <mark class="todo">уточняем</mark>.</p></div></details>
-      <details><summary>Помощь приютам</summary><div class="acc-b"><p>С каждой подпиской кормим одну кошку в приюте — рацион за рацион, через фонд-партнёр <mark class="todo">название</mark>. Её имя, фото и подтверждение — в вашем ежемесячном отчёте.</p></div></details>
+      <details><summary>Помощь приютам</summary><div class="acc-b"><p>С каждой подпиской — месяц еды для одной кошки в приюте: через фонд-партнёр <mark class="todo">название</mark>, <mark class="todo">механика: рацион или взнос фонду</mark>. Её имя, фото и подтверждение — в вашем ежемесячном отчёте.</p></div></details>
     </div>
   </div>
   <div class="wrap clm-copy" style="margin-top:56px">
     <span class="kicker rv">Рацион за рацион</span>
-    <h3 class="clm-sub rv">Ваша кошка ждёт вас девять часов. Есть кошки, которые ждут годами</h3>
+    <h3 class="clm-sub rv">Есть кошки, у которых пока нет дома</h3>
       <figure class="one2one unveil" id="one2one">
         <img {{img:one2one}} sizes="(min-width:900px) 620px, 92vw" alt="<!--ALT:one2one-->" loading="lazy">
         <figcaption class="sr">Один плюс один: на каждую подписку — рацион для кошки в приюте</figcaption>
         <span class="one2one-n serif-num" aria-hidden="true"><span class="a" aria-hidden="true">1</span><span class="plus" aria-hidden="true">+</span><span class="b" aria-hidden="true">1</span></span>
       </figure>
-    <p class="rv">С каждой вашей подпиской KOSH KUSÉ кормит кошку в приюте — ту, у которой пока нет дома. Она не узнает, кто вы. Зато будет сыта. Весь месяц.</p>
+    <p class="rv">С каждой вашей подпиской KOSH KUSÉ кормит одну из них. Она не узнает, кто вы. Зато будет сыта. Весь месяц.</p>
     <p class="small rv">Её имя, фото и отчёт — в вашем приложении. Партнёр и формат отчёта — <mark class="todo">уточняем</mark>.</p>
   </div>
   <div class="wrap" style="margin-top:28px"><div class="fmt rv" style="max-width:620px"><div class="fimg unveil" style="aspect-ratio:3/2;border-radius:22px"><img {{img:shelter}} sizes="(min-width:900px) 620px, 92vw" alt="Волонтёр ставит на пол миски с едой в светлой комнате приюта, к нему подходят три кошки" loading="lazy"></div></div></div>
@@ -1160,7 +1165,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
     <div class="wl-copy">
       <span class="kicker rv">Заявка</span>
       <h2 class="h-display rv" style="--i:1">Познакомимся</h2>
-      <p class="lede rv" style="--i:2">Расскажите о себе и о ней — это минута. Мы прочитаем, напишем вам и позовём познакомиться. Подробный профиль заполним вместе, когда познакомимся.</p>
+      <p class="lede rv" style="--i:2">Расскажите о себе и о ней — это минута. Мы прочитаем, напишем вам и позовём познакомиться: расскажем, как устроен клуб, и подберём программу для вашей кошки. Подробный профиль заполним вместе, когда познакомимся.</p>
     </div>
     <div class="wl-cta rv" style="--i:2">
       <button type="button" class="btn btn-primary" id="open-q">Подать заявку <span class="arr" aria-hidden="true">→</span></button>
@@ -1216,12 +1221,13 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
               <span class="qf-err" aria-live="polite"></span></label>
             <label class="qf-field" data-req><span class="qf-q">Город</span>
               <input class="qf-in" name="city" maxlength="60" autocomplete="address-level2" autocapitalize="words" enterkeyhint="next">
+              <span class="qf-hint">Сейчас принимаем в Москве; из других городов — в лист ожидания.</span>
               <span class="qf-err" aria-live="polite"></span></label>
             <div class="qf-seg" role="radiogroup" aria-label="Как удобнее связаться">
               <label><input type="radio" name="method" value="telegram" checked><span>Telegram</span></label>
               <label><input type="radio" name="method" value="phone"><span>Телефон</span></label>
             </div>
-            <label class="qf-field" data-req data-m="telegram"><span class="qf-q">Ник в Telegram</span>
+            <label class="qf-field" data-req data-m="telegram"><span class="qf-q">Имя в Telegram</span>
               <span class="qf-unit qf-pre"><em>@</em><input class="qf-in" name="telegram" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="next"></span>
               <span class="qf-err" aria-live="polite"></span></label>
             <label class="qf-field" data-req data-m="phone" hidden><span class="qf-q">Телефон</span>
@@ -1279,7 +1285,7 @@ mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;bor
             <svg class="qf-word" viewBox="<!--VB:wordmark-->" fill="currentColor"><use href="#kk-wordmark"/></svg>
           </div>
           <h3 class="qf-h" tabindex="-1">Спасибо, <span data-user></span></h3>
-          <p class="qf-lead" id="qf-done-text">Заявка у нас. Мы <span data-how>напишем вам в Telegram</span> и расскажем, как устроен клуб и что доступно первым участникам. Подробный профиль <span data-cat></span> заполним вместе после знакомства.</p>
+          <p class="qf-lead" id="qf-done-text">Заявка у нас. Мы <span data-how>напишем вам в Telegram</span> — <mark class="todo">срок</mark> — и расскажем, как устроен клуб и что доступно первым участникам. Подробный профиль заполним вместе после знакомства — и <span data-cat></span> получит свою программу.</p>
           <button type="button" class="btn btn-primary" id="qf-close">Вернуться на сайт</button>
           <button type="button" class="qf-again" id="qf-again">Подать ещё одну заявку</button>
         </section>

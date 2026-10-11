@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!-- УТОЧНИТЬ: перед публикацией заменить все плейсхолдеры ниже (в тексте каждый обёрнут в mark.todo):
+  1. [уточнить: дата обновления] — дата, с которой действует эта версия условий
+  2. [уточнить: размер первого набора] — сколько участников берём в первый набор
+  3. [уточнить: порядок рассмотрения заявок] — по очереди, по совпадению с задачами клуба, иначе
+  4. [уточнить: срок ответа на заявку]
+  5. [уточнить: формат знакомства] — звонок, встреча, переписка
+  6. [уточнить: стоимость и периодичность подписки]
+  7. [уточнить: состав подписки] — что входит
+  8. [уточнить: порядок возврата при выходе] — что с оплатой, если участник уходит в середине периода
+  9. [уточнить: механизм помощи приютам] — доля от подписки, отдельные сборы, волонтёрство; каким приютам
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Правила клуба KOSH KUSÉ: что значит заявка, как проходит набор, что получает участник и чего клуб ждёт в ответ.">
+<title>Условия участия — KOSH KUSÉ</title>
+<style>
+@font-face{font-family:'Value Sans Pro';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/ValueSansPro-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Value Sans Pro';font-weight:500;font-style:normal;font-display:swap;src:url(fonts/ValueSansPro-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-weight:400 500;font-style:normal;font-display:swap;src:url(fonts/CormorantGaramond-var-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Cormorant Garamond';font-weight:400 500;font-style:normal;font-display:swap;src:url(fonts/CormorantGaramond-var-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+
+:root{
+  --bg:#F7F4EB;
+  --ink:#2B2A26;
+  --muted:#5A5249;
+  --line:rgba(43,42,38,.12);
+  --accent:#4A1F27;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Value Sans Pro',-apple-system,system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:rgba(74,31,39,.35)}
+a:hover{text-decoration-color:currentColor}
+.wrap{max-width:680px;margin:0 auto;padding:0 24px}
+
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-weight:500;font-size:13px;letter-spacing:.18em;color:var(--accent);text-decoration:none}
+.back{font-size:14px;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--accent)}
+
+main{padding:56px 0 72px}
+h1{margin:0 0 14px;font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.1;letter-spacing:-.005em}
+.updated{margin:0 0 36px;font-size:14px;color:var(--muted)}
+.lead{margin:0 0 40px;font-size:18px;line-height:1.55}
+h2{margin:40px 0 12px;font-family:var(--serif);font-weight:500;font-size:26px;line-height:1.2}
+p{margin:0 0 14px}
+mark.todo{background:rgba(74,31,39,.08);color:#4A1F27;padding:0 .3em;border-radius:4px}
+
+.rules{list-style:none;margin:0;padding:0;counter-reset:n;border-top:1px solid var(--line)}
+.rules>li{counter-increment:n;margin:0;padding:24px 0;border-bottom:1px solid var(--line)}
+.rules>li::before{content:counter(n,decimal-leading-zero);display:block;margin-bottom:8px;font-size:12px;letter-spacing:.14em;color:var(--muted)}
+.rules h2{margin:0 0 8px;font-size:24px}
+.rules p{margin:0 0 10px}
+.rules p:last-child{margin-bottom:0}
+.note{margin:36px 0 0;font-size:14px;color:var(--muted)}
+.note a{color:var(--muted)}
+
+.foot{border-top:1px solid var(--line);padding:28px 0 40px;font-size:13px;color:var(--muted)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;align-items:baseline}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--accent)}
+
+@media(min-width:900px){h1{font-size:48px}main{padding:80px 0 96px}}
+@media print{.top,.foot{display:none}mark.todo{background:none;outline:1px solid #4A1F27}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">KOSH KUSÉ</a>
+    <a class="back" href="./">← на сайт</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>Условия участия</h1>
+    <p class="updated">Обновлено: <mark class="todo">[уточнить: дата обновления]</mark> · Москва, 2026</p>
+
+    <p class="lead">Это не оферта и не договор, а правила клуба — чтобы вы заранее понимали, как всё устроено, ещё до того, как оставите заявку.</p>
+
+    <ol class="rules">
+      <li>
+        <h2>Заявка ни к чему не обязывает</h2>
+        <p>Оставить заявку — значит сказать «мне интересно», не больше. Это не покупка, не подписка и не обещание. Передумать можно в любой момент, объяснять ничего не нужно.</p>
+      </li>
+      <li>
+        <h2>Первых участников принимаем ограниченно</h2>
+        <p>Клуб небольшой и закрытый, особенно вначале. Мест в первом наборе — <mark class="todo">[уточнить: размер первого набора]</mark>. Заявки рассматриваем <mark class="todo">[уточнить: порядок рассмотрения заявок]</mark>, отвечаем в течение <mark class="todo">[уточнить: срок ответа на заявку]</mark>. Если мест пока нет, скажем об этом прямо и предложим подождать следующего набора.</p>
+      </li>
+      <li>
+        <h2>Что вы получаете после заявки</h2>
+        <p>Спокойный рассказ об условиях — без давления и напоминаний. Приглашение на знакомство: <mark class="todo">[уточнить: формат знакомства]</mark>. И возможность участвовать в пилотах — новых форматах, которые мы пробуем вместе с первыми участниками, — только если вам это интересно.</p>
+      </li>
+      <li>
+        <h2>Стоимость называем заранее</h2>
+        <p>Участие в клубе платное. Стоимость подписки — <mark class="todo">[уточнить: стоимость и периодичность подписки]</mark>, что в неё входит — <mark class="todo">[уточнить: состав подписки]</mark>. На этапе заявки и знакомства платить ничего не нужно: данные карты мы не попросим раньше, чем вы решите вступить.</p>
+      </li>
+      <li>
+        <h2>Участие добровольное, выйти можно в любой момент</h2>
+        <p>Без объяснений, без штрафов и без уговоров остаться. Если выход приходится на середину оплаченного периода — <mark class="todo">[уточнить: порядок возврата при выходе]</mark>. Если захотите рассказать, что было не так, мы будем благодарны: так клуб становится лучше.</p>
+      </li>
+      <li>
+        <h2>Чего мы ждём от участников</h2>
+        <p>Трёх вещей. Уважения к другим участникам: у всех разные кошки, разный опыт и разные решения. Внимания к благополучию кошки — к её здоровью, спокойствию и привычкам: в клубе она на первом месте. И готовности делиться опытом, удачным и не очень, — из него и складывается клуб.</p>
+      </li>
+      <li>
+        <h2>Клуб не заменяет ветеринара</h2>
+        <p>Всё, что обсуждается в клубе, — опыт и наблюдения, а не медицинские назначения. Решения о здоровье кошки вы принимаете вместе с её врачом. Если ей нехорошо — сначала к врачу, потом к нам.</p>
+      </li>
+      <li>
+        <h2>Помогаем приютам</h2>
+        <p>Клуб помогает кошкам, у которых пока нет дома: <mark class="todo">[уточнить: механизм помощи приютам]</mark>. Кому и чем помогли — рассказываем участникам открыто.</p>
+      </li>
+    </ol>
+
+    <p class="note">Данные из анкеты используем только для связи по заявке — подробнее в <a href="policy.html">политике обработки персональных данных</a>. Условия могут уточняться; действующая версия всегда на этой странице. Вопросы — через <a href="contacts.html">контакты</a>.</p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 KOSH KUSÉ · Москва</span>
+    <nav aria-label="Служебные страницы">
+      <a href="policy.html">Политика данных</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

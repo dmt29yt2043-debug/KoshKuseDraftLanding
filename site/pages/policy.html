@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!-- УТОЧНИТЬ: перед публикацией заменить все плейсхолдеры ниже (в тексте каждый обёрнут в mark.todo):
+  1. [уточнить: дата обновления] — дата, с которой действует эта версия политики
+  2. [уточнить: наименование оператора] — ООО / ИП / ФИО физлица
+  3. [уточнить: ИНН]
+  4. [уточнить: ОГРН или ОГРНИП]
+  5. [уточнить: юридический адрес]
+  6. [уточнить: почта] — встречается 2 раза; заодно заменить href="mailto:TODO@example.com"
+  7. [уточнить: Telegram] — встречается 2 раза; заодно заменить href="https://t.me/TODO"
+  8. [уточнить: журналы сервера с IP-адресами и срок их хранения] — ведёт ли веб-сервер access-лог; если нет, убрать абзац
+  9. [уточнить: страна и хостинг-провайдер сервера] — где физически стоит сервер с базой заявок
+  10. [уточнить: срок хранения заявок]
+  11. [уточнить: срок ответа на запрос о данных]
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Какие данные KOSH KUSÉ получает через анкету на сайте, зачем они нужны и как их удалить.">
+<title>Политика обработки персональных данных — KOSH KUSÉ</title>
+<style>
+@font-face{font-family:'Value Sans Pro';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/ValueSansPro-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Value Sans Pro';font-weight:500;font-style:normal;font-display:swap;src:url(fonts/ValueSansPro-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-weight:400 500;font-style:normal;font-display:swap;src:url(fonts/CormorantGaramond-var-cyrillic.woff2) format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Cormorant Garamond';font-weight:400 500;font-style:normal;font-display:swap;src:url(fonts/CormorantGaramond-var-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+
+:root{
+  --bg:#F7F4EB;
+  --ink:#2B2A26;
+  --muted:#5A5249;
+  --line:rgba(43,42,38,.12);
+  --accent:#4A1F27;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Value Sans Pro',-apple-system,system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:rgba(74,31,39,.35)}
+a:hover{text-decoration-color:currentColor}
+.wrap{max-width:680px;margin:0 auto;padding:0 24px}
+
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-weight:500;font-size:13px;letter-spacing:.18em;color:var(--accent);text-decoration:none}
+.back{font-size:14px;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--accent)}
+
+main{padding:56px 0 72px}
+h1{margin:0 0 14px;font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.1;letter-spacing:-.005em}
+.updated{margin:0 0 36px;font-size:14px;color:var(--muted)}
+.lead{margin:0 0 40px;font-size:18px;line-height:1.55}
+h2{margin:40px 0 12px;font-family:var(--serif);font-weight:500;font-size:26px;line-height:1.2}
+p{margin:0 0 14px}
+ul{margin:0 0 16px;padding-left:20px}
+li{margin:0 0 6px}
+li::marker{color:var(--muted)}
+mark.todo{background:rgba(74,31,39,.08);color:#4A1F27;padding:0 .3em;border-radius:4px}
+
+.foot{border-top:1px solid var(--line);padding:28px 0 40px;font-size:13px;color:var(--muted)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;align-items:baseline}
+.foot nav{display:flex;flex-wrap:wrap;gap:6px 20px}
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--accent)}
+
+@media(min-width:900px){h1{font-size:48px}main{padding:80px 0 96px}}
+@media print{.top,.foot{display:none}mark.todo{background:none;outline:1px solid #4A1F27}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">KOSH KUSÉ</a>
+    <a class="back" href="./">← на сайт</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>Политика обработки персональных данных</h1>
+    <p class="updated">Обновлено: <mark class="todo">[уточнить: дата обновления]</mark> · Москва, 2026</p>
+
+    <p class="lead">Здесь коротко: какие данные мы получаем через анкету на сайте, зачем они нужны и что с ними происходит дальше.</p>
+
+    <h2>Кто отвечает за данные</h2>
+    <p>Оператор персональных данных — <mark class="todo">[уточнить: наименование оператора]</mark>, ИНН <mark class="todo">[уточнить: ИНН]</mark>, ОГРН <mark class="todo">[уточнить: ОГРН или ОГРНИП]</mark>, адрес: <mark class="todo">[уточнить: юридический адрес]</mark>. Дальше в тексте — «мы» и «клуб».</p>
+    <p>Вопросы о данных: <a href="mailto:TODO@example.com"><mark class="todo">[уточнить: почта]</mark></a> или Telegram <a href="https://t.me/TODO"><mark class="todo">[уточнить: Telegram]</mark></a>.</p>
+
+    <h2>Какие данные мы получаем</h2>
+    <p>Только то, что вы сами вводите в анкету:</p>
+    <ul>
+      <li>имя;</li>
+      <li>город;</li>
+      <li>ник в Telegram или телефон — на ваш выбор;</li>
+      <li>имя кошки и её возраст;</li>
+      <li>ответ на вопрос «что хотите улучшить»;</li>
+      <li>отметку о согласии на обработку данных.</li>
+    </ul>
+    <p>Больше ничего. Анкета не спрашивает дату рождения, домашний адрес или документы, и мы не собираем сведения о вас из других источников.</p>
+    <p>Технические журналы сервера: <mark class="todo">[уточнить: журналы сервера с IP-адресами и срок их хранения]</mark>.</p>
+
+    <h2>Зачем они нужны</h2>
+    <p>Цель одна — связаться с вами по заявке: ответить, рассказать об условиях клуба и, если всё совпадёт, пригласить на знакомство. Имя кошки и её возраст помогают понять, с чем вы приходите, и подготовиться к разговору о ней.</p>
+    <p>Чего мы не делаем: не отправляем рассылки, не используем данные для рекламы, не передаём и не продаём их третьим лицам, не принимаем решений о вас автоматически.</p>
+
+    <h2>На каком основании</h2>
+    <p>Основание — ваше согласие: вы даёте его отметкой в анкете перед отправкой, как предусмотрено Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных». Согласие можно отозвать в любой момент — как именно, написано в разделе «Ваши права».</p>
+
+    <h2>Где хранятся данные и кто их видит</h2>
+    <p>Заявки хранятся в базе данных на сервере проекта — <mark class="todo">[уточнить: страна и хостинг-провайдер сервера]</mark>. Доступ к базе есть только у команды клуба, которая отвечает на заявки. Сторонние сервисы аналитики, рассылок и CRM к ней не подключены.</p>
+
+    <h2>Что остаётся в вашем браузере</h2>
+    <p>Пока вы заполняете анкету, её черновик сохраняется в вашем браузере (localStorage), чтобы текст не пропал, если случайно закрыть вкладку. Черновик никуда не отправляется и хранится до отправки анкеты. Удалить его можно вручную — очистив данные сайта в настройках браузера.</p>
+    <p>Аналитических cookies и сторонних счётчиков на сайте нет.</p>
+
+    <h2>Как долго храним</h2>
+    <p>Заявку храним <mark class="todo">[уточнить: срок хранения заявок]</mark> или до вашего запроса на удаление — смотря что наступит раньше. После этого запись удаляется из базы.</p>
+
+    <h2>Ваши права</h2>
+    <p>В любой момент вы можете:</p>
+    <ul>
+      <li>узнать, какие данные о вас у нас есть;</li>
+      <li>исправить их — например, если сменился ник в Telegram;</li>
+      <li>отозвать согласие и попросить удалить всё.</li>
+    </ul>
+    <p>Для этого напишите на <a href="mailto:TODO@example.com"><mark class="todo">[уточнить: почта]</mark></a> или в Telegram <a href="https://t.me/TODO"><mark class="todo">[уточнить: Telegram]</mark></a> и назовите имя и контакт из анкеты, чтобы мы нашли вашу заявку. Ответим в течение <mark class="todo">[уточнить: срок ответа на запрос о данных]</mark>. После удаления мы не сможем связаться с вами по этой заявке; если захотите вернуться, анкету можно заполнить заново.</p>
+
+    <h2>Если что-то изменится</h2>
+    <p>Если порядок работы с данными изменится, мы обновим эту страницу и дату наверху. Действующая версия всегда здесь.</p>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>© 2026 KOSH KUSÉ · Москва</span>
+    <nav aria-label="Служебные страницы">
+      <a href="terms.html">Условия участия</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
