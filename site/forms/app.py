@@ -2,6 +2,7 @@
 
 Маленький сервис без зависимостей (стандартная библиотека Python 3.10+):
   POST /api/apply        — анкета с сайта (JSON) → проверка → SQLite;
+                           поле form: 'v2' — подробная анкета (по умолчанию), 'v3' — короткая первичная заявка;
   GET  /api/health       — проверка, что сервис жив;
   GET  /admin/           — таблица заявок (пароль ставит Caddy: basic_auth перед /admin);
   GET  /admin/export.csv — выгрузка для Excel;
@@ -38,6 +39,8 @@ MAX_BODY = 16 * 1024
 
 STATUSES = [('new', 'Новая'), ('contacted', 'Связались'), ('member', 'В клубе'), ('declined', 'Не подошло'), ('test', 'Тест')]
 STATUS_NAMES = dict(STATUSES)
+# короткая заявка v3: один вопрос — что человек хочет улучшить в заботе о кошке
+GOALS = ['Рацион', 'Здоровье и анализы', 'Поведение и привычки', 'Всё в одном месте', 'Пока присматриваюсь', 'Другое']
 
 os.makedirs(STATE, exist_ok=True)
 _lock = threading.Lock()
@@ -133,6 +136,13 @@ def telegram_ok(v):
     raise Bad('Проверьте ник в Telegram: латинские буквы, цифры и _, от 5 символов')
 
 
+def goal_ok(v):
+    v = s(v, 40)
+    if v not in GOALS:
+        raise Bad('Выберите, что хотите улучшить')
+    return v
+
+
 def clean(d):
     if not isinstance(d, dict):
         raise Bad('Пустая анкета')
@@ -140,8 +150,12 @@ def clean(d):
         raise Bad('spam')
     if d.get('consent') is not True:
         raise Bad('Нужно согласие на обработку данных')
-    cat, diet, hab, con, meta = (d.get(k) or {} for k in ('cat', 'diet', 'habits', 'contact', 'meta'))
-    if not all(isinstance(x, dict) for x in (cat, diet, hab, con, meta)):
+    form = s(d.get('form'), 4) or 'v2'                # v2 — подробная анкета, v3 — короткая первичная заявка
+    if form not in ('v2', 'v3'):
+        raise Bad('Проверьте анкету')
+    v3 = form == 'v3'
+    cat, diet, hab, con, goal, meta = (d.get(k) or {} for k in ('cat', 'diet', 'habits', 'contact', 'goal', 'meta'))
+    if not all(isinstance(x, dict) for x in (cat, diet, hab, con, goal, meta)):
         raise Bad('Проверьте анкету')
     weight = s(cat.get('weight'), 8).replace(',', '.')
     if weight:
@@ -159,17 +173,20 @@ def clean(d):
     value = telegram_ok(raw) if method == 'telegram' else phone_ok(raw)
     sex = s(cat.get('sex'), 2)
     utm = meta.get('utm') if isinstance(meta.get('utm'), dict) else {}
+    # в короткой заявке рацион и привычки можно не присылать; если раздел прислали — проверяем как в v2
+    diet_sent = not v3 or any(diet.values())
     return {
+        'form': form,
         'cat': {
-            'sex': sex if sex in ('f', 'm') else 'f',
+            'sex': sex if sex in ('f', 'm') else ('' if v3 else 'f'),
             'name': cap(s(cat.get('name'), 40, 'имя кошки', required=True)),
-            'age': s(cat.get('age'), 40, 'возраст', required=True),
+            'age': s(cat.get('age'), 40, 'возраст', required=not v3),
             'weight': weight,
             'health': lst(cat.get('health')),
             'health_note': s(cat.get('health_note'), 300),
         },
         'diet': {
-            'base': s(diet.get('base'), 60, 'рацион', required=True),
+            'base': s(diet.get('base'), 60, 'рацион', required=diet_sent),
             'meals': s(diet.get('meals'), 60),
             'water': s(diet.get('water'), 60),
             'avoid': s(diet.get('avoid'), 200),
@@ -184,7 +201,11 @@ def clean(d):
             'name': cap(s(con.get('name'), 60, 'ваше имя', required=True)),
             'method': method,
             'value': value,
-            'city': cap(s(con.get('city'), 60)),
+            'city': cap(s(con.get('city'), 60, 'город', required=v3)),
+        },
+        'goal': {                                     # только в v3, в v2 остаётся пустым
+            'main': goal_ok(goal.get('main')) if v3 else '',
+            'note': s(goal.get('note'), 300) if v3 else '',
         },
         'meta': {
             'page': s(meta.get('page'), 300),
@@ -224,7 +245,8 @@ METHOD = {'telegram': 'Telegram', 'phone': 'Телефон'}
 
 def row_view(r):
     d = json.loads(r['data'])
-    c, di, h, co, m = d['cat'], d['diet'], d['habits'], d['contact'], d.get('meta', {})
+    c, di, h, co, m = d['cat'], d.get('diet') or {}, d.get('habits') or {}, d['contact'], d.get('meta') or {}
+    g = d.get('goal') or {}                           # у старых строк раздела нет
     created = datetime.fromisoformat(r['created']).astimezone(MSK)
     src = ', '.join(f'{k[4:]}={v}' for k, v in (m.get('utm') or {}).items()) or (m.get('ref') or '')
     return {
@@ -235,6 +257,7 @@ def row_view(r):
         'Связь': METHOD.get(co['method'], co['method']),
         'Контакт': co['value'],
         'Город': co.get('city', ''),
+        'Что улучшить': (g.get('main') or '') + (f' — {g["note"]}' if g.get('note') else ''),
         'Кошка': c['name'],
         'Пол': SEX.get(c.get('sex'), ''),
         'Возраст': c.get('age', ''),
@@ -249,11 +272,13 @@ def row_view(r):
         'Кто ещё дома': ', '.join(h.get('others') or []),
         'Что важнее': ', '.join(h.get('priority') or []),
         'Источник': src,
+        'Версия': d.get('form', ''),
     }
 
 
-COLS = ['Дата (МСК)', 'Имя', 'Связь', 'Контакт', 'Город', 'Кошка', 'Пол', 'Возраст', 'Вес, кг', 'Здоровье',
-        'Рацион', 'Раз в день', 'Вода', 'Нельзя / не ест', 'Характер', 'Где живёт', 'Кто ещё дома', 'Что важнее', 'Источник']
+COLS = ['Дата (МСК)', 'Имя', 'Связь', 'Контакт', 'Город', 'Что улучшить', 'Кошка', 'Пол', 'Возраст', 'Вес, кг', 'Здоровье',
+        'Рацион', 'Раз в день', 'Вода', 'Нельзя / не ест', 'Характер', 'Где живёт', 'Кто ещё дома', 'Что важнее', 'Источник', 'Версия']
+CARD_TOP = COLS[:6] + ['Версия']                      # это карточка показывает в шапке, остальное — списком
 
 
 def contact_link(v):
@@ -276,8 +301,9 @@ nav a.on{border-color:var(--burgundy);color:var(--burgundy)}.btn{margin-left:aut
 main{padding:16px 20px 40px}.empty{color:var(--muted);padding:40px 0}
 .cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
-.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.who{font-weight:600;font-size:15px}.when{color:var(--muted);font-size:12px}
-.ct a{color:var(--burgundy)}dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}dt{color:var(--muted)}dd{margin:0}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.top>div:first-child{flex:1;min-width:0}.who{font-weight:600;font-size:15px}.when{color:var(--muted);font-size:12px}
+.ct a{color:var(--burgundy)}.goal{margin:6px 0 2px;padding:6px 10px;border-left:3px solid var(--burgundy);background:var(--linen);border-radius:0 10px 10px 0;font-size:13px}.goal span{color:var(--muted)}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}dt{color:var(--muted)}dd{margin:0}
 select{font:inherit;font-size:12px;height:28px;border-radius:999px;border:1px solid var(--line);background:var(--ivory);padding:0 8px;color:var(--ink)}
 select.s-new{border-color:var(--burgundy);color:var(--burgundy)}.saved{font-size:11px;color:var(--muted);height:14px}
 '''
@@ -291,10 +317,11 @@ def admin_page(rows, flt, total, counts):
     for r in rows:
         v = row_view(r)
         opts = ''.join(f'<option value="{k}"{" selected" if k == v["status"] else ""}>{n}</option>' for k, n in STATUSES)
-        dl = ''.join(f'<dt>{html.escape(k)}</dt><dd>{html.escape(v[k])}</dd>' for k in COLS[5:] if v[k])
+        dl = ''.join(f'<dt>{html.escape(k)}</dt><dd>{html.escape(v[k])}</dd>' for k in COLS if k not in CARD_TOP and v[k])
+        goal = f'<div class="goal"><span>Что улучшить:</span> {html.escape(v["Что улучшить"])}</div>' if v['Что улучшить'] else ''
         cards.append(f'''<article class="card"><div class="top"><div><div class="who">{html.escape(v["Имя"])}</div>
-<div class="ct">{v["Связь"]}: {contact_link(v)}{(" · " + html.escape(v["Город"])) if v["Город"] else ""}</div>
-<div class="when">№{v["id"]} · {v["Дата (МСК)"]}</div></div>
+<div class="ct">{v["Связь"]}: {contact_link(v)}{(" · " + html.escape(v["Город"])) if v["Город"] else ""}</div>{goal}
+<div class="when">№{v["id"]} · {v["Дата (МСК)"]}{(" · " + html.escape(v["Версия"])) if v["Версия"] else ""}</div></div>
 <div><select data-id="{v["id"]}" class="s-{v["status"]}" aria-label="Статус заявки">{opts}</select><div class="saved"></div></div></div>
 <dl>{dl}</dl></article>''')
     body = '<div class="cards">' + ''.join(cards) + '</div>' if cards else '<p class="empty">Пока заявок нет.</p>'

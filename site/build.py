@@ -211,6 +211,9 @@ def main():
         if os.path.exists(os.path.join(SCR, 'src_fonts', fn)):
             shutil.copy(os.path.join(SCR, 'src_fonts', fn), os.path.join(DIST, 'fonts'))
     open(os.path.join(DIST, 'index.html'), 'w', encoding='utf-8').write(site)
+    # служебные страницы (политика, условия, контакты) — как есть, в корень
+    for f in glob.glob(os.path.join(HERE, 'pages', '*.html')):
+        shutil.copy(f, DIST)
 
     # версия для артефакта: шрифты внутри, без doctype/html/head/body — обёртку добавит хостинг
     a = re.sub(r'<!doctype html>\s*<html[^>]*>\s*<head>', '', art, flags=re.I)

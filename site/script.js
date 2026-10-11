@@ -275,7 +275,6 @@
   function revealEl(el){
     if(el.classList.contains('in'))return;
     var im=el.classList.contains('unveil')?el.querySelector(':scope>img'):null;
-    if(el.querySelector&&el.querySelector('#cnum'))setTimeout(countUp,450);
     if(!im||(im.complete&&im.naturalWidth)){el.classList.add('in');return}
     im.loading='eager';
     var go=function(){el.classList.add('in')};
@@ -312,6 +311,21 @@
     peekT=setTimeout(function(){peek.classList.remove('hide')},1700);
   });
 
+  /* сквозной сценарий «как работает система»: шаг ↔ экран телефона */
+  var flow=$('flow');
+  if(flow){
+    var fBtns=[].slice.call(flow.querySelectorAll('button')),FLOWMAP=fBtns.map(function(b){return +b.getAttribute('data-tab')||0});
+    window.KKflowSet=function(k,user){
+      fBtns.forEach(function(b,i){b.classList.toggle('on',i===k);b.setAttribute('aria-pressed',i===k?'true':'false')});
+      var tab=FLOWMAP[k];
+      if(phLive)phSet(tab,user);
+      else{phones.classList.add('pick');phItems.forEach(function(it,i){it.classList.toggle('hl',i===tab)})}
+    };
+    fBtns.forEach(function(b,k){b.addEventListener('click',function(){KKflowSet(k,true)})});
+    /* телефон листается сам или вкладкой — подсвечиваем первый шаг с этим экраном */
+    window.KKflowFromTab=function(tab){var k=FLOWMAP.indexOf(tab);if(k>=0)fBtns.forEach(function(b,i){b.classList.toggle('on',i===k)})};
+  }
+
   /* кнопки: мягкий круг от точки касания */
   if(!reduce)document.addEventListener('pointerdown',function(e){
     var b=e.target.closest&&e.target.closest('.btn');if(!b)return;
@@ -342,6 +356,7 @@
     phItems.forEach(function(it,k){it.style.setProperty('--d',k<phI?-1:1);it.classList.toggle('on',k===phI)});
     phBtns.forEach(function(b,k){b.setAttribute('aria-pressed',k===phI?'true':'false')});
     phTabs.style.setProperty('--t',phI);
+    if(window.KKflowFromTab)KKflowFromTab(phI);
   }
   function measurePhones(){
     var live=site.offsetWidth<900;
@@ -364,11 +379,6 @@
     if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3)phSet(phI+(dx<0?1:-1),true);
   },{passive:true});
 
-  /* видео-заглушка */
-  var v=$('video');
-  function play(){var on=v.classList.toggle('playing');v.setAttribute('aria-pressed',on)}
-  v.addEventListener('click',play);v.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();play()}});
-
   /* прогресс лент */
   site.querySelectorAll('.slider[data-prog]').forEach(function(s){
     var bar=$(s.getAttribute('data-prog'));if(!bar)return;var th=bar.querySelector('i');
@@ -376,57 +386,43 @@
     s.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);upd();
   });
 
-  /* счётчик заявок: в разметке — итоговое число, отсчёт — украшение */
-  var cnum=$('cnum'),base=+cnum.dataset.base,extra=0;
-  try{extra=+(localStorage.getItem('kk_joined')||0)}catch(e){}
-  var target=base+extra,counted=false;
-  function fmt(n){return n.toLocaleString('ru-RU')}
-  cnum.textContent=fmt(target);
-  function countUp(){
-    if(counted)return;counted=true;if(reduce)return;
-    var t0=null,d=1800;cnum.textContent='0';
-    function step(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/d);k=1-Math.pow(1-k,4);cnum.textContent=fmt(Math.round(target*k));if(k<1)requestAnimationFrame(step)}
-    requestAnimationFrame(step);
-  }
-
   /* =========================================================
-     АНКЕТА «ВСТУПИТЬ В КЛУБ»: 4 шага, черновик в браузере, отправка на /api/apply
+     ЗАЯВКА: короткая первичная анкета на одном экране, черновик в браузере, отправка на /api/apply (form: v3)
      ========================================================= */
-  var qbox=$('qbox'),qform=$('qform'),qBody=$('qf-body'),qStepEl=$('qf-step'),qProg=$('qf-prog'),
-      qBack=$('qf-back'),qNext=$('qf-next'),qNav=$('qf-nav'),qFail=$('qf-fail'),
-      qPanes=[].slice.call(qform.querySelectorAll('.qf-pane')),QN=4,qStep=1,sending=false,lastFocus=null,
-      DRAFT='kk_q_draft',SENT='kk_q_sent';
+  var qbox=$('qbox'),qform=$('qform'),qBody=$('qf-body'),qProg=$('qf-prog'),qNext=$('qf-next'),qNav=$('qf-nav'),qFail=$('qf-fail'),qStepEl=$('qf-step'),
+      qPane=qform.querySelector('.qf-pane[data-step="1"]'),qDone=qform.querySelector('.qf-done'),sending=false,lastFocus=null,
+      DRAFT='kk_q3_draft',SENT='kk_q3_sent';
   /* старый адрес (hstgr.cloud) у части провайдеров режется, но если сайт открыт там — шлём на основной */
   var API=/\.hstgr\.cloud$/.test(location.hostname)?'https://kosh-kuse.187-77-18-20.sslip.io/api/apply':'/api/apply';
   function val(n){
     var el=qform.elements[n];if(!el)return '';
-    if(!el.tagName){                                   /* группа радио или галочек */
-      var list=[].slice.call(el),on=list.filter(function(e){return e.checked}).map(function(e){return e.value});
-      return list[0].type==='checkbox'?on:(on[0]||'');
-    }
+    if(!el.tagName){var on=[].filter.call(el,function(e){return e.checked});return on.length?on[0].value:''}
     if(el.type==='checkbox')return el.checked;
     return el.value.trim();
   }
   function fieldOf(n){var el=qform.elements[n];el=el&&!el.tagName?el[0]:el;return el&&el.closest('.qf-field')}
   function isM(){return val('sex')==='m'}
+  function cap(v){return v?v.charAt(0).toUpperCase()+v.slice(1):v}
+  var REQ=['name','city','contact','cat_name','goal','consent'];
+  function okField(n){
+    if(n==='contact')return val('method')==='phone'?val('phone').replace(/\D/g,'').length>=10:/^[A-Za-z0-9_]{5,32}$/.test(val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,''));
+    if(n==='consent')return val('consent')===true;
+    return !!val(n);
+  }
   function sync(){
-    var m=isM();qbox.setAttribute('data-sex',m?'m':'f');
-    var nm=val('cat_name');nm=nm?nm.charAt(0).toUpperCase()+nm.slice(1):(m?'он':'она');
-    qbox.querySelectorAll('[data-cat]').forEach(function(s){s.textContent=nm});
-    qbox.querySelectorAll('[data-user]').forEach(function(s){s.textContent=val('name')});
+    qbox.setAttribute('data-sex',isM()?'m':'f');
     var tg=val('method')!=='phone';
     qform.querySelector('[data-m="telegram"]').hidden=!tg;qform.querySelector('[data-m="phone"]').hidden=tg;
-    var h=val('health');qform.elements.health_note.hidden=!h.length||(h.length===1&&h[0]==='Всё хорошо');
-    var p=qPanes[qStep-1];
-    if(qStep<=QN)qStepEl.textContent='Шаг '+qStep+' из '+QN+' · '+(m&&p.getAttribute('data-name-m')||p.getAttribute('data-name'));
+    /* линия сверху — сколько обязательного уже заполнено */
+    var done=REQ.filter(okField).length;qProg.style.transform='scaleX('+(0.08+0.92*done/REQ.length).toFixed(3)+')';
   }
   function save(){
     try{
-      var d={_step:qStep};
+      var d={};
       [].forEach.call(qform.elements,function(el){
         if(!el.name||el.name==='company'||el.name==='consent')return;
         if(el.type==='radio'){if(el.checked)d[el.name]=el.value}
-        else if(el.type==='checkbox'){(d[el.name]=d[el.name]||[]);if(el.checked)d[el.name].push(el.value)}
+        else if(el.type==='checkbox'){if(el.checked)d[el.name]=true}
         else d[el.name]=el.value;
       });
       localStorage.setItem(DRAFT,JSON.stringify(d));
@@ -438,34 +434,27 @@
     [].forEach.call(qform.elements,function(el){
       if(!el.name||!(el.name in d))return;var v=d[el.name];
       if(el.type==='radio')el.checked=(v===el.value);
-      else if(el.type==='checkbox')el.checked=Array.isArray(v)&&v.indexOf(el.value)>=0;
+      else if(el.type==='checkbox')el.checked=v===true;
       else el.value=v;
     });
-    qStep=Math.min(Math.max(+d._step||1,1),QN);return true;
+    return true;
   }
-  /* ошибки — по-человечески, с учётом «она/он» */
   function setErr(n,msg){
     var f=fieldOf(n);if(!f)return;var e=f.querySelector('.qf-err');
     f.classList.toggle('bad',!!msg);if(e)e.textContent=msg||'';
     var el=qform.elements[n];if(el&&el.tagName)el.setAttribute('aria-invalid',msg?'true':'false');
     if(msg&&!reduce){f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake')}
   }
-  function checkStep(n){
+  function check(){
     var m=isM(),errs=[];
     function need(name,ok,msg){setErr(name,ok?'':msg);if(!ok)errs.push(name)}
-    if(n===1){
-      need('cat_name',!!val('cat_name'),m?'Напишите, как его зовут':'Напишите, как её зовут');
-      need('age',!!val('age'),'Выберите возраст — можно примерно');
-      var w=val('weight').replace(',','.'),wn=parseFloat(w);
-      need('weight',!w||(/^\d{1,2}([.]\d{1,2})?$/.test(w)&&wn>=0.3&&wn<=20),'Вес — числом в килограммах, например 4,5');
-    }
-    if(n===2)need('diet',!!val('diet'),'Выберите, что ближе всего');
-    if(n===4){
-      need('name',!!val('name'),'Как к вам обращаться');
-      if(val('method')==='phone'){var dg=val('phone').replace(/\D/g,'');need('phone',dg.length>=10&&dg.length<=15,'Проверьте номер — в нём 10–15 цифр')}
-      else{var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');need('telegram',/^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t),'Ник в Telegram — латиница, цифры и _, от 5 символов')}
-      need('consent',val('consent')===true,'Без согласия мы не сможем с вами связаться');
-    }
+    need('name',!!val('name'),'Как к вам обращаться');
+    need('city',!!val('city'),'В каком вы городе');
+    if(val('method')==='phone'){var dg=val('phone').replace(/\D/g,'');need('phone',dg.length>=10&&dg.length<=15,'Проверьте номер — в нём 10–15 цифр')}
+    else{var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');need('telegram',/^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t),'Ник в Telegram — латиница, цифры и _, от 5 символов')}
+    need('cat_name',!!val('cat_name'),m?'Напишите, как его зовут':'Напишите, как её зовут');
+    need('goal',!!val('goal'),'Выберите, что ближе всего');
+    need('consent',val('consent')===true,'Без согласия мы не сможем с вами связаться');
     if(errs.length){
       var f=fieldOf(errs[0]),el=qform.elements[errs[0]];
       if(f)f.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});
@@ -473,48 +462,31 @@
     }
     return !errs.length;
   }
-  function show(n,dir){
-    qStep=n;var done=n>QN;
-    qPanes.forEach(function(p,i){var on=i===n-1;p.classList.toggle('back',on&&dir<0);p.hidden=!on});
-    qProg.style.transform='scaleX('+(done?1:n/QN)+')';
-    qBack.hidden=n===1||done;qNav.hidden=done;qFail.hidden=true;
-    qNext.textContent=n===QN?'Отправить заявку':'Далее';
-    if(done)qStepEl.textContent='Заявка у нас';
-    qBody.scrollTop=0;sync();if(!done)save();
-    var h=qPanes[n-1].querySelector('.qf-h');setTimeout(function(){h&&h.focus({preventScroll:true})},60);
-  }
   function showDone(info){
-    show(QN+1,1);                                      /* сначала шаг, потом подписи: sync() внутри show() взял бы их из пустой формы */
-    qbox.querySelectorAll('[data-user]').forEach(function(s){s.textContent=info.user||''});
-    qbox.querySelectorAll('.qf-done [data-cat]').forEach(function(s){s.textContent=info.cat||''});
+    qPane.hidden=true;qDone.hidden=false;qNav.hidden=true;qFail.hidden=true;
+    qProg.style.transform='scaleX(1)';qStepEl.textContent='Заявка у нас';
+    qbox.querySelectorAll('[data-user]').forEach(function(x){x.textContent=info.user||''});
+    qbox.querySelectorAll('[data-cat]').forEach(function(x){x.textContent=info.cat||''});
     qbox.querySelector('[data-how]').textContent=info.how==='phone'?'позвоним или напишем вам':'напишем вам в Telegram';
+    qBody.scrollTop=0;var h=qDone.querySelector('.qf-h');setTimeout(function(){h&&h.focus({preventScroll:true})},60);
   }
-  qform.addEventListener('change',function(e){
-    var t=e.target,g=t.closest('[data-none]');
-    if(g&&t.type==='checkbox'&&t.checked){                /* «Всё хорошо» и «Больше никого» исключают остальные варианты */
-      var none=g.getAttribute('data-none');
-      g.querySelectorAll('input').forEach(function(i){if(i!==t&&(t.value===none||i.value===none))i.checked=false});
-    }
-    if(t.name)setErr(t.name,'');
-    sync();save();
-  });
+  function showForm(){
+    qDone.hidden=true;qPane.hidden=false;qNav.hidden=false;qFail.hidden=true;
+    qStepEl.textContent='Заявка · около минуты';qNext.textContent='Подать заявку';
+    qBody.scrollTop=0;sync();
+  }
+  qform.addEventListener('change',function(e){if(e.target.name)setErr(e.target.name,'');sync();save()});
   qform.addEventListener('input',function(e){if(e.target.name){setErr(e.target.name,'');sync();save()}});
-  qform.addEventListener('submit',function(e){
-    e.preventDefault();
-    if(sending||!checkStep(qStep))return;
-    if(qStep<QN){show(qStep+1,1);return}
-    send();
-  });
-  qBack.addEventListener('click',function(){if(qStep>1)show(qStep-1,-1)});
+  qform.addEventListener('submit',function(e){e.preventDefault();if(sending||!check())return;send()});
   function send(){
     sending=true;qFail.hidden=true;qNext.disabled=true;qNext.textContent='Отправляем…';
     var q=new URLSearchParams(location.search),utm={};
     ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){if(q.get(k))utm[k]=q.get(k)});
     var method=val('method')==='phone'?'phone':'telegram';
     var body={
-      cat:{sex:isM()?'m':'f',name:val('cat_name'),age:val('age'),weight:val('weight'),health:val('health'),health_note:qform.elements.health_note.hidden?'':val('health_note')},
-      diet:{base:val('diet'),meals:val('meals'),water:val('water'),avoid:val('avoid')},
-      habits:{temper:val('temper'),home:val('home'),others:val('others'),priority:val('priority')},
+      form:'v3',
+      cat:{sex:isM()?'m':'f',name:val('cat_name'),age:val('age')},
+      goal:{main:val('goal'),note:val('goal_note')},
       contact:{name:val('name'),method:method,value:method==='phone'?val('phone'):val('telegram'),city:val('city')},
       consent:val('consent')===true,company:qform.elements.company.value,
       meta:{page:location.href.split('#')[0].slice(0,300),ref:document.referrer.slice(0,300),utm:utm,mode:native?'site':'stand'}
@@ -524,14 +496,13 @@
       .then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(!r.ok||!j.ok)throw j;return j})})
       .then(function(){
         clearTimeout(to);sending=false;qNext.disabled=false;
-        var info={cat:body.cat.name.charAt(0).toUpperCase()+body.cat.name.slice(1),user:body.contact.name,how:method};
+        var info={cat:cap(body.cat.name),user:cap(body.contact.name),how:method};
         try{localStorage.removeItem(DRAFT);localStorage.setItem(SENT,JSON.stringify(info))}catch(e){}
-        extra++;target=base+extra;try{localStorage.setItem('kk_joined',extra)}catch(e){}cnum.textContent=fmt(target);
         qform.elements.consent.checked=false;
         showDone(info);
       })
       .catch(function(j){
-        clearTimeout(to);sending=false;qNext.disabled=false;qNext.textContent='Отправить заявку';
+        clearTimeout(to);sending=false;qNext.disabled=false;qNext.textContent='Подать заявку';
         qFail.textContent=(j&&j.error)||'Не получилось отправить. Проверьте интернет и попробуйте ещё раз — ответы сохранены.';
         qFail.hidden=false;
       });
@@ -550,7 +521,7 @@
     if(!native){qm.style.top=frame.scrollTop+'px';qm.style.height=frame.clientHeight+'px';qm.style.bottom='auto'}
     var sent=null;try{sent=JSON.parse(localStorage.getItem(SENT)||'null')}catch(e){}
     var hasDraft=restore();
-    if(sent&&!hasDraft)showDone(sent);else show(qStep,1);
+    if(sent&&!hasDraft)showDone(sent);else{showForm();var h=qPane.querySelector('.qf-h');setTimeout(function(){h&&h.focus({preventScroll:true})},60)}
     qm.classList.add('on');qm.setAttribute('aria-hidden','false');lockEl.style.overflow='hidden';fitQ();
   }
   function closeQ(){
@@ -561,13 +532,13 @@
   }
   $('qf-again').addEventListener('click',function(){
     try{localStorage.removeItem(SENT);localStorage.removeItem(DRAFT)}catch(e){}
-    qform.reset();qPanes.forEach(function(p){p.querySelectorAll('.qf-field').forEach(function(f){f.classList.remove('bad')});p.querySelectorAll('.qf-err').forEach(function(e){e.textContent=''})});
-    show(1,1);
+    qform.reset();qform.querySelectorAll('.qf-field').forEach(function(f){f.classList.remove('bad')});qform.querySelectorAll('.qf-err').forEach(function(e){e.textContent=''});
+    showForm();
   });
   $('qf-close').addEventListener('click',closeQ);
   $('open-q').addEventListener('click',openQ);$('q-x').addEventListener('click',closeQ);
   qm.addEventListener('click',function(e){if(e.target===qm)closeQ()});
-  /* «Вступить в клуб» везде открывает анкету сразу; без JS ссылки ведут к блоку заявки */
+  /* «Подать заявку» везде открывает анкету сразу; без JS ссылки ведут к блоку заявки */
   document.querySelectorAll('a[href="#waitlist"].btn-primary').forEach(function(a){
     a.addEventListener('click',function(e){e.preventDefault();if(menu.classList.contains('open'))setMenu(false);openQ()});
   });
@@ -643,7 +614,6 @@
         c.querySelectorAll('.hero-media').forEach(function(m){m.style.clipPath=''});
         c.querySelectorAll('.hero-media img').forEach(function(i){i.style.transform=''});
         c.querySelectorAll('.pcard').forEach(function(p){p.style.removeProperty('--s');p.style.removeProperty('--dim')});
-        c.querySelectorAll('.cnum').forEach(function(n){n.textContent=fmt(target)});
         /* «Здоровье» в обзоре — без закрепления, подписи видны */
         c.querySelectorAll('.hx').forEach(function(h){h.classList.remove('on','live');h.style.removeProperty('--hx-card');h.style.removeProperty('--hx-zone')});
         c.querySelectorAll('.finale').forEach(function(f){f.classList.add('seen')});

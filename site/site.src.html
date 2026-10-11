@@ -134,11 +134,13 @@ section{position:relative;padding:80px 0}
    HERO — фото в «арке», которая на прокрутке раскрывается в полный кадр
    ========================================================= */
 .hero{padding:10px 0 0}
-.hero-media{position:relative;margin:0 12px;height:min(calc((100cqw - 24px) * 1.5),max(400px,calc(var(--app-h) - var(--hh) - 190px)));border-radius:26px;overflow:hidden;background:var(--linen)}
+.hero-media{position:relative;margin:0 12px;height:min(calc((100cqw - 24px) * 1.1),clamp(240px,calc(var(--app-h) * .38),360px));border-radius:26px;overflow:hidden;background:var(--linen)}
 .js .hero-media{will-change:clip-path}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 55%;transform-origin:50% 60%}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 42%;transform-origin:50% 60%}
 .js .hero-media img{will-change:transform}
-.hero-text{position:relative;display:flex;flex-direction:column;gap:16px;align-items:flex-start;padding-top:28px;padding-bottom:60px}
+.hero-text{position:relative;display:flex;flex-direction:column;gap:14px;align-items:flex-start;padding-top:22px;padding-bottom:56px}
+.hero .kicker{margin-bottom:2px}
+.hero .cta-note{font-size:13px;line-height:1.5;color:var(--muted);max-width:26em}
 .hero .sub{font-size:16px;line-height:1.6;color:var(--muted);max-width:30em}
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:6px}
 .line{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
@@ -400,7 +402,7 @@ section{position:relative;padding:80px 0}
 .qf-pane[hidden]{display:none}
 @keyframes qf-in{from{opacity:0;transform:translateX(24px)}}
 @keyframes qf-back{from{opacity:0;transform:translateX(-24px)}}
-.qbox .qf-h{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.05;letter-spacing:-.005em;margin:0;outline:none}
+.qbox .qf-h{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.05;letter-spacing:-.005em;margin:0;outline:none}
 .qbox .qf-lead{font-size:14.5px;line-height:1.55;color:var(--muted);margin:-12px 0 0}
 .qf-field{display:flex;flex-direction:column;gap:10px;border:0;margin:0;padding:0;min-width:0}
 .qf-field[hidden]{display:none}
@@ -435,6 +437,10 @@ section{position:relative;padding:80px 0}
 .qf-check>span::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid var(--ivory);border-width:0 2px 2px 0;transform:rotate(45deg) scale(0);transition:transform .25s var(--ease-out)}
 .qf-check input:checked+span::before{background:var(--burgundy);border-color:var(--burgundy)}
 .qf-check input:checked+span::after{transform:rotate(45deg) scale(1)}
+.qf-group{display:flex;flex-direction:column;gap:16px;padding-top:20px;border-top:1px solid var(--line)}
+.qf-gt{font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--charcoal)}
+.qf-ta{height:auto;min-height:92px;padding:13px 16px;line-height:1.45;resize:vertical}
+.qf-check a{color:var(--burgundy);text-underline-offset:3px}
 .qf-err{font-size:12.5px;line-height:1.4;color:var(--burgundy)}
 .qf-err:empty{display:none}
 .qf-field.bad .qf-in{border-color:var(--burgundy)}
@@ -539,7 +545,7 @@ html.intro-on{background:var(--ivory)}
 }
 @container site (min-width:600px){
   .wrap{padding:0 max(40px,env(safe-area-inset-right)) 0 max(40px,env(safe-area-inset-left))}
-  .hero-media{margin:0 40px;height:min(calc((100cqw - 80px) * .92),calc(var(--app-h) - var(--hh) - 220px))}
+  .hero-media{margin:0 40px;height:min(calc((100cqw - 80px) * .7),calc(var(--app-h) * .42))}
   .slider,.phones{padding-left:40px;scroll-padding-left:40px}
   .slider::after,.phones::after{flex-basis:26px}
   .sprog{margin-left:40px;margin-right:40px}
@@ -566,6 +572,7 @@ html.intro-on{background:var(--ivory)}
   /* герой на один экран: текст слева, арка с фото справа */
   .hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:72px;height:clamp(560px,calc(var(--app-h) - var(--hh)),960px);padding:20px max(40px,calc((100cqw - 1240px)/2 + 40px)) 40px}
   .hero-media{grid-column:2;grid-row:1;margin:0;aspect-ratio:2/3;width:auto;height:calc(clamp(560px,calc(var(--app-h) - var(--hh)),960px) - 60px);max-width:44cqi;border-radius:28px}
+  .hero-media img{object-position:50% 55%}
   .hero .h-display{font-size:clamp(60px,min(7.5cqi,calc((var(--app-h) - var(--hh)) * .14)),96px)}
   .hero-media img{position:absolute;inset:0}
   .hero-text{grid-column:1;grid-row:1;padding:0;gap:22px}
@@ -653,6 +660,101 @@ html.intro-on{background:var(--ivory)}
 .frame.labels .blk{display:inline-block}
 .frame.d .qmodal{align-items:center}
 .frame.labels [data-block]{outline:1px dashed rgba(90,82,73,.6);outline-offset:-1px}
+
+.role,.clubsec,.teamsec{padding:72px 0 64px}
+.wl-cta .cta-note{font-size:13px;line-height:1.5;color:var(--muted);margin:10px 0 0;max-width:26em}
+@container site (min-width:900px){.role,.clubsec,.teamsec{padding:110px 0 96px}}
+/* ---------- V3: обращение основателей ---------- */
+.founders{background:var(--ivory);padding:72px 0 64px}
+.fo-grid{display:flex;flex-direction:column;gap:34px}
+.fo-letter{display:flex;flex-direction:column;gap:18px}
+.fo-letter p{font-family:var(--serif);font-size:22px;line-height:1.35;color:var(--ink);max-width:24em}
+.fo-sign{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--muted)}
+.fo-sign b{font-family:var(--serif);font-weight:500;font-size:18px;color:var(--ink)}
+.fo-people{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fo-card{display:flex;flex-direction:column;gap:10px}
+.fo-ph{aspect-ratio:4/5;border-radius:18px;background:linear-gradient(160deg,var(--linen),var(--sand));position:relative;overflow:hidden}
+.fo-ph::after{content:"";position:absolute;inset:10px;border:1px solid rgba(74,31,39,.18);border-radius:12px;pointer-events:none}
+.fo-ph img{width:100%;height:100%;object-fit:cover}
+.fo-ph.todo-ph::before{content:"фото";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(90,82,73,.6)}
+.fo-card b{font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.15}
+.fo-card span{font-size:12.5px;line-height:1.4;color:var(--muted)}
+/* пометки для владельца: чего в источниках нет — видно на черновике, снимается перед запуском */
+mark.todo{background:rgba(74,31,39,.08);color:var(--burgundy);padding:0 .3em;border-radius:4px;font-style:normal}
+/* ---------- V3: первый месяц — шаги ---------- */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;counter-reset:st}
+.step{position:relative;padding:0 0 30px 44px}
+.step::before{content:counter(st,decimal-leading-zero);counter-increment:st;position:absolute;left:0;top:0;font-family:var(--serif);font-size:15px;letter-spacing:.08em;color:var(--charcoal);font-variant-numeric:lining-nums tabular-nums}
+.step::after{content:"";position:absolute;left:11px;top:26px;bottom:8px;width:1px;background:var(--line-2)}
+.step:last-child::after{display:none}
+.step b{display:block;font-family:var(--serif);font-weight:500;font-size:22px;line-height:1.1;margin-bottom:6px}
+.step p{margin:0;font-size:14.5px;line-height:1.55;color:var(--muted);max-width:30em}
+.step .when{display:block;margin-top:6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--charcoal)}
+/* форматы участия */
+.fmts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fmt{display:flex;flex-direction:column;gap:8px}
+.fmt .fimg{aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:var(--sand)}
+.fmt .fimg img{width:100%;height:100%;object-fit:cover}
+.fmt b{font-family:var(--serif);font-weight:500;font-size:17px;line-height:1.15}
+.fmt span{font-size:13px;line-height:1.45;color:var(--muted)}
+.fmt .tag{display:inline-block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--charcoal);margin-top:2px}
+/* ---------- V3: что готово / пилот / следующий этап ---------- */
+.status{display:grid;gap:12px}
+.st-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px 20px 20px;display:flex;flex-direction:column;gap:12px}
+.st-card.now{border-color:rgba(74,31,39,.35)}
+.st-k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--charcoal);display:flex;align-items:center;gap:8px}
+.st-k i{width:8px;height:8px;border-radius:50%;background:var(--line-2)}
+.st-card.now .st-k i{background:var(--burgundy)}
+.st-card h3{font-family:var(--serif);font-weight:500;font-size:24px;line-height:1.1}
+.st-card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.st-card li{padding-left:16px;position:relative}
+.st-card li::before{content:"";position:absolute;left:0;top:.75em;width:6px;height:1px;background:var(--taupe)}
+.st-card .when{font-size:12.5px;color:var(--charcoal);margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}
+/* сквозной сценарий — шаги, связанные с экранами телефона */
+.flow{display:flex;flex-direction:column;gap:6px;margin-top:22px}
+.flow button{display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:transparent;font:inherit;color:var(--ink);cursor:pointer;transition:border-color .3s,background-color .3s;-webkit-tap-highlight-color:transparent}
+.flow button.on{background:var(--paper);border-color:rgba(74,31,39,.35)}
+.flow .n{flex:none;font-family:var(--serif);font-size:14px;letter-spacing:.08em;color:var(--charcoal);padding-top:3px;font-variant-numeric:lining-nums}
+.flow b{display:block;font-weight:500;font-size:15px;margin-bottom:3px}
+.flow span{font-size:13.5px;line-height:1.45;color:var(--muted)}
+.phones:not(.live) .ph-item{transition:opacity .5s var(--ease)}
+.phones:not(.live).pick .ph-item:not(.hl){opacity:.4}
+/* ---------- V3: команда и подтверждения ---------- */
+.team{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tm{display:flex;flex-direction:column;gap:8px}
+.tm .fo-ph{aspect-ratio:1;border-radius:16px}
+.tm b{font-family:var(--serif);font-weight:500;font-size:16px;line-height:1.15}
+.tm span{font-size:12.5px;line-height:1.4;color:var(--muted)}
+.proof-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.proof-list li{display:flex;flex-direction:column;gap:4px;font-size:14.5px;line-height:1.5;color:var(--muted);padding:14px 0;border-top:1px solid var(--line)}
+.proof-list li b{font-family:var(--serif);font-weight:500;font-size:17px;color:var(--ink)}
+/* ---------- V3: правила приглашения — аккордеон ---------- */
+.acc{border-top:1px solid var(--line-2)}
+.acc details{border-bottom:1px solid var(--line-2)}
+.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;font-family:var(--serif);font-size:21px;line-height:1.15;color:var(--ink);-webkit-tap-highlight-color:transparent}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"";flex:none;width:11px;height:11px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);transform:rotate(45deg) translateY(-3px);transition:transform .35s var(--ease)}
+.acc details[open] summary::after{transform:rotate(-135deg) translateY(2px)}
+.acc .acc-b{padding:0 0 20px;font-size:14.5px;line-height:1.6;color:var(--muted);max-width:34em}
+.acc .acc-b p{margin:0 0 10px}.acc .acc-b p:last-child{margin-bottom:0}.acc .acc-b ul{margin:0 0 10px;padding-left:18px}
+.sec-head.left{text-align:left;align-items:flex-start}
+.sec-sub{font-size:16px;line-height:1.6;color:var(--muted);max-width:34em}
+@container site (min-width:900px){
+  .founders{padding:110px 0 96px}
+  .fo-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start}
+  .fo-letter p{font-size:28px}
+  .fo-people{gap:20px}
+  .steps{flex-direction:row;gap:40px}
+  .step{flex:1;padding:36px 0 0}
+  .step::after{left:0;right:-40px;top:10px;bottom:auto;width:auto;height:1px}
+  .fmts{grid-template-columns:repeat(4,1fr);gap:24px}
+  .status{grid-template-columns:repeat(3,1fr);gap:20px}
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1000px;margin:34px auto 0}
+  .flow button{flex-direction:column;gap:8px;padding:18px}
+  .team{grid-template-columns:repeat(4,1fr);gap:20px}
+  .acc summary{font-size:26px;padding:24px 0}
+  .acc .acc-b{font-size:16px}
+}
 
 /* ---------- бережём тех, кто отключил анимацию ---------- */
 @media (prefers-reduced-motion:reduce){
@@ -752,25 +854,27 @@ html.intro-on{background:var(--ivory)}
       <svg class="b-word" id="b-word" viewBox="<!--VB:wordmark-->" fill="currentColor" aria-hidden="true"><use href="#kk-wordmark"/></svg>
     </a>
     <nav class="nav-links" aria-label="Основная навигация">
-      <a href="#clm">Идея</a>
-      <a href="#product-block">Рацион</a>
-      <a href="#health">Здоровье</a>
-      <a href="#stories">Истории</a>
+      <a href="#founders">Приглашение</a>
+      <a href="#benefit">Польза</a>
+      <a href="#system">Как работает</a>
+      <a href="#club">Клуб</a>
+      <a href="#waitlist">Заявка</a>
     </nav>
     <div class="nav-right">
-      <a href="#waitlist" class="btn btn-primary nav-cta">Вступить в клуб</a>
+      <a href="#waitlist" class="btn btn-primary nav-cta">Подать заявку</a>
       <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
     </div>
   </div>
   <div class="menu" id="menu">
     <nav aria-label="Меню">
-      <a href="#clm"><small aria-hidden="true">01</small>Идея</a>
-      <a href="#product-block"><small aria-hidden="true">02</small>Рацион</a>
-      <a href="#health"><small aria-hidden="true">03</small>Здоровье</a>
-      <a href="#stories"><small aria-hidden="true">04</small>Истории</a>
+      <a href="#founders"><small aria-hidden="true">01</small>Приглашение</a>
+      <a href="#benefit"><small aria-hidden="true">02</small>Польза</a>
+      <a href="#system"><small aria-hidden="true">03</small>Как работает</a>
+      <a href="#club"><small aria-hidden="true">04</small>Клуб</a>
+      <a href="#waitlist"><small aria-hidden="true">05</small>Заявка</a>
     </nav>
     <div class="menu-foot">
-      <a href="#waitlist" class="btn btn-primary">Вступить в клуб</a>
+      <a href="#waitlist" class="btn btn-primary">Подать заявку</a>
     </div>
   </div>
 </header>
@@ -781,48 +885,119 @@ html.intro-on{background:var(--ivory)}
 <section class="hero" id="product" data-block="hero"><span class="blk" aria-hidden="true">01 · HERO</span>
   <div class="hero-media" id="hero-media"><img {{img:hero}} sizes="(min-width:900px) 44vw, 100vw" alt="Женщина в кремовом свитере сидит на льняном диване и с улыбкой смотрит на рыжую кошку, которая спит у неё на коленях" fetchpriority="high"></div>
   <div class="wrap hero-text">
+    <span class="kicker hero-in">Набор первых участников · По приглашению</span>
     <h1 class="h-display"><span class="line"><span>Больше счастливых</span></span><span class="line"><span>лет вместе</span></span></h1>
-    <p class="sub hero-in d1">KOSH KUSÉ — единая система заботы о кошках, где натуральная еда, ветеринарный сервис и аксессуары работают как одно целое. Вы любите. Мы помогаем со всем остальным.</p>
+    <p class="sub hero-in d1">Владимир Перельман и команда KOSH KUSÉ собирают владельцев кошек, чтобы вместе создать систему заботы: натуральная еда, ветеринарный сервис и аксессуары — как одно целое. Вы любите. Мы помогаем со всем остальным.</p>
     <div class="hero-cta hero-in d2">
-      <a href="#waitlist" class="btn btn-primary" id="hero-cta">Вступить в клуб <span class="arr" aria-hidden="true">→</span></a>
+      <a href="#waitlist" class="btn btn-primary" id="hero-cta">Подать заявку <span class="arr" aria-hidden="true">→</span></a>
       <span class="scroll-cue" aria-hidden="true"><i></i>Листайте</span>
+    </div>
+    <p class="cta-note hero-in d2">Расскажите о себе и своей кошке. Мы познакомимся и расскажем об условиях участия.</p>
+  </div>
+</section>
+
+<!-- 01 · ПРИГЛАШЕНИЕ ОСНОВАТЕЛЕЙ -->
+<section class="founders" id="founders" data-block="founders"><span class="blk" aria-hidden="true">01 · FOUNDERS</span>
+  <div class="wrap fo-grid">
+    <div class="fo-letter">
+      <span class="kicker rv">Приглашение основателей</span>
+      <h2 class="h-sec rv" style="--i:1">Мы зовём не покупателей, а соавторов</h2>
+      <p class="rv" style="--i:2">Много лет моя работа — чтобы людям было хорошо за столом. Кошки ждут того же: настоящей еды и внимания к себе. KOSH KUSÉ — система заботы, которую мы собираем вместе с первыми участниками: рацион, ветеринарная поддержка и устройства, замечающие то, что мы можем пропустить.</p>
+      <p class="rv" style="--i:3">Мы ищем тех, кто готов пробовать решения раньше других, говорить, что не так, и видеть, как их замечания меняют продукт. Это и есть клуб.</p>
+      <div class="fo-sign rv" style="--i:4"><b>Владимир Перельман</b><span>основатель KOSH KUSÉ · ресторатор, основатель группы Perelman People</span></div>
+      <span class="fo-draft rv" style="--i:4">Черновик обращения · утверждают основатели</span>
+    </div>
+    <div class="fo-people rv" style="--i:2">
+      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Владимир Перельман</b><span>основатель · голос клуба<br><mark class="todo">фото с его кошкой</mark></span></div>
+      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Макс Снигирёв</b><span>сооснователь · основатель JAMI<br><mark class="todo">роль в проекте</mark></span></div>
+      <div class="fo-card"><div class="fo-ph todo-ph"></div><b>Вадим Устюжанин</b><span>сооснователь · ex-CEO JAMI, 7 лет с Mars<br><mark class="todo">роль в проекте</mark></span></div>
     </div>
   </div>
 </section>
 
-<!-- CLM -->
-<section class="spot clm linen" id="clm" data-block="clm"><span class="blk" aria-hidden="true">02 · CLM</span>
+<!-- МАНИФЕСТ (CLM) -->
+<section class="spot clm linen" id="clm" data-block="clm"><span class="blk" aria-hidden="true">01b · CLM</span>
   <div class="wrap clm-grid">
     <div class="clm-head">
       <span class="stamp rv" lang="en">Cat Lives Matter<sup>*</sup></span>
       <h2 class="h-sec rv" style="--i:1">Любовь, которая не умеет просить, заслуживает ответа</h2>
     </div>
-    <div class="video rv" id="video" role="button" tabindex="0" aria-label="Видео: почему мы это делаем" aria-pressed="false">
-      <img {{img:clm-video}} sizes="(min-width:900px) 420px, 90vw" alt="<!--ALT:clm-video-->" loading="lazy" data-parallax="0.05">
-      <div class="play"><span class="play-btn" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="cap"><b>Почему мы это делаем</b><span>Видео — к запуску клуба</span></span></div>
-      <div class="playing-msg"><b>Видео — к запуску</b><span>Оно появится здесь, когда клуб откроется.</span></div>
-    </div>
     <div class="clm-copy">
       <p class="ink">Кошки не умеют просить. Они не жалуются, не болеют напоказ, не требуют внимания. Они просто ждут. Такая любовь заслуживает ответа — не «корма», не «товаров для животных», а ответа.</p>
-      <p class="ink">Мы собрали первую систему заботы, в которой продумано всё: еда, ветеринарный сервис, аксессуары. Это самая полная забота о кошке — потому что она не питомец, а член семьи.</p>
-      <h3 class="clm-sub rv">Рацион за рацион</h3>
-      <p class="rv">Ваша кошка ждёт вас девять часов. Есть кошки, которые ждут годами. Не вас — кого-нибудь. Они живут в приюте — и тоже не умеют просить.</p>
-      <figure class="one2one unveil" id="one2one">
-        <img {{img:one2one}} sizes="(min-width:900px) 620px, 92vw" alt="<!--ALT:one2one-->" loading="lazy">
-        <figcaption class="sr">Один плюс один: на каждую подписку — рацион для кошки в приюте</figcaption>
-        <span class="one2one-n serif-num" aria-hidden="true"><span class="a" aria-hidden="true">1</span><span class="plus" aria-hidden="true">+</span><span class="b" aria-hidden="true">1</span></span>
-      </figure>
-      <p class="rv">С каждой вашей подпиской KOSH KUSÉ кормит кошку в приюте — ту, у которой пока нет мамы. Она не узнает, кто вы. Зато будет сыта. Весь месяц.</p>
-      <p class="small rv">Её имя, фото и отчёт — в вашем приложении.</p>
+      <p class="ink">Мы собираем первую систему заботы, в которой продумано всё: еда, ветеринарный сервис, аксессуары. Это самая полная забота о кошке — потому что она не питомец, а член семьи.</p>
     </div>
   </div>
   <div class="wrap"><p class="fn">* Cat Lives Matter (англ.) — «Жизни кошек важны»</p></div>
 </section>
 
-<!-- PRODUCT -->
-<section class="product" id="product-block" data-block="product"><span class="blk" aria-hidden="true">03 · PRODUCT</span>
-  <div class="wrap sec-head">
-    <span class="kicker rv">Система заботы</span>
+<!-- 02 · ПОЛЬЗА -->
+<section class="pillars" id="benefit" data-block="benefit"><span class="blk" aria-hidden="true">02 · BENEFIT</span>
+  <div class="wrap proof">
+    <span class="kicker rv">Польза для неё и для вас</span>
+    <h2 class="h-sec rv" style="--i:1">Мы убрали всё, что мешает</h2>
+    <p class="lede rv" style="--i:2">Продлить жизнь — значит убрать всё, что её сокращает. Плохая еда, обезвоживание, слишком поздно замеченная болезнь. Мы научились заботиться о своём здоровье. Нашим кошкам это нужно не меньше — а вам нужно спокойствие, что всё под присмотром.</p>
+  </div>
+  <!-- пять пунктов карточкой-историей: фото на всю карточку, текст поверх; без JS — лента со свайпом -->
+  <div class="hx" id="hx">
+    <div class="hx-stick">
+      <div class="hx-card">
+        <div class="hx-rail" id="hx-rail"></div>
+      <ol class="hx-track" id="hx-track">
+        <li class="hx-slide"><img {{img:c-food}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-food-->" loading="lazy"><div class="hx-cap"><span class="hx-num">01 / 05</span><h3 class="h-card">Еда без лишнего</h3><p>Филе дикого минтая. Ни консервантов, ни усилителей вкуса.</p></div></li>
+        <li class="hx-slide"><img {{img:c-water}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-water-->" loading="lazy"><div class="hx-cap"><span class="hx-num">02 / 05</span><h3 class="h-card">Молочная сыворотка</h3><p>Молочная сыворотка восполняет минеральный баланс.</p></div></li>
+        <li class="hx-slide"><img {{img:c-early}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-early-->" loading="lazy"><div class="hx-cap"><span class="hx-num">03 / 05</span><h3 class="h-card">Заметить вовремя</h3><p>Анализы на дому, без переноски и стресса. Медкарта — у врача и у вас.</p></div></li>
+        <li class="hx-slide"><img {{img:c-move}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-move-->" loading="lazy"><div class="hx-cap"><span class="hx-num">04 / 05</span><h3 class="h-card">Вес и движение</h3><p>Кормушка, лоток и трекер ведут дневник: порции, вес, визиты, сон и движение.</p></div></li>
+        <li class="hx-slide"><img {{img:c-calm}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-calm-->" loading="lazy"><div class="hx-cap"><span class="hx-num">05 / 05</span><h3 class="h-card">Спокойствие — тоже здоровье</h3><p>Зоопсихолог разберётся в привычках и поведении.</p></div></li>
+      </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 · ПЕРВЫЕ УЧАСТНИКИ И ПЕРВЫЙ МЕСЯЦ -->
+<section class="role linen" id="role" data-block="role"><span class="blk" aria-hidden="true">03 · ROLE</span>
+  <div class="wrap sec-head left">
+    <span class="kicker rv">Первые участники</span>
+    <h2 class="h-sec rv" style="--i:1">Что значит быть первым</h2>
+    <p class="sec-sub rv" style="--i:2">Клуб собирается небольшим, чтобы слышать каждого. Первые участники пробуют решения раньше других, говорят, что не так, и видят, как их замечания меняют продукт.</p>
+  </div>
+  <div class="wrap">
+    <ol class="steps rv" style="--i:2">
+      <li class="step"><b>Знакомство</b><p>Короткая встреча или созвон: о вас, о ней и о том, что хочется улучшить.</p><span class="when">первая неделя</span></li>
+      <li class="step"><b>Потребности</b><p>Вместе разбираем рацион, здоровье и привычки. Из этого складывается её программа.</p><span class="when">вторая неделя</span></li>
+      <li class="step"><b>Сервис или пилот</b><p>Начинаем с того, что уже доступно: рацион с переходом за семь дней. Что в пилоте — пробуете первыми, по желанию.</p><span class="when">с третьей недели</span></li>
+      <li class="step"><b>Встреча по результатам</b><p>Через месяц: что сработало, что менять. Ваши замечания идут в работу команды.</p><span class="when">конец месяца</span></li>
+    </ol>
+    <p class="sec-sub rv" style="--i:3">Участие добровольное: от одной встречи в месяц до пилотов и обсуждений. Сколько это занимает времени — <mark class="todo">уточняем с командой</mark>.</p>
+  </div>
+  <div class="wrap" style="margin-top:34px">
+    <div class="fmts">
+      <div class="fmt rv"><div class="fimg unveil"><img {{img:meeting}} sizes="(min-width:900px) 290px, 46vw" alt="Две женщины разговаривают за столом у окна, между ними на столе сидит полосатая кошка" loading="lazy"></div><b>Сопровождение</b><span>Созвоны, чат и личные встречи — по вашему ритму.</span><span class="tag">с первой недели</span></div>
+      <div class="fmt rv" style="--i:1"><div class="fimg unveil" style="--i:1"><img {{img:couple}} sizes="(min-width:900px) 290px, 46vw" alt="Пара готовит на светлой кухне, у их ног сидит бело-рыжая кошка" loading="lazy"></div><b>Пилоты дома</b><span>Пробуете новое первыми и рассказываете, как это у вас.</span><span class="tag">по желанию</span></div>
+      <div class="fmt rv" style="--i:2"><div class="fimg unveil" style="--i:2"><img {{img:dinner}} sizes="(min-width:900px) 290px, 46vw" alt="Люди разного возраста разговаривают за длинным столом в светлом ресторане" loading="lazy"></div><b>Ужины клуба</b><span>Раз в месяц — за одним столом с основателями и гостями.</span><span class="tag"><mark class="todo">дата первого</mark></span></div>
+      <div class="fmt rv" style="--i:3"><div class="fimg unveil" style="--i:3"><img {{img:man-phone}} sizes="(min-width:900px) 290px, 46vw" alt="Мужчина с телефоном сидит у дивана, серо-белая кошка трётся о его плечо" loading="lazy"></div><b>Закрытый онлайн-дом</b><span>Место, где участники показывают своих кошек и задают вопросы.</span><span class="tag"><mark class="todo">формат уточняется</mark></span></div>
+    </div>
+    <p class="sec-sub rv" style="margin-top:28px">Здесь будут изменения, которые появились благодаря первым участникам. Пока их нет — клуб только собирается.</p>
+  </div>
+</section>
+
+<!-- 04 · ЧТО ГОТОВО И КАК РАБОТАЕТ -->
+<section class="product" id="system" data-block="system"><span class="blk" aria-hidden="true">04 · SYSTEM</span>
+  <div class="wrap sec-head left">
+    <span class="kicker rv">Что уже готово</span>
+    <h2 class="h-sec rv" style="--i:1">Честно о стадии</h2>
+    <p class="sec-sub rv" style="--i:2">Первых участников мы зовём в систему, которая ещё собирается. Поэтому делим её на три части: что доступно сейчас, что проходит пилот и что дальше.</p>
+  </div>
+  <div class="wrap">
+    <div class="status rv" style="--i:2">
+      <div class="st-card now"><span class="st-k"><i></i>Доступно первым</span><h3>Рацион и стол</h3><ul><li>Рацион из филе дикого минтая — собственное производство запущено</li><li>Переход за семь дней, чек-ин на десятый</li><li>Доставка курьером в выбранное окно</li></ul><span class="when">первая когорта — осень 2026 · <mark class="todo">дата</mark></span></div>
+      <div class="st-card"><span class="st-k"><i></i>Проходит пилот</span><h3>Проверка и приложение</h3><ul><li>Полевой тест: дневники, анализы до и после</li><li>Независимые лабораторные испытания рецептуры по стандарту FEDIAF</li><li>Приложение: профиль, медкарта, напоминания</li></ul><span class="when">результаты — после теста, участникам первыми</span></div>
+      <div class="st-card"><span class="st-k"><i></i>Следующий этап</span><h3>Устройства и врачи</h3><ul><li>Кормушка, лоток и трекер <mark class="todo">статус</mark></li><li>Домашний чекап и живой ветеринар в чате <mark class="todo">статус</mark></li><li>Именной куратор-ветеринар</li></ul><span class="when">сроки объявим участникам · <mark class="todo">уточнить</mark></span></div>
+    </div>
+    <p class="sec-sub rv" style="margin-top:22px">Условия: участие платное, по подписке на рацион и сервис. Состав и стоимость расскажем при знакомстве — <mark class="todo">цены</mark>; устройства — <mark class="todo">входят в подписку или отдельно</mark>. Город запуска — Москва. Заявка ни к чему не обязывает.</p>
+  </div>
+  <div class="wrap sec-head" style="margin-top:72px">
+    <span class="kicker rv">Из чего состоит система</span>
     <h2 class="h-sec rv" style="--i:1">Еда, ветеринар и аксессуары — как одно целое</h2>
   </div>
   <div class="pstack" id="pstack">
@@ -832,7 +1007,7 @@ html.intro-on{background:var(--ivory)}
         <span class="num">01</span>
         <h3 class="h-card">Полноценный рацион</h3>
         <ul class="plist">
-          <li><b>Влажный корм</b> из филе дикого минтая. Витамины и минералы — в составе, консерванты и усилители вкуса — нет.</li>
+          <li><b>Рацион</b> из филе дикого минтая. Витамины и минералы — в составе, консерванты и усилители вкуса — нет.</li>
           <li><b>Молочная сыворотка</b> — восполняет минеральный баланс.</li>
           <li><b>Снеки из рыбной чешуи</b> — для зубов и пищеварения.</li>
         </ul>
@@ -914,60 +1089,82 @@ html.intro-on{background:var(--ivory)}
       <span>Гаджеты</span>
     </div>
   </div>
+  <div class="wrap">
+    <div class="flow" id="flow" aria-label="Как работает система">
+      <button type="button" data-tab="2" aria-pressed="false"><span class="n">01</span><span><b>Устройства замечают</b><span>Кормушка и лоток фиксируют порции, вес и визиты.</span></span></button>
+      <button type="button" data-tab="1" aria-pressed="false"><span class="n">02</span><span><b>Данные — в профиле</b><span>Медкарта, анализы и динамика — в одном месте.</span></span></button>
+      <button type="button" data-tab="0" aria-pressed="false"><span class="n">03</span><span><b>Понятен следующий шаг</b><span>Рацион и напоминания: что сделать сегодня.</span></span></button>
+      <button type="button" data-tab="1" aria-pressed="false"><span class="n">04</span><span><b>Специалист видит то же</b><span>Ветеринар отвечает, видя её историю, а не пересказ.</span></span></button>
+    </div>
+    <p class="sec-sub rv" style="margin-top:18px">Так система задумана целиком. Что из этого уже работает — в разделе «Что уже готово» выше.</p>
+  </div>
 </section>
 
-<!-- PILLARS -->
-<section class="pillars linen" id="health" data-block="pillars"><span class="blk" aria-hidden="true">04 · PILLARS</span>
-  <div class="wrap proof">
-    <span class="kicker rv">Здоровье</span>
-    <h2 class="h-sec rv" style="--i:1">Мы убрали всё, что мешает</h2>
-    <p class="lede rv" style="--i:2">Продлить жизнь — значит убрать всё, что её сокращает. Плохая еда, обезвоживание, слишком поздно замеченная болезнь. Мы научились заботиться о своём здоровье. Нашим кошкам это нужно не меньше.</p>
+<!-- 05 · КОМАНДА И ПОДТВЕРЖДЕНИЯ -->
+<section class="teamsec linen" id="team" data-block="team"><span class="blk" aria-hidden="true">05 · TEAM</span>
+  <div class="wrap sec-head left">
+    <span class="kicker rv">Команда и подтверждения</span>
+    <h2 class="h-sec rv" style="--i:1">Кто отвечает за решения</h2>
+    <p class="sec-sub rv" style="--i:2">Основатель приглашает и задаёт планку. Составы, технологии и медицина — у специалистов рядом. Один факт — одна строка — подпись человека.</p>
   </div>
-  <!-- пять пунктов карточкой-историей: фото на всю карточку, текст поверх; без JS — лента со свайпом -->
-  <div class="hx" id="hx">
-    <div class="hx-stick">
-      <div class="hx-card">
-        <div class="hx-rail" id="hx-rail"></div>
-      <ol class="hx-track" id="hx-track">
-        <li class="hx-slide"><img {{img:c-food}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-food-->" loading="lazy"><div class="hx-cap"><span class="hx-num">01 / 05</span><h3 class="h-card">Еда без лишнего</h3><p>Филе дикого минтая. Ни консервантов, ни усилителей вкуса.</p></div></li>
-        <li class="hx-slide"><img {{img:c-water}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-water-->" loading="lazy"><div class="hx-cap"><span class="hx-num">02 / 05</span><h3 class="h-card">Молочная сыворотка</h3><p>Молочная сыворотка восполняет минеральный баланс.</p></div></li>
-        <li class="hx-slide"><img {{img:c-early}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-early-->" loading="lazy"><div class="hx-cap"><span class="hx-num">03 / 05</span><h3 class="h-card">Заметить вовремя</h3><p>Анализы на дому, без переноски и стресса. Медкарта — у врача и у вас.</p></div></li>
-        <li class="hx-slide"><img {{img:c-move}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-move-->" loading="lazy"><div class="hx-cap"><span class="hx-num">04 / 05</span><h3 class="h-card">Вес и движение</h3><p>Кормушка, лоток и трекер ведут дневник: порции, вес, визиты, сон и движение.</p></div></li>
-        <li class="hx-slide"><img {{img:c-calm}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-calm-->" loading="lazy"><div class="hx-cap"><span class="hx-num">05 / 05</span><h3 class="h-card">Спокойствие — тоже здоровье</h3><p>Зоопсихолог разберётся в привычках и поведении.</p></div></li>
-      </ol>
-      </div>
+  <div class="wrap">
+    <div class="team rv" style="--i:2">
+      <div class="tm"><div class="fo-ph todo-ph"></div><b>Владимир Перельман</b><span>основатель · голос клуба</span></div>
+      <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>технолог рецептуры · кандидат наук</span></div>
+      <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>ветеринар · отвечает в чате</span></div>
+      <div class="tm"><div class="fo-ph todo-ph"></div><b><mark class="todo">Имя</mark></b><span>зоопсихолог</span></div>
+    </div>
+    <ul class="proof-list rv" style="margin-top:34px">
+      <li><b>Полевой тест</b>Кошки едят рацион под наблюдением: дневники, разговоры с владельцами, анализы до и после. Результаты покажем участникам первыми.</li>
+      <li><b>Лаборатория</b>Рецептура проходит независимые испытания по европейскому стандарту FEDIAF. Соответствие подтвердим, когда испытания закончатся.</li>
+      <li><b>Патент</b>Заявка на рецептуру подана.</li>
+      <li><b>Производство</b>Собственная площадка запущена; на следующий этап роста — партнёрское производство.</li>
+      <li><b>Почему минтай и сыворотка</b><mark class="todo">обоснование состава от технолога</mark></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 06 · ПРАВИЛА ПРИГЛАШЕНИЯ, УСЛОВИЯ И ПРИЮТЫ -->
+<section class="clubsec" id="club" data-block="club"><span class="blk" aria-hidden="true">06 · CLUB</span>
+  <div class="wrap sec-head left">
+    <span class="kicker rv">Правила приглашения</span>
+    <h2 class="h-sec rv" style="--i:1">Клуб по приглашению — и что это значит</h2>
+  </div>
+  <div class="wrap">
+    <div class="acc rv" style="--i:2">
+      <details open><summary>Почему набор ограничен</summary><div class="acc-b"><p>Первых участников немного, чтобы сопровождать каждого лично и внимательно собирать обратную связь. Закрытость — не ограничение, а способ остаться домом, а не магазином.</p></div></details>
+      <details><summary>Кого мы приглашаем</summary><div class="acc-b"><p>Тех, для кого кошка — член семьи. Кто готов делиться опытом, пробовать и уважать других участников. Знакомство с основателями для этого не нужно.</p></div></details>
+      <details><summary>Как рассматриваем заявки</summary><div class="acc-b"><p>Читаем каждую заявку сами и отвечаем в Telegram или по телефону — <mark class="todo">срок ответа</mark>. Дальше — знакомство. Заявка ни к чему не обязывает.</p></div></details>
+      <details><summary>Условия и стоимость</summary><div class="acc-b"><p>Участие платное — по подписке на рацион и сервис. Состав и стоимость расскажем при знакомстве: <mark class="todo">цены и состав</mark>. Устройства — <mark class="todo">входят или отдельно</mark>.</p></div></details>
+      <details><summary>Города и доставка</summary><div class="acc-b"><p>Сейчас — Москва. Зона доставки и выездов на дом — <mark class="todo">уточняем</mark>.</p></div></details>
+      <details><summary>Помощь приютам</summary><div class="acc-b"><p>С каждой подпиской кормим одну кошку в приюте — рацион за рацион, через фонд-партнёр <mark class="todo">название</mark>. Её имя, фото и подтверждение — в вашем ежемесячном отчёте.</p></div></details>
     </div>
   </div>
+  <div class="wrap clm-copy" style="margin-top:56px">
+    <span class="kicker rv">Рацион за рацион</span>
+    <h3 class="clm-sub rv">Ваша кошка ждёт вас девять часов. Есть кошки, которые ждут годами</h3>
+      <figure class="one2one unveil" id="one2one">
+        <img {{img:one2one}} sizes="(min-width:900px) 620px, 92vw" alt="<!--ALT:one2one-->" loading="lazy">
+        <figcaption class="sr">Один плюс один: на каждую подписку — рацион для кошки в приюте</figcaption>
+        <span class="one2one-n serif-num" aria-hidden="true"><span class="a" aria-hidden="true">1</span><span class="plus" aria-hidden="true">+</span><span class="b" aria-hidden="true">1</span></span>
+      </figure>
+    <p class="rv">С каждой вашей подпиской KOSH KUSÉ кормит кошку в приюте — ту, у которой пока нет дома. Она не узнает, кто вы. Зато будет сыта. Весь месяц.</p>
+    <p class="small rv">Её имя, фото и отчёт — в вашем приложении. Партнёр и формат отчёта — <mark class="todo">уточняем</mark>.</p>
+  </div>
+  <div class="wrap" style="margin-top:28px"><div class="fmt rv" style="max-width:620px"><div class="fimg unveil" style="aspect-ratio:3/2;border-radius:22px"><img {{img:shelter}} sizes="(min-width:900px) 620px, 92vw" alt="Волонтёр ставит на пол миски с едой в светлой комнате приюта, к нему подходят три кошки" loading="lazy"></div></div></div>
 </section>
 
-<!-- STORIES -->
-<section class="vstories" id="stories" data-block="stories"><span class="blk" aria-hidden="true">05 · STORIES</span>
-  <div class="wrap sec-head">
-    <span class="kicker rv">Клуб</span>
-    <h2 class="h-sec rv" style="--i:1">Любовь к кошкам — наш общий язык</h2>
-    <p class="lede rv" style="--i:2">А мы объединяем тех, кто разделяет наши ценности. Ужины в ресторане с интересными гостями, закрытые дропы от дизайнеров и дела, которые двигают культуру заботы вперёд.</p>
-    <span class="soon rv" style="--i:3"><i></i>Видеоистории участниц — после первых съёмок</span>
-  </div>
-  <div class="slider" data-prog="st">
-    <button type="button" aria-label="История «Утро вдвоём» — скоро" class="vcard rv" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil"><img {{img:s-1}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-1-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Утро вдвоём</span><span class="vwho">Ритуалы, с которых начинается день</span><span class="vq">Как устроить день так, чтобы он начинался с неё.</span></button>
-    <button type="button" aria-label="История «Вечер» — скоро" class="vcard rv" style="--i:1" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil" style="--i:1"><img {{img:s-2}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-2-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Вечер</span><span class="vwho">Когда день уже позади</span><span class="vq">Тихие вечера дома, когда спешить некуда и можно просто быть рядом.</span></button>
-    <button type="button" aria-label="История «Вместе» — скоро" class="vcard rv" style="--i:2" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil" style="--i:2"><img {{img:s-3}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-3-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Вместе</span><span class="vwho">Больше лет — это каждый день</span><span class="vq">Истории о том, как меняется жизнь, когда о главном уже подумали.</span></button>
-    <button type="button" aria-label="История «Забота» — скоро" class="vcard rv" style="--i:3" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil" style="--i:3"><img {{img:s-4}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-4-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Забота</span><span class="vwho">Культура, которую мы двигаем</span><span class="vq">Приюты, ужины клуба, закрытые дропы от дизайнеров — и люди, которые за этим стоят.</span></button>
-  </div>
-  <div class="sprog" id="st" aria-hidden="true"><i></i></div>
-</section>
-
-<!-- WAITLIST -->
-<section class="waitlist linen" id="waitlist" data-block="waitlist"><span class="blk" aria-hidden="true">06 · WAITLIST</span>
+<!-- 07 · ЗАЯВКА -->
+<section class="waitlist linen" id="waitlist" data-block="waitlist"><span class="blk" aria-hidden="true">07 · APPLY</span>
   <div class="wrap wl-grid">
     <div class="wl-copy">
-      <span class="kicker rv">Приглашение</span>
-      <h2 class="h-display rv" style="--i:1">Вход по заявке</h2>
-      <p class="lede rv" style="--i:2">Оставьте заявку — мы свяжемся, расскажем, как устроен клуб, и подберём программу для вашей кошки. Анкета займёт несколько минут.</p>
+      <span class="kicker rv">Заявка</span>
+      <h2 class="h-display rv" style="--i:1">Познакомимся</h2>
+      <p class="lede rv" style="--i:2">Расскажите о себе и о ней — это минута. Мы прочитаем, напишем вам и позовём познакомиться. Подробный профиль заполним вместе, когда познакомимся.</p>
     </div>
     <div class="wl-cta rv" style="--i:2">
-      <div class="counter"><span class="cnum serif-num" id="cnum" data-base="312">312</span><span class="clbl">человек уже оставили заявку</span></div>
-      <button type="button" class="btn btn-primary" id="open-q">Заполнить анкету <span class="arr" aria-hidden="true">→</span></button>
+      <button type="button" class="btn btn-primary" id="open-q">Подать заявку <span class="arr" aria-hidden="true">→</span></button>
+      <p class="cta-note">Ответим в Telegram или по телефону — <mark class="todo">срок</mark>. Заявка ни к чему не обязывает.</p>
     </div>
   </div>
 </section>
@@ -976,7 +1173,7 @@ html.intro-on{background:var(--ivory)}
 <section class="finale" id="finale" data-block="finale"><span class="blk" aria-hidden="true">07 · FINALE</span>
   <div class="wrap fin-in">
     <h2 class="h-display fin-q rv">Её любовь — без условий.<br>Наша забота —&nbsp;тоже.</h2>
-    <a href="#waitlist" class="btn btn-primary fin-cta rv" style="--i:3">Вступить в клуб <span class="arr" aria-hidden="true">→</span></a>
+    <a href="#waitlist" class="btn btn-primary fin-cta rv" style="--i:3">Подать заявку <span class="arr" aria-hidden="true">→</span></a>
   </div>
   <div class="peek" id="peek" aria-hidden="true"><img {{img:peek}} sizes="(min-width:900px) 340px, 48vw" alt="" loading="lazy" draggable="false"></div>
 </section>
@@ -990,18 +1187,17 @@ html.intro-on{background:var(--ivory)}
         <svg class="f-cat" viewBox="<!--VB:cat-->" fill="currentColor" aria-hidden="true"><use href="#kk-cat"/></svg>
         <svg class="f-word" viewBox="<!--VB:wordmark-->" fill="currentColor" aria-hidden="true"><use href="#kk-wordmark"/></svg>
       </a>
-      <nav class="flinks" aria-label="Служебные ссылки"><a href="#">Политика данных</a><a href="#">Оферта</a><a href="#">Контакты</a></nav>
-      <span class="fcopy">© 2026 KOSH KUSÉ</span>
+      <nav class="flinks" aria-label="Служебные ссылки"><a href="policy.html">Политика данных</a><a href="terms.html">Условия участия</a><a href="contacts.html">Контакты</a></nav>
+      <span class="fcopy">© 2026 KOSH KUSÉ · Москва</span>
     </div>
   </div>
 </footer>
 
-<!-- анкета «Вступить в клуб»: 4 шага + благодарность; слова про неё/него переключаются по выбору «Кошка/Кот» -->
+<!-- заявка: короткая первичная анкета на одном экране (контакт, город, немного о ней, один вопрос); подробный профиль — после знакомства -->
 <div class="qmodal" id="qmodal" role="dialog" aria-modal="true" aria-labelledby="q-title" aria-hidden="true">
   <div class="qbox qf" id="qbox" data-sex="f">
-    <h2 class="sr" id="q-title">Анкета: вступить в клуб</h2>
     <div class="qf-top">
-      <span class="qf-step" id="qf-step">Шаг 1 из 4 · О ней</span>
+      <span class="qf-step" id="qf-step">Заявка · около минуты</span>
       <button type="button" class="q-x" id="q-x" aria-label="Закрыть анкету">×</button>
       <div class="qf-prog" aria-hidden="true"><i id="qf-prog"></i></div>
     </div>
@@ -1009,154 +1205,88 @@ html.intro-on{background:var(--ivory)}
       <div class="qf-body" id="qf-body">
         <input class="qf-hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-        <section class="qf-pane" data-step="1" data-name="О ней" data-name-m="О нём">
-          <h3 class="qf-h" tabindex="-1"><span class="g-f">Расскажите о ней</span><span class="g-m">Расскажите о нём</span></h3>
-          <p class="qf-lead">Около двух минут. Ответы сохраняются — можно закрыть и вернуться позже.</p>
-          <div class="qf-seg" role="radiogroup" aria-label="Кошка или кот">
-            <label><input type="radio" name="sex" value="f" checked><span>Кошка</span></label>
-            <label><input type="radio" name="sex" value="m"><span>Кот</span></label>
+        <section class="qf-pane" data-step="1">
+          <h2 class="qf-h" id="q-title" tabindex="-1">Расскажите о себе <span class="g-f">и о ней</span><span class="g-m">и о нём</span></h2>
+          <p class="qf-lead">Это знакомство, а не анкета на всё: контакт, город и один вопрос о вашей кошке. Подробнее поговорим при встрече.</p>
+
+          <div class="qf-group">
+            <span class="qf-gt">О вас</span>
+            <label class="qf-field" data-req><span class="qf-q">Как к вам обращаться</span>
+              <input class="qf-in" name="name" maxlength="60" autocomplete="given-name" autocapitalize="words" enterkeyhint="next">
+              <span class="qf-err" aria-live="polite"></span></label>
+            <label class="qf-field" data-req><span class="qf-q">Город</span>
+              <input class="qf-in" name="city" maxlength="60" autocomplete="address-level2" autocapitalize="words" enterkeyhint="next">
+              <span class="qf-err" aria-live="polite"></span></label>
+            <div class="qf-seg" role="radiogroup" aria-label="Как удобнее связаться">
+              <label><input type="radio" name="method" value="telegram" checked><span>Telegram</span></label>
+              <label><input type="radio" name="method" value="phone"><span>Телефон</span></label>
+            </div>
+            <label class="qf-field" data-req data-m="telegram"><span class="qf-q">Ник в Telegram</span>
+              <span class="qf-unit qf-pre"><em>@</em><input class="qf-in" name="telegram" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="next"></span>
+              <span class="qf-err" aria-live="polite"></span></label>
+            <label class="qf-field" data-req data-m="phone" hidden><span class="qf-q">Телефон</span>
+              <input class="qf-in" name="phone" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00" enterkeyhint="next">
+              <span class="qf-err" aria-live="polite"></span></label>
           </div>
-          <label class="qf-field" data-req><span class="qf-q"><span class="g-f">Как её зовут</span><span class="g-m">Как его зовут</span></span>
-            <input class="qf-in" name="cat_name" maxlength="40" autocomplete="off" autocapitalize="words" enterkeyhint="next">
-            <span class="qf-err" aria-live="polite"></span></label>
-          <fieldset class="qf-field" data-req>
-            <legend class="qf-q"><span class="g-f">Сколько ей лет</span><span class="g-m">Сколько ему лет</span></legend>
-            <div class="qf-chips">
-              <label><input type="radio" name="age" value="До года"><span>До года</span></label>
-              <label><input type="radio" name="age" value="1–7 лет"><span>1–7 лет</span></label>
-              <label><input type="radio" name="age" value="7–11 лет"><span>7–11 лет</span></label>
-              <label><input type="radio" name="age" value="Старше 11"><span>Старше 11</span></label>
-            </div>
-            <span class="qf-err" aria-live="polite"></span>
-          </fieldset>
-          <label class="qf-field"><span class="qf-q">Вес <small>если знаете</small></span>
-            <span class="qf-unit"><input class="qf-in" name="weight" inputmode="decimal" maxlength="5" autocomplete="off" placeholder="4,5" enterkeyhint="next"><em>кг</em></span>
-            <span class="qf-err" aria-live="polite"></span></label>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Что важно знать о здоровье</legend>
-            <div class="qf-chips" data-none="Всё хорошо">
-              <label><input type="checkbox" name="health" value="Всё хорошо"><span>Всё хорошо</span></label>
-              <label><input type="checkbox" name="health" value="Почки"><span>Почки</span></label>
-              <label><input type="checkbox" name="health" value="Пищеварение"><span>Пищеварение</span></label>
-              <label><input type="checkbox" name="health" value="Мочевыводящие пути"><span>Мочевыводящие пути</span></label>
-              <label><input type="checkbox" name="health" value="Аллергия"><span>Аллергия</span></label>
-              <label><input type="checkbox" name="health" value="Вес выше нормы"><span>Вес выше нормы</span></label>
-              <label><input type="checkbox" name="health" value="Другое"><span>Другое</span></label>
-            </div>
-            <input class="qf-in qf-more" name="health_note" maxlength="300" placeholder="Коротко о главном — если хотите" aria-label="Подробнее о здоровье" hidden>
-          </fieldset>
-        </section>
 
-        <section class="qf-pane" data-step="2" data-name="Рацион" hidden>
-          <h3 class="qf-h" tabindex="-1">Что <span data-cat>она</span> ест сейчас</h3>
-          <fieldset class="qf-field" data-req>
-            <legend class="qf-q">Основа рациона</legend>
-            <div class="qf-chips">
-              <label><input type="radio" name="diet" value="Сухие гранулы"><span>Сухие гранулы</span></label>
-              <label><input type="radio" name="diet" value="Паучи и консервы"><span>Паучи и консервы</span></label>
-              <label><input type="radio" name="diet" value="Домашняя еда"><span>Домашняя еда</span></label>
-              <label><input type="radio" name="diet" value="Всего понемногу"><span>Всего понемногу</span></label>
+          <div class="qf-group">
+            <span class="qf-gt"><span class="g-f">О ней</span><span class="g-m">О нём</span></span>
+            <div class="qf-seg" role="radiogroup" aria-label="Кошка или кот">
+              <label><input type="radio" name="sex" value="f" checked><span>Кошка</span></label>
+              <label><input type="radio" name="sex" value="m"><span>Кот</span></label>
             </div>
-            <span class="qf-err" aria-live="polite"></span>
-          </fieldset>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Сколько раз в день</legend>
-            <div class="qf-chips">
-              <label><input type="radio" name="meals" value="Один"><span>Один</span></label>
-              <label><input type="radio" name="meals" value="Два"><span>Два</span></label>
-              <label><input type="radio" name="meals" value="Три и больше"><span>Три и больше</span></label>
-              <label><input type="radio" name="meals" value="Миска всегда полная"><span>Миска всегда полная</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Как пьёт воду</legend>
-            <div class="qf-chips">
-              <label><input type="radio" name="water" value="Охотно"><span>Охотно</span></label>
-              <label><input type="radio" name="water" value="Мало"><span>Мало</span></label>
-              <label><input type="radio" name="water" value="Не знаю"><span>Не знаю</span></label>
-            </div>
-          </fieldset>
-          <label class="qf-field"><span class="qf-q">Чего <span class="g-f">ей</span><span class="g-m">ему</span> нельзя или что <span class="g-f">она</span><span class="g-m">он</span> не ест <small>если есть</small></span>
-            <input class="qf-in" name="avoid" maxlength="200" autocomplete="off" enterkeyhint="next"></label>
-        </section>
-
-        <section class="qf-pane" data-step="3" data-name="Характер" hidden>
-          <h3 class="qf-h" tabindex="-1"><span data-cat>Она</span> — <span class="g-f">какая она дома</span><span class="g-m">какой он дома</span></h3>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Темперамент</legend>
-            <div class="qf-cards">
-              <label><input type="radio" name="temper" value="Спокойный характер"><span><b><span class="g-f">Спокойная</span><span class="g-m">Спокойный</span></b><small>Любит плед и подоконник</small></span></label>
-              <label><input type="radio" name="temper" value="В меру активный"><span><b>В меру <span class="g-f">активная</span><span class="g-m">активный</span></b><small>Играет, когда есть настроение</small></span></label>
-              <label><input type="radio" name="temper" value="Охотник"><span><b><span class="g-f">Охотница</span><span class="g-m">Охотник</span></b><small>Всегда в движении</small></span></label>
-            </div>
-          </fieldset>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Где живёт</legend>
-            <div class="qf-chips">
-              <label><input type="radio" name="home" value="Только дома"><span>Только дома</span></label>
-              <label><input type="radio" name="home" value="Дом и прогулки"><span>Дом и прогулки</span></label>
-              <label><input type="radio" name="home" value="Летом на даче"><span>Летом на даче</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Кто ещё дома</legend>
-            <div class="qf-chips" data-none="Больше никого">
-              <label><input type="checkbox" name="others" value="Больше никого"><span>Больше никого</span></label>
-              <label><input type="checkbox" name="others" value="Другие кошки"><span>Другие кошки</span></label>
-              <label><input type="checkbox" name="others" value="Собака"><span>Собака</span></label>
-              <label><input type="checkbox" name="others" value="Дети"><span>Дети</span></label>
-            </div>
-          </fieldset>
-          <fieldset class="qf-field">
-            <legend class="qf-q">Что для вас важнее всего</legend>
-            <div class="qf-chips">
-              <label><input type="checkbox" name="priority" value="Рацион"><span>Рацион</span></label>
-              <label><input type="checkbox" name="priority" value="Здоровье и анализы"><span>Здоровье и анализы</span></label>
-              <label><input type="checkbox" name="priority" value="Всё в одном месте"><span>Всё в одном месте</span></label>
-              <label><input type="checkbox" name="priority" value="Красивые вещи для дома"><span>Красивые вещи для дома</span></label>
-            </div>
-          </fieldset>
-        </section>
-
-        <section class="qf-pane" data-step="4" data-name="Контакты" hidden>
-          <h3 class="qf-h" tabindex="-1">Как с вами связаться</h3>
-          <p class="qf-lead">Напишем, когда откроем места в клубе, и расскажем, как всё устроено.</p>
-          <label class="qf-field" data-req><span class="qf-q">Ваше имя</span>
-            <input class="qf-in" name="name" maxlength="60" autocomplete="given-name" autocapitalize="words" enterkeyhint="next">
-            <span class="qf-err" aria-live="polite"></span></label>
-          <div class="qf-seg" role="radiogroup" aria-label="Как удобнее связаться">
-            <label><input type="radio" name="method" value="telegram" checked><span>Telegram</span></label>
-            <label><input type="radio" name="method" value="phone"><span>Телефон</span></label>
+            <label class="qf-field" data-req><span class="qf-q"><span class="g-f">Как её зовут</span><span class="g-m">Как его зовут</span></span>
+              <input class="qf-in" name="cat_name" maxlength="40" autocomplete="off" autocapitalize="words" enterkeyhint="next">
+              <span class="qf-err" aria-live="polite"></span></label>
+            <fieldset class="qf-field">
+              <legend class="qf-q"><span class="g-f">Сколько ей лет</span><span class="g-m">Сколько ему лет</span> <small>если хотите</small></legend>
+              <div class="qf-chips">
+                <label><input type="radio" name="age" value="До года"><span>До года</span></label>
+                <label><input type="radio" name="age" value="1–7 лет"><span>1–7 лет</span></label>
+                <label><input type="radio" name="age" value="7–11 лет"><span>7–11 лет</span></label>
+                <label><input type="radio" name="age" value="Старше 11"><span>Старше 11</span></label>
+              </div>
+            </fieldset>
           </div>
-          <label class="qf-field" data-req data-m="telegram"><span class="qf-q">Ник в Telegram</span>
-            <span class="qf-unit qf-pre"><em>@</em><input class="qf-in" name="telegram" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="next"></span>
-            <span class="qf-err" aria-live="polite"></span></label>
-          <label class="qf-field" data-req data-m="phone" hidden><span class="qf-q">Телефон</span>
-            <input class="qf-in" name="phone" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00" enterkeyhint="next">
-            <span class="qf-err" aria-live="polite"></span></label>
-          <label class="qf-field"><span class="qf-q">Город <small>если хотите</small></span>
-            <input class="qf-in" name="city" maxlength="60" autocomplete="address-level2" enterkeyhint="done"></label>
+
+          <div class="qf-group">
+            <span class="qf-gt">Один вопрос</span>
+            <fieldset class="qf-field" data-req>
+              <legend class="qf-q">Что вы хотели бы улучшить в заботе <span class="g-f">о ней</span><span class="g-m">о нём</span></legend>
+              <div class="qf-chips">
+                <label><input type="radio" name="goal" value="Рацион"><span>Рацион</span></label>
+                <label><input type="radio" name="goal" value="Здоровье и анализы"><span>Здоровье и анализы</span></label>
+                <label><input type="radio" name="goal" value="Поведение и привычки"><span>Поведение и привычки</span></label>
+                <label><input type="radio" name="goal" value="Всё в одном месте"><span>Всё в одном месте</span></label>
+                <label><input type="radio" name="goal" value="Пока присматриваюсь"><span>Пока присматриваюсь</span></label>
+                <label><input type="radio" name="goal" value="Другое"><span>Другое</span></label>
+              </div>
+              <span class="qf-err" aria-live="polite"></span>
+            </fieldset>
+            <label class="qf-field"><span class="qf-q">Своими словами <small>если хотите</small></span>
+              <textarea class="qf-in qf-ta" name="goal_note" maxlength="300" rows="3" placeholder="Что беспокоит или чего не хватает сейчас"></textarea></label>
+          </div>
+
           <div class="qf-field" data-req>
-            <label class="qf-check"><input type="checkbox" name="consent"><span>Соглашаюсь на обработку моих данных, чтобы со мной связались по заявке</span></label>
+            <label class="qf-check"><input type="checkbox" name="consent"><span>Соглашаюсь на обработку моих данных, чтобы со мной связались по заявке — <a href="policy.html" target="_blank" rel="noopener">политика данных</a></span></label>
             <span class="qf-err" aria-live="polite"></span>
           </div>
         </section>
 
-        <section class="qf-pane qf-done" data-step="5" data-name="Готово" hidden>
+        <section class="qf-pane qf-done" data-step="2" hidden>
           <div class="qf-lock" aria-hidden="true">
             <svg class="qf-cat" viewBox="<!--VB:cat-->" fill="currentColor"><use href="#kk-cat"/></svg>
             <svg class="qf-word" viewBox="<!--VB:wordmark-->" fill="currentColor"><use href="#kk-wordmark"/></svg>
           </div>
           <h3 class="qf-h" tabindex="-1">Спасибо, <span data-user></span></h3>
-          <p class="qf-lead"><span data-cat></span> — в листе ожидания. Мы <span data-how>напишем вам в Telegram</span>, когда откроем места, и расскажем, как устроен клуб.</p>
+          <p class="qf-lead" id="qf-done-text">Заявка у нас. Мы <span data-how>напишем вам в Telegram</span> и расскажем, как устроен клуб и что доступно первым участникам. Подробный профиль <span data-cat></span> заполним вместе после знакомства.</p>
           <button type="button" class="btn btn-primary" id="qf-close">Вернуться на сайт</button>
-          <button type="button" class="qf-again" id="qf-again">Заполнить ещё одну анкету</button>
+          <button type="button" class="qf-again" id="qf-again">Подать ещё одну заявку</button>
         </section>
       </div>
       <p class="qf-fail" id="qf-fail" role="alert" hidden></p>
       <div class="qf-nav" id="qf-nav">
-        <button type="button" class="qf-back" id="qf-back" hidden>Назад</button>
-        <button type="submit" class="btn btn-primary qf-next" id="qf-next">Далее</button>
+        <button type="submit" class="btn btn-primary qf-next" id="qf-next">Подать заявку</button>
       </div>
     </form>
   </div>
@@ -1164,7 +1294,7 @@ html.intro-on{background:var(--ivory)}
 
 <div class="dock" data-block="sticky_cta"><span class="blk" aria-hidden="true">STICKY-CTA</span>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <div class="sticky-cta" id="sticky"><a href="#waitlist" class="btn btn-primary">Вступить в клуб</a></div>
+  <div class="sticky-cta" id="sticky"><a href="#waitlist" class="btn btn-primary">Подать заявку</a></div>
 </div>
 
 </div></div></div>

@@ -1,0 +1,8 @@
+[
+ {"id":"gen:v3-man-sofa","name":"man-sofa","tone":"natural","aspect":null,"widths":[540,810,1024],"q":74},
+ {"id":"gen:v3-man-phone","name":"man-phone","tone":"natural","aspect":null,"widths":[540,810,1024],"q":74},
+ {"id":"gen:v3-couple","name":"couple","tone":"natural","aspect":1.5,"widths":[720,1200,1536],"q":76},
+ {"id":"gen:v3-dinner","name":"dinner","tone":"natural","aspect":1.5,"widths":[720,1200,1536],"q":76},
+ {"id":"gen:v3-shelter","name":"shelter","tone":"natural","aspect":1.5,"widths":[720,1200,1536],"q":76},
+ {"id":"gen:v3-meeting","name":"meeting","tone":"natural","aspect":1.5,"widths":[720,1200,1536],"q":76}
+]
