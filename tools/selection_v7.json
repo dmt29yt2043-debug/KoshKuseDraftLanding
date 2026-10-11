@@ -1,0 +1,7 @@
+[
+ {"id":"gen:g0-c-food","name":"c-food","tone":"natural","box":[0.0,0.04,0.78,1.0],"aspect":null,"widths":[540,810],"q":74},
+ {"id":"gen:g3-c-water","name":"c-water","tone":"natural","aspect":null,"widths":[540,810,1024],"q":74},
+ {"id":"gen:g3-c-early","name":"c-early","tone":"natural","aspect":null,"widths":[540,810,1024],"q":74},
+ {"id":"gen:g3-c-move","name":"c-move","tone":"natural","aspect":null,"widths":[540,810,1024],"q":74},
+ {"id":"gen:g3-c-calm","name":"c-calm","tone":"natural","aspect":null,"widths":[540,810,1024],"q":74}
+]

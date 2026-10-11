@@ -5,13 +5,23 @@
 *.key
 id_*
 *service-account*.json
+Доступ*
+.kk_*
 
-# шрифты под лицензией — не распространяем
+# шрифты под лицензией — не распространяем (Value Sans Pro передаётся отдельно)
 fonts/*.woff
 fonts/*.woff2
 fonts/*.otf
 fonts/*.ttf
+src_fonts/ValueSans*
+**/ValueSansPro*
 
-# служебное
+# сборка и служебное
+site/dist/
+site/forms/state/
+site/shots/
+site/plan_*.json
+*.tgz
 .DS_Store
 __pycache__/
+node_modules/

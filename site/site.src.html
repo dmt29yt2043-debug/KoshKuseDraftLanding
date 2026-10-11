@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F4EB">
+<meta name="robots" content="noindex, nofollow">
+<title>KOSH KUSÉ — еда, а не корм</title>
+<script>
+/* до первой отрисовки: режим (телефон и планшет — сам сайт, десктоп с мышью — стенд) и решение о прелоадере */
+(function(){
+  var d=document.documentElement,q=location.search,mm=window.matchMedia;
+  var coarse=mm&&mm('(pointer:coarse)').matches;
+  var n=/[?&]site\b/.test(q)||(!/[?&]stand\b/.test(q)&&(coarse||Math.min(screen.width,innerWidth)<760));
+  d.className+=(n?' is-native':' is-stand')+' js';
+  /* заставка — при каждом открытии сайта, кроме возврата «назад» и ?nointro;
+     при «Уменьшении движения» не пропадает, а идёт спокойной версией (без подъёма букв и перелёта) */
+  var nav='';try{nav=performance.getEntriesByType('navigation')[0].type}catch(e){}
+  if(!/[?&]nointro\b/.test(q)&&nav!=='back_forward'){
+    d.className+=' intro-on'+(mm&&mm('(prefers-reduced-motion: reduce)').matches?' intro-calm':'');
+    try{history.scrollRestoration='manual'}catch(e){}
+    /* после заставки сайт всегда открывается с начала: «#раздел» из старого адреса убираем, иначе браузер прыгнет к нему */
+    if(location.hash){try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
+  }
+})();
+</script>
+<style>
+/*FONTS*/
+
+/* =========================================================
+   KOSH KUSÉ — светлая предметная коллекция.
+   85–90% молочный и лён, 5–10% тёмного текста, винный — 3–5%:
+   логотип, основные кнопки, выбранные состояния. Золото не используем.
+   ========================================================= */
+:root{
+  --ivory:#F7F4EB; --linen:#E8DFC9; --sand:#D5C6A8; --taupe:#B7A98F; --stone:#A79E93;
+  --charcoal:#5A5249; --ebony:#2B2A26; --burgundy:#4A1F27; --burgundy-hover:#3A161D;
+  --paper:#FCFAF5;
+
+  --bg:var(--ivory); --ink:var(--ebony); --muted:var(--charcoal);
+  --line:rgba(43,42,38,.12); --line-2:rgba(43,42,38,.24);
+
+  --sans:'Value Sans Pro','Helvetica Neue',Arial,sans-serif;
+  --serif:'Cormorant Garamond','Cormorant',ui-serif,'New York','Iowan Old Style','Hoefler Text','Times New Roman',serif;
+
+  --ease:cubic-bezier(.22,.61,.24,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-io:cubic-bezier(.65,0,.35,1);
+  --app-h:100vh;
+  --hh:64px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;font-feature-settings:"ss02";-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+img{max-width:100%;height:auto;display:block}
+svg{display:block}
+a{color:inherit}
+button{font:inherit;color:inherit}
+h1,h2,h3{margin:0;font-weight:400;text-wrap:balance}
+p{margin:0}
+p,li,.sub,.vq,.lede{text-wrap:pretty}
+figure{margin:0}
+:focus-visible{outline:2px solid var(--burgundy);outline-offset:3px;border-radius:4px}
+[hidden]{display:none!important}
+@media (forced-colors:active){.burger span{background:CanvasText}}
+
+/* ---------- типографика ---------- */
+.wrap{width:100%;max-width:1240px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-right)) 0 max(20px,env(safe-area-inset-left))}
+.kicker{display:inline-flex;align-items:center;gap:12px;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--charcoal)}
+.kicker::before{content:"";width:28px;height:1px;background:var(--taupe);transform-origin:left;transform:scaleX(var(--rule,1));transition:transform 1.1s var(--ease-out) .15s}
+.h-display{font-family:var(--serif);font-weight:400;font-size:44px;line-height:1;letter-spacing:-.01em;color:var(--ink)}
+.h-sec{font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.04;letter-spacing:-.008em;color:var(--ink)}
+.h-card{font-family:var(--serif);font-weight:500;font-size:28px;line-height:1.06;letter-spacing:-.005em;color:var(--ink)}
+.lede{font-size:16px;line-height:1.6;color:var(--muted);max-width:34em}
+.serif-num{font-family:var(--serif);font-weight:400;font-variant-numeric:lining-nums tabular-nums;letter-spacing:-.02em;line-height:.9}
+
+/* ---------- кнопки: винный — только у основного действия ---------- */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:999px;border:1px solid transparent;font-family:var(--sans);font-size:12.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .35s var(--ease),background-color .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease)}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);transform:translateX(-120%);transition:transform .9s var(--ease)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:active{transform:scale(.975)}
+.btn-primary{background:var(--burgundy);color:var(--ivory)}
+.btn-primary:hover{background:var(--burgundy-hover)}
+.btn-line{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn-line:hover{border-color:var(--ink)}
+.btn .arr{display:inline-block;transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+
+/* ---------- разделы ---------- */
+section{position:relative;padding:80px 0}
+.linen{background:var(--linen)}
+.sec-head{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
+
+/* ---------- появление при прокрутке (только когда работает JS) ---------- */
+.js .rv{opacity:0;transform:translate3d(0,22px,0);transition:opacity 1s var(--ease-out),transform 1.1s var(--ease-out);transition-delay:calc(var(--i,0) * 90ms)}
+.js .rv.in{opacity:1;transform:none}
+.js .kicker.rv{--rule:0}
+.js .kicker.rv.in{--rule:1}
+/* шторка — на картинке, а не на наблюдаемом блоке: полностью обрезанный элемент IntersectionObserver считает невидимым */
+.unveil{overflow:hidden}
+.js .unveil>img{clip-path:inset(100% 0 0 0);transform:scale(1.12);transition:clip-path 1.25s var(--ease-out),transform 1.8s var(--ease-out);transition-delay:calc(var(--i,0) * 110ms)}
+.js .unveil.in>img{clip-path:inset(0 0 0 0);transform:scale(1)}
+
+/* =========================================================
+   ШАПКА — всегда светлая, логотип-надпись винным
+   ========================================================= */
+.top{position:sticky;top:0;z-index:50;height:var(--hh);background:rgba(247,244,235,.88);-webkit-backdrop-filter:saturate(140%) blur(14px);backdrop-filter:saturate(140%) blur(14px);color:var(--ink);transition:box-shadow .5s var(--ease)}
+.top.scrolled,.top.menu-open{box-shadow:0 1px 0 var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:100%}
+.brand{display:flex;align-items:center;min-height:44px;text-decoration:none;color:var(--burgundy)}
+.brand .b-word{width:auto;height:14px}
+.intro-on .brand .b-word{opacity:0}
+.nav-links{display:none;gap:30px}
+.nav-links a{position:relative;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:inherit;padding:6px 0}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-right{display:flex;align-items:center;gap:6px}
+.nav-cta{display:none;min-height:42px;padding:0 20px;font-size:11.5px}
+.burger{width:44px;height:44px;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-right:-10px}
+.burger span{display:block;width:22px;height:1px;background:currentColor;transition:transform .45s var(--ease)}
+.burger[aria-expanded="true"] span:first-child{transform:translateY(3.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+.menu{position:absolute;top:100%;left:0;right:0;height:calc(var(--app-h) - var(--hh));background:var(--ivory);color:var(--ink);display:flex;flex-direction:column;justify-content:space-between;padding:20px 20px calc(28px + env(safe-area-inset-bottom,0px));visibility:hidden;opacity:0;transition:opacity .45s var(--ease),visibility 0s linear .45s;overflow:auto}
+.menu.open{visibility:visible;opacity:1;transition:opacity .45s var(--ease)}
+.menu nav{display:flex;flex-direction:column}
+.menu nav a{display:flex;align-items:baseline;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);text-decoration:none;font-family:var(--serif);font-size:38px;line-height:1.05;opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease-out),transform .7s var(--ease-out)}
+.menu nav a small{flex:0 0 2.2em;font-family:var(--serif);font-size:15px;letter-spacing:.06em;font-variant-numeric:lining-nums tabular-nums;color:var(--charcoal)}
+.menu.open nav a{opacity:1;transform:none}
+.menu.open nav a:nth-child(2){transition-delay:.06s}.menu.open nav a:nth-child(3){transition-delay:.12s}.menu.open nav a:nth-child(4){transition-delay:.18s}
+.menu-foot{display:flex;flex-direction:column;gap:18px;padding-top:28px}
+.menu-foot .btn{width:100%}
+
+/* =========================================================
+   HERO — фото в «арке», которая на прокрутке раскрывается в полный кадр
+   ========================================================= */
+.hero{padding:10px 0 0}
+.hero-media{position:relative;margin:0 12px;height:min(calc((100cqw - 24px) * 1.5),max(400px,calc(var(--app-h) - var(--hh) - 190px)));border-radius:26px;overflow:hidden;background:var(--linen)}
+.js .hero-media{will-change:clip-path}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 55%;transform-origin:50% 60%}
+.js .hero-media img{will-change:transform}
+.hero-text{position:relative;display:flex;flex-direction:column;gap:16px;align-items:flex-start;padding-top:28px;padding-bottom:60px}
+.hero .sub{font-size:16px;line-height:1.6;color:var(--muted);max-width:30em}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:6px}
+.line{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.line>span{display:block;transform:translateY(105%);animation:lineup 1.25s var(--ease-out) .15s forwards}
+.line:nth-child(2)>span{animation-delay:.27s}
+@keyframes lineup{to{transform:none}}
+.hero-in{opacity:0;transform:translateY(16px);animation:fadeup 1.1s var(--ease-out) forwards}
+.hero-in.d1{animation-delay:.45s}.hero-in.d2{animation-delay:.6s}
+@keyframes fadeup{to{opacity:1;transform:none}}
+.intro-on .hero-in,.intro-on .line>span{animation-play-state:paused}
+.scroll-cue{display:none;align-items:center;gap:12px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--charcoal)}
+.scroll-cue i{position:relative;display:block;width:1px;height:38px;background:var(--line-2);overflow:hidden}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:var(--ink);animation:cue 2.4s var(--ease) infinite}
+@keyframes cue{to{top:100%}}
+
+/* =========================================================
+   CLM — манифест: текст проявляется словами по мере чтения
+   ========================================================= */
+.clm-grid{display:flex;flex-direction:column;gap:28px}
+.clm-head{display:flex;flex-direction:column;gap:20px}
+.stamp{display:inline-flex;align-items:flex-start;align-self:flex-start;padding:10px 15px 9px;border:1.5px solid var(--ink);color:var(--ink);font-size:13px;font-weight:700;letter-spacing:.22em;line-height:1;text-transform:uppercase;transform:rotate(-2deg)}
+.js .stamp.rv{transform:translate3d(0,22px,0) rotate(-2deg)}
+.js .stamp.rv.in{transform:rotate(-2deg)}
+.stamp sup{font-size:10px;letter-spacing:0;margin-left:.15em;line-height:1}
+.clm-copy{display:flex;flex-direction:column;gap:18px}
+.clm-copy p{font-size:16px;line-height:1.65;color:var(--muted);max-width:34em}
+.clm-copy p.ink{font-family:var(--serif);font-size:25px;line-height:1.3;color:var(--ink);letter-spacing:-.003em;max-width:24em}
+.js .ink .w{color:rgba(43,42,38,.28);transition:color .5s var(--ease)}
+@media (prefers-contrast:more){.js .ink .w{color:var(--ink)}}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.js .ink .w.on{color:var(--ink)}
+.video{position:relative;aspect-ratio:4/5;width:100%;max-width:420px;border-radius:24px;overflow:hidden;cursor:pointer;background:var(--sand);isolation:isolate}
+.video img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;scale:1.1}
+.video::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,42,38,0) 50%,rgba(43,42,38,.55) 100%);z-index:1}
+.video .play{position:absolute;inset:auto 0 0 0;z-index:2;display:flex;align-items:center;gap:16px;padding:20px}
+.play-btn{position:relative;flex:0 0 auto;width:58px;height:58px;border-radius:50%;background:rgba(247,244,235,.92);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.play-btn::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(247,244,235,.7);animation:pulse 2.6s var(--ease) infinite}
+@keyframes pulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.video .cap{display:flex;flex-direction:column;gap:2px;color:var(--ivory);font-size:14px;line-height:1.35}
+.video .cap b{font-family:var(--serif);font-weight:500;font-size:24px}
+.video .cap span{color:rgba(247,244,235,.88);font-size:13px}
+.video.playing .playing-msg{opacity:1;visibility:visible}
+.playing-msg{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;background:rgba(247,244,235,.9);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
+.playing-msg b{font-family:var(--serif);font-weight:500;font-size:28px}
+.playing-msg span{font-size:13px;color:var(--muted)}
+.clm-sub{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.05;color:var(--ink);margin-top:18px}
+.one2one{position:relative;aspect-ratio:3/2;width:100%;border-radius:22px;overflow:hidden;background:var(--sand)}
+.one2one img{width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.one2one::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,42,38,0) 38%,rgba(43,42,38,.58) 100%);pointer-events:none}
+.one2one-n{position:absolute;z-index:1;left:0;right:0;bottom:16px;display:flex;justify-content:center;align-items:baseline;font-size:84px;color:var(--ivory)}
+.one2one-n .a{transform:translateX(calc(var(--c,0) * -46px))}
+.one2one-n .b{transform:translateX(calc(var(--c,0) * 46px))}
+.one2one-n .plus{margin:0 .12em;opacity:calc(1 - var(--c,0))}
+.clm .small{font-size:13px;color:var(--ink)}
+.clm .fn{font-size:11px;color:var(--charcoal);margin-top:36px}
+
+/* =========================================================
+   PRODUCT — на телефоне карточки ложатся стопкой
+   ========================================================= */
+.pstack{display:flex;flex-direction:column;gap:18px;padding:0 12px}
+.pcard{position:sticky;top:calc(var(--hh) + 14px + var(--k,0) * 14px);display:flex;flex-direction:column;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:12px 12px 24px;box-shadow:0 24px 48px -34px rgba(43,42,38,.4);transform-origin:50% 0;transform:scale(var(--s,1))}
+.pstack.no-stack .pcard{position:relative;top:auto;transform:none}
+.pstack.no-stack .pcard::after{display:none}
+.pcard::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--ivory);opacity:var(--dim,0);pointer-events:none}
+.pcard .pimg{aspect-ratio:3/2;border-radius:20px;background:var(--linen)}
+.pcard .pimg img{width:100%;height:100%;object-fit:cover}
+.pcard .ptext{display:flex;flex-direction:column;gap:12px;padding:0 8px}
+.pcard .num,.card .cnum-s{font-family:var(--serif);font-size:15px;letter-spacing:.08em;font-variant-numeric:lining-nums tabular-nums;color:var(--charcoal)}
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.plist li{position:relative;padding-left:18px}
+.plist li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:1px;background:var(--taupe)}
+.plist b{color:var(--ink);font-weight:500}
+
+/* ---------- приложение ---------- */
+.app3{margin-top:84px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.phones{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:26px 0 70px 20px;margin-bottom:-60px;scroll-padding-left:20px;scrollbar-width:none;width:100%}
+.phones::-webkit-scrollbar{display:none}
+.phones::after{content:"";flex:0 0 4px}
+.ph-item{scroll-snap-align:start;flex:0 0 58%;max-width:250px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.ph-item>span{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--charcoal)}
+.phone{position:relative;width:100%;aspect-ratio:9/19;border-radius:34px;background:var(--ebony);padding:6px;box-shadow:0 30px 60px -28px rgba(43,42,38,.45);text-align:left}
+.screen{position:relative;width:100%;height:100%;border-radius:29px;background:var(--ivory);overflow:hidden;display:flex;flex-direction:column;gap:9px;padding:30px 13px 13px;font-size:10px;line-height:1.3;color:var(--ink)}
+.screen::before{content:"";position:absolute;top:8px;left:50%;width:64px;height:17px;margin-left:-32px;border-radius:12px;background:var(--ebony)}
+.s-top{display:flex;justify-content:space-between;align-items:baseline}
+.s-top b{font-family:var(--serif);font-weight:500;font-size:22px;line-height:1}
+.s-top span{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--charcoal)}
+.s-card{background:var(--paper);border-radius:13px;padding:10px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 0 rgba(43,42,38,.06)}
+.s-card.hl{background:var(--linen)}
+.s-row{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.screen em{font-style:normal;color:var(--charcoal);font-size:9px}
+.s-row>em{font-family:var(--serif);font-size:11px;font-variant-numeric:lining-nums}
+.s-big{font-family:var(--serif);font-weight:500;font-size:28px;line-height:1;white-space:nowrap;font-variant-numeric:lining-nums}
+.s-tag{display:inline-block;padding:2px 7px;border-radius:99px;background:var(--linen);color:var(--ink);font-size:8.5px;letter-spacing:.06em}
+.s-card.hl .s-tag{background:var(--paper)}
+.ring{flex:0 0 auto;width:48px;height:48px}
+.ring circle{fill:none;stroke-width:5}
+.ring .tr{stroke:rgba(43,42,38,.12)}
+.ring .pr{stroke:var(--ink);stroke-linecap:round;stroke-dasharray:138;stroke-dashoffset:46;transform:rotate(-90deg);transform-origin:center}
+.bar-mini{height:4px;border-radius:4px;background:var(--linen);overflow:hidden}
+.bar-mini i{display:block;height:100%;background:var(--charcoal);border-radius:4px}
+.spark{width:100%;height:40px}
+.spark path{fill:none;stroke:var(--charcoal);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.spark .area{fill:rgba(43,42,38,.06);stroke:none}
+.tog{width:24px;height:14px;border-radius:9px;background:var(--burgundy);position:relative;flex:0 0 auto}
+.tog::after{content:"";position:absolute;top:2px;right:2px;width:10px;height:10px;border-radius:50%;background:var(--ivory)}
+.tog.off{background:#C9C1B6}.tog.off::after{right:auto;left:2px}
+.s-nav{margin-top:auto;display:flex;justify-content:space-around;padding:9px 4px 0;border-top:1px solid var(--line);font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--charcoal)}
+.s-nav span:not(.on){font-size:0}
+.s-nav span{display:flex;flex-direction:column;align-items:center;gap:4px}
+.s-nav span::before{content:"";width:14px;height:14px;border-radius:5px;border:1.2px solid currentColor}
+.s-nav span.on{color:var(--burgundy)}
+.s-nav span.on::before{background:var(--burgundy);border-color:var(--burgundy)}
+
+/* =========================================================
+   ЛЕНТЫ (здоровье, истории)
+   ========================================================= */
+.slider{display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:4px 0 6px 20px;scroll-padding-left:20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.slider::-webkit-scrollbar{display:none}
+.slider::after{content:"";flex:0 0 6px}
+.sprog{height:1px;margin:22px 20px 0;background:var(--line-2);position:relative;overflow:hidden}
+.sprog i{position:absolute;left:0;top:0;bottom:0;width:30%;background:var(--ink);transform-origin:left;transition:transform .2s linear}
+.proof{display:flex;flex-direction:column;gap:16px;margin-bottom:36px}
+.card{scroll-snap-align:start;flex:0 0 72%;max-width:300px;display:flex;flex-direction:column;gap:12px;color:inherit}
+.card .cimg{aspect-ratio:4/5;border-radius:20px;background:var(--sand)}
+.card .cimg img{width:100%;height:100%;object-fit:cover;transition:clip-path 1.25s var(--ease-out),transform 1.2s var(--ease-out);transition-delay:calc(var(--i,0) * 110ms)}
+.card:hover .cimg img{transform:scale(1.04)}
+.card .sub{font-size:14.5px;line-height:1.5;color:var(--muted)}
+
+/* ---------- Здоровье: карточка-история — фото на всю карточку, текст поверх;
+   листается пальцем вбок и сама при прокрутке вниз (без JS — обычная лента со свайпом) ---------- */
+.hx{position:relative;padding:0 16px}
+.hx-card{position:relative;border-radius:24px;overflow:hidden;background:var(--sand);isolation:isolate}
+.hx-track{list-style:none;margin:0;padding:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch;height:min(190cqi,calc(var(--app-h) - var(--hh) - 96px));min-height:420px}
+.hx:not(.on) .hx-track{height:min(150cqi,calc(var(--app-h) - var(--hh) - 28px));min-height:280px}
+.hx-track::-webkit-scrollbar{display:none}
+.hx-slide{position:relative;flex:0 0 100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden}
+.hx-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 1.8s var(--ease-out)}
+.hx-slide.on img{transform:none}
+.hx-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(43,42,38,.84) 0%,rgba(43,42,38,.55) 26%,rgba(43,42,38,.12) 50%,rgba(43,42,38,0) 62%);pointer-events:none}
+.hx-cap{position:absolute;left:0;right:0;bottom:0;z-index:1;display:flex;flex-direction:column;gap:8px;padding:24px 22px 26px;color:var(--ivory)}
+.hx-num{font-family:var(--serif);font-size:15px;letter-spacing:.08em;font-variant-numeric:lining-nums tabular-nums;color:rgba(247,244,235,.72)}
+.hx-cap .h-card{color:var(--ivory);font-size:31px}
+.hx-cap p{margin:0;max-width:30em;font-size:14.5px;line-height:1.5;color:rgba(247,244,235,.88)}
+.hx.live .hx-cap>*{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .9s var(--ease-out)}
+.hx.live .hx-slide.on .hx-cap>*{opacity:1;transform:none}
+.hx.live .hx-slide.on .hx-cap>:nth-child(2){transition-delay:.08s}
+.hx.live .hx-slide.on .hx-cap>:nth-child(3){transition-delay:.16s}
+.hx-rail{position:absolute;top:12px;left:14px;right:14px;z-index:2;display:flex;gap:5px}
+.hx-rail button{position:relative;flex:1;height:20px;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hx-rail button::before,.hx-rail button::after{content:"";position:absolute;left:0;right:0;top:9px;height:2px;border-radius:2px}
+.hx-rail button::before{background:rgba(247,244,235,.38)}
+.hx-rail button::after{background:var(--ivory);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease-out)}
+.hx-rail button.done::after,.hx-rail button.on::after{transform:scaleX(1)}
+.hx-hint{display:none}
+/* сцена: карточка закреплена под шапкой, прокрутка вниз листает фото */
+.hx.on{height:calc(var(--hx-card,600px) + var(--hx-zone,420px) * 4 + 8px)}
+.hx.on .hx-stick{position:sticky;top:calc(var(--hh) + 10px)}
+@container site (min-width:900px){
+  .hx{padding:0 40px}
+  .hx-card{max-width:600px;margin:0 auto}
+  .hx-track{height:min(800px,calc(var(--app-h) - var(--hh) - 70px))}
+  .hx-cap{padding:32px 34px 36px}
+  .hx-cap .h-card{font-size:42px}
+  .hx-cap p{font-size:16px}
+}
+
+/* ---------- мелочи, которые делают дорого ---------- */
+/* заголовки поднимаются из-под маски по словам */
+.js .hs .wm{display:inline-block;overflow:hidden;vertical-align:top;padding:.06em .02em .14em;margin:-.06em -.02em -.14em}
+.js .hs .wi{display:inline-block;transform:translateY(112%);transition:transform 1.2s var(--ease-out);transition-delay:calc(var(--i,0) * 80ms + var(--wi,0) * 45ms)}
+.js .rv.hs{opacity:1;transform:none}
+.js .hs.in .wi{transform:none}
+/* тонкая линия чтения в шапке */
+.top-prog{position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--burgundy);opacity:.8;transform-origin:left;transform:scaleX(0);pointer-events:none}
+/* мягкий круг от касания на кнопках */
+.btn{isolation:isolate}
+.btn .rip{position:absolute;z-index:-1;border-radius:50%;background:currentColor;opacity:.16;transform:scale(0);pointer-events:none;animation:rip .8s var(--ease-out) forwards}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+/* точки на фото рациона */
+.pimg{position:relative}
+.hspots{position:absolute;inset:0;z-index:2;pointer-events:none}
+.hs-dot{position:absolute;left:var(--x);top:var(--y);width:30px;height:30px;margin:-15px 0 0 -15px;padding:0;border:0;border-radius:50%;background:rgba(247,244,235,.94);box-shadow:0 4px 14px -4px rgba(43,42,38,.5);cursor:pointer;pointer-events:auto;opacity:0;transform:scale(.5);transition:opacity .5s var(--ease),transform .6s var(--ease-out);-webkit-tap-highlight-color:transparent}
+.hs-dot::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--burgundy);transition:transform .35s var(--ease-out)}
+.hs-dot::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(247,244,235,.95);animation:hs-pulse 2.8s var(--ease) infinite}
+.hs-dot:nth-of-type(2){transition-delay:.15s}.hs-dot:nth-of-type(3){transition-delay:.3s}
+.hs-dot:nth-of-type(2)::after{animation-delay:.9s}.hs-dot:nth-of-type(3)::after{animation-delay:1.8s}
+@keyframes hs-pulse{0%{transform:scale(.7);opacity:0}30%{opacity:1}100%{transform:scale(1.45);opacity:0}}
+.pimg.in .hs-dot{opacity:1;transform:none}
+.hs-dot[aria-expanded="true"]::before{transform:scale(1.7)}
+.hs-dot[aria-expanded="true"]::after{animation:none;opacity:0}
+.hs-card{position:absolute;left:var(--x);top:var(--y);width:max-content;max-width:min(200px,58%);padding:10px 12px 11px;border-radius:13px;background:rgba(252,250,245,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 14px 30px -14px rgba(43,42,38,.5);font-size:12px;line-height:1.4;color:var(--muted);pointer-events:none;opacity:0;transform:translate(var(--tx,24px),var(--ty,22px)) scale(.94);transition:opacity .35s var(--ease),transform .5s var(--ease-out)}
+.hs-card b{display:block;margin-bottom:3px;font-family:var(--serif);font-weight:500;font-size:16.5px;line-height:1.15;color:var(--ink)}
+.hs-card.hs-l{--tx:calc(-100% - 24px);transform-origin:right}
+.hs-card.hs-c{--tx:-50%;transform-origin:bottom}
+.hs-dot{z-index:1}.hs-card{z-index:2}
+.hs-card.hs-up{--ty:calc(-100% - 22px)}
+.hs-card.open{opacity:1;transform:translate(var(--tx,24px),var(--ty,22px))}
+@media (hover:hover){.hs-dot:hover+.hs-card{opacity:1;transform:translate(var(--tx,24px),var(--ty,22px))}}
+/* приложение: на узком экране — один «живой» телефон с вкладками вместо третьей карусели */
+.ph-tabs{position:relative;display:grid;grid-template-columns:repeat(3,1fr);width:min(calc(100% - 40px),330px);margin:26px auto 0;padding:4px;border-radius:999px;background:var(--linen)}
+.ph-tabs[hidden]{display:none}
+.ph-tabs button{position:relative;z-index:1;height:38px;padding:0;border:0;border-radius:999px;background:none;font:inherit;font-size:13px;color:var(--muted);cursor:pointer;transition:color .35s;-webkit-tap-highlight-color:transparent}
+.ph-tabs button[aria-pressed="true"]{color:var(--burgundy)}
+.ph-ind{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / 3);border-radius:999px;background:var(--ivory);box-shadow:0 2px 10px -3px rgba(43,42,38,.28);transform:translateX(calc(var(--t,0) * 100%));transition:transform .6s var(--ease-out)}
+.phones.live{display:grid;justify-items:center;overflow:visible;scroll-snap-type:none;padding:22px 20px 70px;touch-action:pan-y}
+.phones.live::after{content:none}
+.phones.live .ph-item{grid-area:1/1;width:62%;max-width:250px;flex:none;opacity:0;visibility:hidden;transform:translateX(calc(var(--d,1) * 38px)) scale(.97);transition:opacity .55s var(--ease),transform .8s var(--ease-out),visibility 0s linear .8s}
+.phones.live .ph-item.on{opacity:1;visibility:visible;transform:none;transition:opacity .55s var(--ease),transform .8s var(--ease-out)}
+.phones.live .ph-item>span{display:none}
+.phones.live .s-nav span{cursor:pointer}
+.vcard{position:relative;scroll-snap-align:start;flex:0 0 66%;max-width:290px;display:flex;flex-direction:column;gap:12px;color:inherit;border:0;background:none;padding:0;text-align:left;cursor:pointer}
+.vcard .vimg{position:relative;aspect-ratio:9/16;border-radius:20px;background:var(--sand)}
+.vcard .vimg img{width:100%;height:100%;object-fit:cover;transition:clip-path 1.25s var(--ease-out),transform 1.2s var(--ease-out);transition-delay:calc(var(--i,0) * 110ms)}
+.vcard:hover .vimg img{transform:scale(1.04)}
+.vcard .vimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,42,38,0) 55%,rgba(43,42,38,.66) 100%)}
+.vplay{position:absolute;left:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:10px;color:var(--ivory);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase}
+.vplay i{width:34px;height:34px;border-radius:50%;background:rgba(247,244,235,.25);border:1px solid rgba(247,244,235,.7);display:flex;align-items:center;justify-content:center}
+.vtag{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--charcoal)}
+.vwho{font-family:var(--serif);font-weight:500;font-size:25px;line-height:1.08;color:var(--ink)}
+.vq{font-size:14px;line-height:1.5;color:var(--muted)}
+.soon{display:inline-flex;align-items:center;gap:10px;margin-top:6px;font-size:12px;color:var(--muted)}
+.soon i{width:6px;height:6px;border-radius:50%;background:var(--charcoal);animation:blink 2.4s var(--ease) infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* =========================================================
+   WAITLIST
+   ========================================================= */
+.wl-grid{display:flex;flex-direction:column;gap:30px}
+.wl-copy{display:flex;flex-direction:column;gap:16px}
+.wl-cta{display:flex;flex-direction:column;gap:18px;align-items:stretch;width:100%;max-width:440px}
+.counter{align-self:stretch;display:flex;flex-direction:column;gap:8px;padding:26px 0 24px;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+.cnum{font-size:96px;color:var(--ink)}
+.clbl{font-size:14px;color:var(--muted)}
+
+/* модалка-анкета */
+.qmodal{position:absolute;inset:0;z-index:80;background:rgba(43,42,38,.38);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility 0s linear .4s}
+.qmodal.on{opacity:1;visibility:visible;transition:opacity .4s var(--ease)}
+.qbox{position:relative;background:var(--ivory);color:var(--ink);border-radius:28px;padding:34px 24px 24px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:14px;transform:translateY(30px);transition:transform .55s var(--ease-out);box-shadow:0 30px 70px -30px rgba(43,42,38,.5)}
+.qmodal.on .qbox{transform:none}
+.qbox h3{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.05}
+.qbox p{font-size:14.5px;line-height:1.55;color:var(--muted)}
+.qbox .btn{width:100%}
+.q-x{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:0;background:var(--linen);color:var(--ink);cursor:pointer;font-size:20px;line-height:1}
+.is-native .qmodal{position:fixed}
+@media (min-width:900px){.is-native .qmodal{align-items:center}}
+
+/* ---------- анкета: шаги внутри окна, шапка и кнопки на месте, середина прокручивается ---------- */
+.qbox.qf{padding:0;gap:0;max-width:480px;max-height:100%;overflow:hidden}
+.qf-top{position:relative;flex:none;padding:10px 64px 0 24px;min-height:64px;display:flex;align-items:center}
+.qf-step{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.qf .q-x{top:10px;right:10px}
+.qf-prog{position:absolute;left:24px;right:24px;bottom:0;height:1px;background:var(--line)}
+.qf-prog i{display:block;height:100%;background:var(--burgundy);transform-origin:left;transform:scaleX(.25);transition:transform .8s var(--ease-out)}
+.qf-form{display:flex;flex-direction:column;flex:1;min-height:0}
+.qf-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:24px 24px 12px}
+.qf-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+.qf-pane{display:flex;flex-direction:column;gap:24px;animation:qf-in .55s var(--ease-out) both}
+.qf-pane.back{animation-name:qf-back}
+.qf-pane[hidden]{display:none}
+@keyframes qf-in{from{opacity:0;transform:translateX(24px)}}
+@keyframes qf-back{from{opacity:0;transform:translateX(-24px)}}
+.qbox .qf-h{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.05;letter-spacing:-.005em;margin:0;outline:none}
+.qbox .qf-lead{font-size:14.5px;line-height:1.55;color:var(--muted);margin:-12px 0 0}
+.qf-field{display:flex;flex-direction:column;gap:10px;border:0;margin:0;padding:0;min-width:0}
+.qf-field[hidden]{display:none}
+.qf-q{font-family:var(--serif);font-size:21px;line-height:1.15;color:var(--ink);padding:0}
+.qf-q small{font-family:var(--sans);font-size:12px;letter-spacing:.02em;color:var(--muted);margin-left:8px}
+.qf-in{width:100%;height:52px;border-radius:14px;border:1px solid var(--line-2);background:var(--paper);color:var(--ink);font:inherit;font-size:16px;padding:0 16px;-webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s}
+.qf-in:focus{outline:none;border-color:var(--burgundy);box-shadow:0 0 0 3px rgba(74,31,39,.10)}
+.qf-in::placeholder{color:rgba(90,82,73,.5)}
+.qf-unit{position:relative;display:block}
+.qf-unit em{position:absolute;top:0;bottom:0;right:16px;display:flex;align-items:center;font-style:normal;color:var(--muted);pointer-events:none}
+.qf-unit .qf-in{padding-right:46px}
+.qf-pre em{right:auto;left:16px}.qf-pre .qf-in{padding-left:33px;padding-right:16px}
+.qf-chips{display:flex;flex-wrap:wrap;gap:8px}
+.qf-chips label,.qf-seg label,.qf-cards label,.qf-check{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.qf-chips input,.qf-seg input,.qf-cards input,.qf-check input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.qf-chips label>span{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--paper);font-size:14.5px;color:var(--ink);transition:border-color .2s,background-color .2s,color .2s,transform .15s}
+.qf-chips label:active>span,.qf-cards label:active>span{transform:scale(.975)}
+.qf-chips input:checked+span{border-color:var(--burgundy);color:var(--burgundy);background:rgba(74,31,39,.06)}
+.qf-chips input:focus-visible+span,.qf-seg input:focus-visible+span,.qf-cards input:focus-visible+span,.qf-check input:focus-visible+span{outline:2px solid var(--burgundy);outline-offset:2px}
+.qf-seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:var(--linen)}
+.qf-seg label>span{display:flex;align-items:center;justify-content:center;height:42px;border-radius:999px;font-size:14.5px;color:var(--muted);transition:background-color .3s,color .3s,box-shadow .3s}
+.qf-seg input:checked+span{background:var(--ivory);color:var(--burgundy);box-shadow:0 2px 10px -3px rgba(43,42,38,.25)}
+.qf-cards{display:flex;flex-direction:column;gap:8px}
+.qf-cards label>span{position:relative;display:flex;flex-direction:column;gap:2px;padding:14px 16px 14px 50px;border-radius:16px;border:1px solid var(--line-2);background:var(--paper);transition:border-color .2s,background-color .2s,transform .15s}
+.qf-cards label>span::before{content:"";position:absolute;left:17px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;border:1px solid var(--line-2);background:var(--ivory);transition:border-color .2s,background-color .2s,box-shadow .2s}
+.qf-cards input:checked+span{border-color:var(--burgundy);background:rgba(74,31,39,.05)}
+.qf-cards input:checked+span::before{border-color:var(--burgundy);background:var(--burgundy);box-shadow:inset 0 0 0 4px var(--ivory)}
+.qf-cards b{font-weight:500;font-size:15px}.qf-cards b span{display:inline}.qf-cards small{font-size:13px;color:var(--muted)}
+.qf-check{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.qf-check>span{position:relative;display:block;padding-left:34px}
+.qf-check>span::before{content:"";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:6px;border:1px solid var(--line-2);background:var(--paper);transition:background-color .2s,border-color .2s}
+.qf-check>span::after{content:"";position:absolute;left:7px;top:3px;width:5px;height:10px;border:solid var(--ivory);border-width:0 2px 2px 0;transform:rotate(45deg) scale(0);transition:transform .25s var(--ease-out)}
+.qf-check input:checked+span::before{background:var(--burgundy);border-color:var(--burgundy)}
+.qf-check input:checked+span::after{transform:rotate(45deg) scale(1)}
+.qf-err{font-size:12.5px;line-height:1.4;color:var(--burgundy)}
+.qf-err:empty{display:none}
+.qf-field.bad .qf-in{border-color:var(--burgundy)}
+.qf-field.bad .qf-chips label>span{border-color:rgba(74,31,39,.5)}
+.qf-field.bad .qf-check>span::before{border-color:var(--burgundy)}
+.qf-field.shake{animation:qf-shake .42s}
+@keyframes qf-shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.qf[data-sex="f"] .g-m,.qf[data-sex="m"] .g-f{display:none}
+.qf-nav{flex:none;display:flex;gap:10px;align-items:center;padding:14px 24px 20px;border-top:1px solid var(--line);background:var(--ivory)}
+.qf-nav[hidden]{display:none}
+.qbox .qf-nav .btn{flex:1;width:auto}
+.qf-back{flex:none;height:52px;padding:0 20px;border-radius:999px;border:1px solid var(--line-2);background:transparent;color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.qf-back[hidden]{display:none}
+.qf-next[disabled]{opacity:.65;cursor:progress}
+.qf-fail{margin:0 24px 6px;padding:12px 14px;border-radius:12px;background:rgba(74,31,39,.06);color:var(--burgundy);font-size:13.5px;line-height:1.45}
+.qf-fail[hidden]{display:none}
+.qf-done{align-items:center;text-align:center;padding:14px 0 10px}
+.qf-lock{display:flex;flex-direction:column;align-items:center;gap:9px;color:var(--burgundy)}
+.qf-cat{height:86px;width:auto}.qf-word{height:13px;width:auto}
+.qbox .qf-done .qf-lead{margin:0;max-width:22em}
+.qbox .qf-done .btn{width:100%;margin-top:6px}
+.qf-again{border:0;background:none;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px 8px}
+.qf-done .qf-cat{animation:qf-pop 1s var(--ease-out) both .1s}
+.qf-done .qf-word{animation:qf-pop 1s var(--ease-out) both .28s}
+@keyframes qf-pop{from{opacity:0;transform:translateY(12px) scale(.96)}}
+
+/* =========================================================
+   FOOTER — кошка вместе с надписью
+   ========================================================= */
+/* ---------- финал: аффирмация, сбоку выглядывает кошка ---------- */
+.finale{position:relative;overflow:hidden;background:var(--ivory);padding:92px 0 0}
+.fin-in{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:30px;padding-bottom:calc(min(48cqi,300px) * 1.56 - 70px)}
+.fin-q{max-width:13em;font-size:40px;line-height:1.08}
+@container site (max-width:380px){.fin-q{font-size:36px}}
+.peek{position:absolute;right:0;bottom:0;z-index:0;width:min(48cqi,300px);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.peek img{display:block;width:100%;height:auto;transform-origin:100% 72%}
+.js .peek{transform:translateX(102%);transition:transform 1.2s var(--ease-out)}
+.js .finale.seen .peek{transform:none;transition-delay:.5s}
+.js .finale.seen .peek img{animation:peek-tilt 7s var(--ease) 2.4s infinite}
+.js .finale.seen .peek.hide{transform:translateX(102%);transition:transform .4s cubic-bezier(.5,0,.75,0);transition-delay:0s}
+@keyframes peek-tilt{0%,68%,100%{transform:rotate(0)}76%{transform:rotate(-4deg)}84%{transform:rotate(1.5deg)}90%{transform:rotate(0)}}
+@container site (min-width:900px){
+  .finale{padding-top:140px}
+  .fin-in{padding-bottom:160px}
+  .fin-q{font-size:64px;max-width:12em}
+  .peek{width:340px}
+}
+footer{background:var(--ivory);color:var(--muted);padding:56px 0 40px;border-top:1px solid var(--line)}
+.frow{display:flex;flex-direction:column;gap:26px;align-items:center;text-align:center}
+.flogo{display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--burgundy);text-decoration:none}
+.flogo{gap:8px}
+.flogo .f-cat{height:58px;width:auto}
+.flogo .f-word{height:15px;width:auto}
+.flinks{display:flex;gap:2px 26px;flex-wrap:wrap;justify-content:center}
+.flinks a{color:var(--ink);text-decoration:none;font-size:12px;letter-spacing:.16em;text-transform:uppercase;min-height:44px;display:inline-flex;align-items:center}
+.flinks a:hover{color:var(--burgundy)}
+.fcopy{font-size:12px;color:var(--charcoal)}
+
+/* ---------- нижняя плашка с кнопкой и тостом ---------- */
+/* док прилипает к низу экрана; overflow обрезает спрятанную кнопку, иначе она удлиняет страницу под подвалом */
+.dock{position:sticky;bottom:0;z-index:40;height:180px;margin-top:-180px;overflow:hidden;pointer-events:none}
+.sticky-cta{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;transform:translate(-50%,140%);visibility:hidden;transition:transform .55s var(--ease-out),visibility 0s linear .55s;pointer-events:auto}
+.sticky-cta.show{transform:translate(-50%,0);visibility:visible;transition:transform .55s var(--ease-out)}
+.sticky-cta .btn{min-height:46px;padding:0 26px;white-space:nowrap;box-shadow:0 14px 30px -12px rgba(43,42,38,.45)}
+.toast{position:absolute;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);max-width:calc(100% - 32px);width:max-content;padding:12px 18px;border-radius:999px;background:var(--ebony);color:var(--ivory);font-size:13px;line-height:1.35;text-align:center;box-shadow:0 14px 34px -12px rgba(43,42,38,.5);opacity:0;transition:opacity .35s var(--ease),transform .45s var(--ease-out);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* =========================================================
+   ПРЕЛОАДЕР: кот рисуется линией, буквы поднимаются,
+   тонкая линия — реальная загрузка; затем надпись перелетает в шапку
+   ========================================================= */
+.intro{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px;color:var(--burgundy);cursor:pointer}
+.intro.run,.intro-on .intro{display:flex}
+.intro-on .intro:not(.run)>*:not(.i-bg){visibility:hidden}
+.intro .i-bg{position:absolute;inset:0;background:var(--ivory)}
+.intro>*:not(.i-bg){position:relative}
+html.intro-on{background:var(--ivory)}
+.is-native.intro-on body{overflow:hidden}
+.intro .i-lock{display:flex;flex-direction:column;align-items:center;gap:16px}
+.intro .i-cat{width:auto;height:128px;overflow:visible}
+.intro .i-cat .st{fill:none;stroke:var(--burgundy);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round;transition:opacity .6s var(--ease) 1.55s}
+.intro .i-cat .fl{fill:var(--burgundy);opacity:0;transition:opacity .8s var(--ease) 1.35s}
+.intro.draw .i-cat .st{animation:kk-draw 1.7s var(--ease-io) forwards;opacity:0}
+@keyframes kk-draw{to{stroke-dashoffset:0}}
+.intro.draw .i-cat .fl{opacity:1}
+.intro .i-word{width:min(64vw,290px);height:auto;transform-origin:0 0;overflow:hidden;opacity:0;transition:opacity .25s var(--ease) .05s}
+.intro.draw .i-word{opacity:1}
+.intro .i-word .lt{transform-box:fill-box;transform:translateY(130%);transition:transform 1.15s var(--ease-out);transition-delay:calc(.1s + var(--k) * 60ms)}
+.intro.draw .i-word .lt{transform:none}
+.intro.skip .i-word .lt{transition:none;transform:none}
+.intro.out{pointer-events:none}
+.intro .i-bar{margin-top:10px;width:120px;height:1px;background:var(--line-2);overflow:hidden}
+.intro .i-bar i{display:block;width:100%;height:100%;background:var(--ink);transform:scaleX(0);transform-origin:left}
+.intro .i-skip{position:absolute;bottom:calc(26px + env(safe-area-inset-bottom,0px));font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--charcoal)}
+
+/* =========================================================
+   ДЕСКТОП / ПЛАНШЕТ — контейнерные запросы к ширине сайта
+   ========================================================= */
+@container site (max-width:380px){
+  .hero .h-display{font-size:40px}
+  .ph-item{flex-basis:64%}
+}
+@container site (min-width:600px){
+  .wrap{padding:0 max(40px,env(safe-area-inset-right)) 0 max(40px,env(safe-area-inset-left))}
+  .hero-media{margin:0 40px;height:min(calc((100cqw - 80px) * .92),calc(var(--app-h) - var(--hh) - 220px))}
+  .slider,.phones{padding-left:40px;scroll-padding-left:40px}
+  .slider::after,.phones::after{flex-basis:26px}
+  .sprog{margin-left:40px;margin-right:40px}
+  .pstack{padding:0 40px}
+  .card{flex-basis:40%}
+  .vcard{flex-basis:38%}
+  .ph-item{flex-basis:34%}
+  .h-display{font-size:66px}
+  .h-sec{font-size:52px}
+  .clm-copy p.ink{font-size:29px}
+  .wl-cta{align-items:flex-start}
+}
+@container site (min-width:900px){
+  .site,.top,.ov-in>section{--hh:76px}
+  section{padding:128px 0}
+  .brand .b-word{height:16px}
+  .nav-links{display:flex}
+  .nav-cta{display:inline-flex}
+  .burger,.menu{display:none!important}
+  .h-display{font-size:96px;line-height:.96}
+  .h-sec{font-size:66px}
+  .h-card{font-size:30px}
+  .lede{font-size:17px}
+  /* герой на один экран: текст слева, арка с фото справа */
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:72px;height:clamp(560px,calc(var(--app-h) - var(--hh)),960px);padding:20px max(40px,calc((100cqw - 1240px)/2 + 40px)) 40px}
+  .hero-media{grid-column:2;grid-row:1;margin:0;aspect-ratio:2/3;width:auto;height:calc(clamp(560px,calc(var(--app-h) - var(--hh)),960px) - 60px);max-width:44cqi;border-radius:28px}
+  .hero .h-display{font-size:clamp(60px,min(7.5cqi,calc((var(--app-h) - var(--hh)) * .14)),96px)}
+  .hero-media img{position:absolute;inset:0}
+  .hero-text{grid-column:1;grid-row:1;padding:0;gap:22px}
+  .hero .sub{font-size:18px}
+  .scroll-cue{display:inline-flex}
+  .clm-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:0 96px;align-items:start}
+  .clm-head{grid-column:1}
+  .clm .video{grid-column:2;grid-row:1 / span 2;position:sticky;top:120px;margin:0 0 0 auto}
+  .clm-copy{grid-column:1;margin-top:40px}
+  .clm-copy p.ink{font-size:33px}
+  .pstack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:1240px;margin:0 auto;padding:0 40px}
+  .pcard{position:relative;top:auto;transform:none}
+  .pcard::after{display:none}
+  .slider{overflow:visible;scroll-snap-type:none;max-width:1240px;margin:0 auto}
+  .slider::after{content:none}
+  .sprog{display:none}
+  .pillars .card{flex:1 1 0;max-width:none;min-width:0}
+  .pillars .h-card{font-size:clamp(21px,2.2cqi,28px)}
+  .vstories .vcard{flex:1 1 0;max-width:none}
+  .phones{overflow:visible;justify-content:center;gap:40px;max-width:1000px;margin:0 auto -60px;padding-left:40px;padding-right:40px}
+  .phones::after{content:none}
+  .ph-item{flex:0 1 270px}
+  .app3{margin-top:128px}
+  .wl-grid{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:end}
+  .cnum{font-size:132px}
+  .frow{flex-direction:row;align-items:center;justify-content:space-between;text-align:left}
+  .sticky-cta{display:none}
+  .toast{bottom:32px}
+}
+
+/* =========================================================
+   СТЕНД: переключатель «мобильная · десктоп · все экраны»
+   ========================================================= */
+.bar{display:none}
+.is-stand .bar{position:sticky;top:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--ebony);color:var(--ivory);font-family:var(--sans);padding:0 16px}
+.bar .lbl{font-size:11px;letter-spacing:.28em;font-weight:500;color:var(--sand);margin-right:8px}
+.seg{display:flex;background:rgba(247,244,235,.08);border-radius:999px;padding:3px}
+.seg button{height:34px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:rgba(247,244,235,.7);font-family:var(--sans);font-size:12.5px;cursor:pointer}
+.seg button.on{background:var(--ivory);color:var(--ink)}
+.bar .size{font-size:12px;color:rgba(247,244,235,.5);min-width:44px}
+.bar .open-site{font-size:12px;color:var(--sand);text-decoration:none;border-bottom:1px solid rgba(213,198,168,.4);margin-left:6px}
+.chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(247,244,235,.7);cursor:pointer;margin-left:6px}
+.chk input{accent-color:var(--sand);width:15px;height:15px}
+.is-stand body{background:#E6E0D3}
+.is-stand .stage{display:flex;justify-content:center;align-items:flex-start;padding:24px 20px 40px;min-height:calc(100vh - 56px)}
+.frame{position:relative;background:var(--bg);container-type:inline-size;container-name:site}
+.is-stand .frame{flex:0 0 auto;overflow:auto;transform:translateZ(0);scroll-padding-top:80px;scroll-padding-bottom:84px;transform-origin:top center;scrollbar-width:thin}
+.is-stand.smooth .frame{scroll-behavior:smooth}
+.is-stand .frame.m{width:408px;height:780px;border-radius:44px;border:9px solid var(--ebony);box-shadow:0 40px 80px -24px rgba(43,42,38,.4)}
+.is-stand .frame.d{width:1282px;height:calc(100vh - 116px);border-radius:12px;border:1px solid #D2C9B8;box-shadow:0 24px 60px -24px rgba(43,42,38,.25)}
+.site{background:var(--bg);min-height:100%}
+.is-stand .frame.m .site{--app-h:762px}
+/* на телефоне — стабильная высота экрана: не прыгает, когда сворачивается панель браузера */
+.is-native .site{--app-h:100svh}
+.is-native .menu{height:calc(100dvh - var(--hh))}
+.is-native{scroll-padding-top:72px;scroll-padding-bottom:84px}
+[tabindex="-1"]:focus{outline:none}
+.is-native.smooth{scroll-behavior:smooth}
+.overview{display:none;flex-direction:column;gap:28px;padding:24px 20px 60px;max-width:1440px;margin:0 auto}
+.overview.on{display:flex}
+.ov-row{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:start;padding:20px;background:var(--ivory);border-radius:16px;border:1px solid #D9D0BF}
+.ov-name{font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);padding-top:6px}
+.ov-name small{display:block;margin-top:6px;font-size:11px;letter-spacing:0;text-transform:none;color:var(--charcoal)}
+.ov-shots{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.ov-shot{display:flex;flex-direction:column;gap:8px}
+.ov-cap{font-family:var(--sans);font-size:11px;color:var(--charcoal)}
+.ov-box{overflow:hidden;border:1px solid #DDD5C6;border-radius:8px;background:var(--bg)}
+.ov-in{transform-origin:top left;container-type:inline-size;container-name:site;background:var(--bg);--app-h:780px}
+.ov-in.m{width:390px}.ov-in.d{width:1280px}
+.ov-in .blk{display:none!important}.ov-in [data-block]{outline:none!important}
+.ov-in .top{position:relative}
+.ov-in .rv,.ov-in .unveil,.ov-in .unveil img,.ov-in .hero-in,.ov-in .line>span,.ov-in .hero-media,.ov-in .hero-media img,.ov-in .pcard{opacity:1!important;transform:none!important;clip-path:none!important;animation:none!important}
+.ov-in .pcard{position:relative;top:auto}
+.ov-in .pcard::after{display:none}
+.ov-in .ink .w{color:inherit!important}
+.ov-in .one2one-n{--c:0!important}
+.ov-in [data-parallax]{translate:none!important}
+.ov-in .kicker,.ov-in .kicker.rv{--rule:1!important}
+.ov-in .dock{position:relative;height:auto;margin-top:0;overflow:visible}
+.ov-in .sticky-cta{position:relative;transform:none;visibility:visible}
+@media(max-width:800px){.ov-row{grid-template-columns:1fr}}
+/* нулевая специфичность: иначе перебивает sticky у шапки, карточек и нижней плашки */
+:where([data-block]){position:relative}
+.blk{display:none;position:absolute;top:8px;left:8px;z-index:60;padding:4px 8px;border-radius:6px;background:var(--ebony);color:var(--ivory);font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;pointer-events:none}
+.frame.labels .blk{display:inline-block}
+.frame.d .qmodal{align-items:center}
+.frame.labels [data-block]{outline:1px dashed rgba(90,82,73,.6);outline-offset:-1px}
+
+/* ---------- бережём тех, кто отключил анимацию ---------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  .rv,.unveil,.unveil img,.hero-in,.line>span,.hero-media img,.pcard{opacity:1!important;transform:none!important;clip-path:none!important}
+  .hero-media{clip-path:none!important}
+  .ink .w{color:var(--ink)!important}
+  .one2one-n{--c:0!important}
+  .kicker{--rule:1!important}
+  .js .hs .wi{transform:none!important}
+  .phones.live .ph-item{transform:none!important}
+  .js .peek{transform:none!important}
+  .js .finale.seen .peek img{animation:none!important}
+  html,.is-native,.frame{scroll-behavior:auto!important}
+  /* заставка остаётся, но спокойная: линия рисуется на месте, надпись проявляется без подъёма, в шапку — сменой прозрачности */
+  .intro .i-cat .st{transition:opacity .6s var(--ease) 1.55s!important}
+  .intro.draw .i-cat .st{animation:kk-draw 1.7s var(--ease-io) forwards!important}
+  .intro .i-cat .fl{transition:opacity .8s var(--ease) 1.35s!important}
+  .intro .i-word{transition:opacity 1.1s var(--ease) .45s!important}
+  .intro .i-word .lt{transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- прелоадер: при каждом открытии сайта; кошка и надпись — единая композиция -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="i-bg"></div>
+  <div class="i-lock"><!--INTRO_CAT--><!--INTRO_WORD--></div>
+  <div class="i-bar"><i id="i-bar"></i></div>
+  <span class="i-skip">Нажмите, чтобы пропустить</span>
+</div>
+<script>
+/* заставка стартует сразу, пока остальная страница ещё грузится (на мобильном интернете это секунды).
+   Линия загрузки — настоящий прогресс: шрифты, фото героя и готовность основного скрипта.
+   Финал (перелёт надписи в шапку) регистрирует основной скрипт как KKintro.finish. */
+(function(){
+  var d=document.documentElement,i=document.getElementById('intro');
+  if(!d.classList.contains('intro-on'))return;
+  var K=window.KKintro={t0:performance.now(),fonts:false,skip:false,done:false,finish:null};
+  i.classList.add('run');
+  var st=i.querySelectorAll('.i-cat .st');
+  for(var j=0;j<st.length;j++){var L=st[j].getTotalLength();st[j].style.strokeDasharray=L;st[j].style.strokeDashoffset=L}
+  requestAnimationFrame(function(){requestAnimationFrame(function(){i.classList.add('draw')})});
+  var fd=function(){K.fonts=true};
+  if(document.fonts&&document.fonts.load&&window.Promise){
+    Promise.all([document.fonts.load('400 44px "Cormorant Garamond"','Больше'),document.fonts.load('400 16px "Value Sans Pro"','Больше')]).then(fd,fd);
+    setTimeout(fd,4000);
+  }else fd();
+  /* минимум 2,1 с ради рисунка; дольше 7 с не держим, даже если фото ещё в пути */
+  var bar=document.getElementById('i-bar'),shown=0,MIN=2100,MAX=7000;
+  var tick=function(now){
+    if(K.done)return;
+    var el=now-K.t0,h=document.querySelector('#hero-media img'),hero=!!(h&&h.complete);
+    var parts=(K.fonts?1:0)+(hero?1:0)+(K.finish?1:0),ready=parts===3;
+    shown+=(Math.min(el/MIN,1)*(ready?1:.3+.18*parts)-shown)*.12;
+    bar.style.transform='scaleX('+shown.toFixed(3)+')';
+    if(K.finish&&(K.skip||(ready&&el>=MIN&&shown>.985)||el>MAX)){K.done=true;bar.style.transform='scaleX(1)';setTimeout(K.finish,K.skip?0:180);return}
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  var skip=function(){K.skip=true};
+  i.addEventListener('click',skip);
+  document.addEventListener('keydown',skip);
+  /* страховка: если основной скрипт так и не подхватил заставку, плавно убираем её сами */
+  var rescue=function(){
+    if(K.finish||K.done)return;K.done=true;
+    i.style.transition='opacity .6s ease';i.style.opacity='0';
+    setTimeout(function(){d.classList.remove('intro-on');i.style.display='none'},650);
+  };
+  window.addEventListener('load',function(){setTimeout(rescue,2500)});
+  setTimeout(rescue,20000);
+})();
+</script>
+
+<!-- шрифты (свои файлы, без Google Fonts) и фото героя начинают грузиться, когда заставка уже рисуется, —
+     раньше они отнимали у неё канал на медленном интернете -->
+<!--FONT_PRELOAD-->
+<link rel="preload" as="image" href="<!--HERO_SRC-->" imagesrcset="<!--HERO_SRCSET-->" imagesizes="(min-width:900px) 44vw, 100vw" fetchpriority="high">
+
+<!-- символы логотипа -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!--SYMBOLS-->
+  </defs>
+</svg>
+
+
+<div class="bar"><span class="lbl">KOSH KUSÉ</span><div class="seg" id="seg"><button data-v="m" class="on">Мобильная · 390</button><button data-v="d">Десктоп · 1280</button><button data-v="o">Все экраны</button></div><span class="size" id="size"></span><label class="chk"><input type="checkbox" id="labels"> Метки блоков</label><a class="open-site" href="?site">Открыть как сайт</a></div>
+<div class="overview" id="overview"></div>
+
+<div class="stage" id="stage"><div class="frame m" id="frame"><div class="site" id="site">
+
+<header class="top" id="top" data-block="header"><span class="blk" aria-hidden="true">HEADER</span><i class="top-prog" id="top-prog" aria-hidden="true"></i>
+  <div class="wrap">
+    <a href="#product" class="brand" aria-label="KOSH KUSÉ — на главную">
+      <svg class="b-word" id="b-word" viewBox="<!--VB:wordmark-->" fill="currentColor" aria-hidden="true"><use href="#kk-wordmark"/></svg>
+    </a>
+    <nav class="nav-links" aria-label="Основная навигация">
+      <a href="#clm">Идея</a>
+      <a href="#product-block">Рацион</a>
+      <a href="#health">Здоровье</a>
+      <a href="#stories">Истории</a>
+    </nav>
+    <div class="nav-right">
+      <a href="#waitlist" class="btn btn-primary nav-cta">Вступить в клуб</a>
+      <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="menu" id="menu">
+    <nav aria-label="Меню">
+      <a href="#clm"><small aria-hidden="true">01</small>Идея</a>
+      <a href="#product-block"><small aria-hidden="true">02</small>Рацион</a>
+      <a href="#health"><small aria-hidden="true">03</small>Здоровье</a>
+      <a href="#stories"><small aria-hidden="true">04</small>Истории</a>
+    </nav>
+    <div class="menu-foot">
+      <a href="#waitlist" class="btn btn-primary">Вступить в клуб</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero" id="product" data-block="hero"><span class="blk" aria-hidden="true">01 · HERO</span>
+  <div class="hero-media" id="hero-media"><img {{img:hero}} sizes="(min-width:900px) 44vw, 100vw" alt="Женщина в кремовом свитере сидит на льняном диване и с улыбкой смотрит на рыжую кошку, которая спит у неё на коленях" fetchpriority="high"></div>
+  <div class="wrap hero-text">
+    <h1 class="h-display"><span class="line"><span>Больше счастливых</span></span><span class="line"><span>лет вместе</span></span></h1>
+    <p class="sub hero-in d1">KOSH KUSÉ — единая система заботы о кошках, где натуральная еда, ветеринарный сервис и аксессуары работают как одно целое. Вы любите. Мы помогаем со всем остальным.</p>
+    <div class="hero-cta hero-in d2">
+      <a href="#waitlist" class="btn btn-primary" id="hero-cta">Вступить в клуб <span class="arr" aria-hidden="true">→</span></a>
+      <span class="scroll-cue" aria-hidden="true"><i></i>Листайте</span>
+    </div>
+  </div>
+</section>
+
+<!-- CLM -->
+<section class="spot clm linen" id="clm" data-block="clm"><span class="blk" aria-hidden="true">02 · CLM</span>
+  <div class="wrap clm-grid">
+    <div class="clm-head">
+      <span class="stamp rv" lang="en">Cat Lives Matter<sup>*</sup></span>
+      <h2 class="h-sec rv" style="--i:1">Любовь, которая не умеет просить, заслуживает ответа</h2>
+    </div>
+    <div class="video rv" id="video" role="button" tabindex="0" aria-label="Видео: почему мы это делаем" aria-pressed="false">
+      <img {{img:clm-video}} sizes="(min-width:900px) 420px, 90vw" alt="<!--ALT:clm-video-->" loading="lazy" data-parallax="0.05">
+      <div class="play"><span class="play-btn" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="cap"><b>Почему мы это делаем</b><span>Видео — к запуску клуба</span></span></div>
+      <div class="playing-msg"><b>Видео — к запуску</b><span>Оно появится здесь, когда клуб откроется.</span></div>
+    </div>
+    <div class="clm-copy">
+      <p class="ink">Кошки не умеют просить. Они не жалуются, не болеют напоказ, не требуют внимания. Они просто ждут. Такая любовь заслуживает ответа — не «корма», не «товаров для животных», а ответа.</p>
+      <p class="ink">Мы собрали первую систему заботы, в которой продумано всё: еда, ветеринарный сервис, аксессуары. Это самая полная забота о кошке — потому что она не питомец, а член семьи.</p>
+      <h3 class="clm-sub rv">Рацион за рацион</h3>
+      <p class="rv">Ваша кошка ждёт вас девять часов. Есть кошки, которые ждут годами. Не вас — кого-нибудь. Они живут в приюте — и тоже не умеют просить.</p>
+      <figure class="one2one unveil" id="one2one">
+        <img {{img:one2one}} sizes="(min-width:900px) 620px, 92vw" alt="<!--ALT:one2one-->" loading="lazy">
+        <figcaption class="sr">Один плюс один: на каждую подписку — рацион для кошки в приюте</figcaption>
+        <span class="one2one-n serif-num" aria-hidden="true"><span class="a" aria-hidden="true">1</span><span class="plus" aria-hidden="true">+</span><span class="b" aria-hidden="true">1</span></span>
+      </figure>
+      <p class="rv">С каждой вашей подпиской KOSH KUSÉ кормит кошку в приюте — ту, у которой пока нет мамы. Она не узнает, кто вы. Зато будет сыта. Весь месяц.</p>
+      <p class="small rv">Её имя, фото и отчёт — в вашем приложении.</p>
+    </div>
+  </div>
+  <div class="wrap"><p class="fn">* Cat Lives Matter (англ.) — «Жизни кошек важны»</p></div>
+</section>
+
+<!-- PRODUCT -->
+<section class="product" id="product-block" data-block="product"><span class="blk" aria-hidden="true">03 · PRODUCT</span>
+  <div class="wrap sec-head">
+    <span class="kicker rv">Система заботы</span>
+    <h2 class="h-sec rv" style="--i:1">Еда, ветеринар и аксессуары — как одно целое</h2>
+  </div>
+  <div class="pstack" id="pstack">
+    <article class="pcard" style="--k:0">
+      <div class="pimg unveil"><img {{img:p-food}} sizes="(min-width:900px) 380px, 94vw" alt="Керамическая миска с кусочками белой рыбы, графин молочной сыворотки, льняной мешочек со снеками и коробка с винной лентой на травертиновом столе; к миске тянется белая кошка" loading="lazy"><div class="hspots" id="hspots"><button type="button" class="hs-dot" style="--x:61%;--y:64%" aria-expanded="false" aria-controls="hs-1"><span class="sr">Что в миске</span></button><div class="hs-card hs-c hs-up" id="hs-1" role="note" style="--x:61%;--y:64%"><b>Филе дикого минтая</b>Витамины и минералы — в составе, консервантов и усилителей вкуса нет.</div><button type="button" class="hs-dot" style="--x:43%;--y:42%" aria-expanded="false" aria-controls="hs-2"><span class="sr">Что в графине</span></button><div class="hs-card hs-c" id="hs-2" role="note" style="--x:43%;--y:42%"><b>Молочная сыворотка</b>Восполняет минеральный баланс.</div><button type="button" class="hs-dot" style="--x:30%;--y:76%" aria-expanded="false" aria-controls="hs-3"><span class="sr">Что в мешочке</span></button><div class="hs-card hs-r hs-up" id="hs-3" role="note" style="--x:30%;--y:76%"><b>Снеки из рыбной чешуи</b>Для зубов и пищеварения.</div></div></div>
+      <div class="ptext">
+        <span class="num">01</span>
+        <h3 class="h-card">Полноценный рацион</h3>
+        <ul class="plist">
+          <li><b>Влажный корм</b> из филе дикого минтая. Витамины и минералы — в составе, консерванты и усилители вкуса — нет.</li>
+          <li><b>Молочная сыворотка</b> — восполняет минеральный баланс.</li>
+          <li><b>Снеки из рыбной чешуи</b> — для зубов и пищеварения.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="pcard" style="--k:1">
+      <div class="pimg unveil"><img {{img:p-vet}} sizes="(min-width:900px) 380px, 94vw" alt="Раскрытый ветеринарный кейс со стетоскопом и пробирками на дубовом столе; рядом на льняном полотенце лежит трёхцветная кошка, её гладит рука ветеринара" loading="lazy"></div>
+      <div class="ptext">
+        <span class="num">02</span>
+        <h3 class="h-card">Ветеринарный сервис</h3>
+        <ul class="plist">
+          <li><b>Анализы на дому</b> без переноски и стресса.</li>
+          <li><b>Горячая линия ветеринара.</b> Медицинская карта кошки всегда под рукой у врача и у вас.</li>
+          <li><b>Зоопсихолог.</b> Консультации по поведению и привычкам вашей кошки.</li>
+        </ul>
+      </div>
+    </article>
+    <article class="pcard" style="--k:2">
+      <div class="pimg unveil"><img {{img:p-gear}} sizes="(min-width:900px) 380px, 94vw" alt="Серо-белая кошка ест из кремовой умной кормушки; на заднем плане закрытый лоток, на полу кожаный ошейник с трекером" loading="lazy"></div>
+      <div class="ptext">
+        <span class="num">03</span>
+        <h3 class="h-card">Аксессуары</h3>
+        <ul class="plist">
+          <li><b>Умная кормушка.</b> Порции по расписанию и учёт съеденного.</li>
+          <li><b>Лоток с датчиками.</b> Вес и частота визитов — в приложении.</li>
+          <li><b>Трекер активности.</b> Сколько двигается и спит — день за днём.</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+
+  <div class="wrap app3">
+    <span class="kicker rv">Приложение</span>
+    <h2 class="h-sec rv" style="--i:1">Одна подписка — одно приложение</h2>
+  </div>
+  <div class="ph-tabs" id="ph-tabs" hidden><button type="button" aria-pressed="true">Рацион</button><button type="button" aria-pressed="false">Медкарта</button><button type="button" aria-pressed="false">Гаджеты</button><i class="ph-ind" aria-hidden="true"></i></div>
+  <div class="phones" aria-label="Экраны приложения">
+    <div class="ph-item rv">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-top"><b>Рацион</b><span>Сегодня</span></div>
+        <div class="s-card hl">
+          <div class="s-row">
+            <div><div class="s-big">2 из 3</div><em>порции съедены</em></div>
+            <svg class="ring" viewBox="0 0 54 54"><circle class="tr" cx="27" cy="27" r="22"/><circle class="pr" cx="27" cy="27" r="22"/></svg>
+          </div>
+        </div>
+        <div class="s-card"><div class="s-row"><span>Утро · 85 г</span><span class="s-tag">съела</span></div></div>
+        <div class="s-card"><div class="s-row"><span>День · 85 г</span><span class="s-tag">съела</span></div></div>
+        <div class="s-card"><div class="s-row"><span>Вечер · 85 г</span><em>19:30</em></div></div>
+        <div class="s-card"><div class="s-row"><span>Сыворотка · 50 мл</span><span class="s-tag">выпила</span></div></div>
+        <div class="s-nav"><span class="on">Рацион</span><span>Медкарта</span><span>Гаджеты</span><span>Профиль</span></div>
+      </div></div>
+      <span>Рацион</span>
+    </div>
+    <div class="ph-item rv" style="--i:1">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-top"><b>Медкарта</b><span>Профиль</span></div>
+        <div class="s-card">
+          <div class="s-row"><span>Вес</span><em>за 6 месяцев</em></div>
+          <div class="s-big">4,2 кг</div>
+          <svg class="spark" viewBox="0 0 120 40" preserveAspectRatio="none"><path class="area" d="M0 30 C15 28 22 31 34 26 S55 22 66 23 S88 18 100 17 S114 15 120 14 L120 40 L0 40Z"/><path d="M0 30 C15 28 22 31 34 26 S55 22 66 23 S88 18 100 17 S114 15 120 14"/></svg>
+        </div>
+        <div class="s-card"><div class="s-row"><span>Анализы на дому</span><span class="s-tag">готовы</span></div><em>12 марта · следующие в сентябре</em></div>
+        <div class="s-card"><div class="s-row"><span>Прививки</span><em>через 18 дней</em></div></div>
+        <div class="s-card hl"><div class="s-row"><span>Ветеринар на связи</span><span class="s-tag">чат</span></div></div>
+        <div class="s-nav"><span>Рацион</span><span class="on">Медкарта</span><span>Гаджеты</span><span>Профиль</span></div>
+      </div></div>
+      <span>Медкарта</span>
+    </div>
+    <div class="ph-item rv" style="--i:2">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-top"><b>Гаджеты</b><span>Дом</span></div>
+        <div class="s-card"><div class="s-row"><span>Кормушка</span><span class="tog"></span></div><em>Заполнена на 70%</em><div class="bar-mini"><i style="width:70%"></i></div></div>
+        <div class="s-card"><div class="s-row"><span>Лоток</span><span class="tog"></span></div><em>4 визита сегодня · в норме</em></div>
+        <div class="s-card"><div class="s-row"><span>Трекер</span><span class="tog"></span></div><div class="s-big">3 ч 20 мин</div><em>активности сегодня</em></div>
+        <div class="s-card"><div class="s-row"><span>Ночной режим</span><span class="tog off"></span></div></div>
+        <div class="s-nav"><span>Рацион</span><span>Медкарта</span><span class="on">Гаджеты</span><span>Профиль</span></div>
+      </div></div>
+      <span>Гаджеты</span>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars linen" id="health" data-block="pillars"><span class="blk" aria-hidden="true">04 · PILLARS</span>
+  <div class="wrap proof">
+    <span class="kicker rv">Здоровье</span>
+    <h2 class="h-sec rv" style="--i:1">Мы убрали всё, что мешает</h2>
+    <p class="lede rv" style="--i:2">Продлить жизнь — значит убрать всё, что её сокращает. Плохая еда, обезвоживание, слишком поздно замеченная болезнь. Мы научились заботиться о своём здоровье. Нашим кошкам это нужно не меньше.</p>
+  </div>
+  <!-- пять пунктов карточкой-историей: фото на всю карточку, текст поверх; без JS — лента со свайпом -->
+  <div class="hx" id="hx">
+    <div class="hx-stick">
+      <div class="hx-card">
+        <div class="hx-rail" id="hx-rail"></div>
+      <ol class="hx-track" id="hx-track">
+        <li class="hx-slide"><img {{img:c-food}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-food-->" loading="lazy"><div class="hx-cap"><span class="hx-num">01 / 05</span><h3 class="h-card">Еда без лишнего</h3><p>Филе дикого минтая. Ни консервантов, ни усилителей вкуса.</p></div></li>
+        <li class="hx-slide"><img {{img:c-water}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-water-->" loading="lazy"><div class="hx-cap"><span class="hx-num">02 / 05</span><h3 class="h-card">Молочная сыворотка</h3><p>Молочная сыворотка восполняет минеральный баланс.</p></div></li>
+        <li class="hx-slide"><img {{img:c-early}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-early-->" loading="lazy"><div class="hx-cap"><span class="hx-num">03 / 05</span><h3 class="h-card">Заметить вовремя</h3><p>Анализы на дому, без переноски и стресса. Медкарта — у врача и у вас.</p></div></li>
+        <li class="hx-slide"><img {{img:c-move}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-move-->" loading="lazy"><div class="hx-cap"><span class="hx-num">04 / 05</span><h3 class="h-card">Вес и движение</h3><p>Кормушка, лоток и трекер ведут дневник: порции, вес, визиты, сон и движение.</p></div></li>
+        <li class="hx-slide"><img {{img:c-calm}} sizes="(min-width:900px) 600px, 92vw" alt="<!--ALT:c-calm-->" loading="lazy"><div class="hx-cap"><span class="hx-num">05 / 05</span><h3 class="h-card">Спокойствие — тоже здоровье</h3><p>Зоопсихолог разберётся в привычках и поведении.</p></div></li>
+      </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES -->
+<section class="vstories" id="stories" data-block="stories"><span class="blk" aria-hidden="true">05 · STORIES</span>
+  <div class="wrap sec-head">
+    <span class="kicker rv">Клуб</span>
+    <h2 class="h-sec rv" style="--i:1">Любовь к кошкам — наш общий язык</h2>
+    <p class="lede rv" style="--i:2">А мы объединяем тех, кто разделяет наши ценности. Ужины в ресторане с интересными гостями, закрытые дропы от дизайнеров и дела, которые двигают культуру заботы вперёд.</p>
+    <span class="soon rv" style="--i:3"><i></i>Видеоистории участниц — после первых съёмок</span>
+  </div>
+  <div class="slider" data-prog="st">
+    <button type="button" aria-label="История «Утро вдвоём» — скоро" class="vcard rv" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil"><img {{img:s-1}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-1-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Утро вдвоём</span><span class="vwho">Ритуалы, с которых начинается день</span><span class="vq">Как устроить день так, чтобы он начинался с неё.</span></button>
+    <button type="button" aria-label="История «Вечер» — скоро" class="vcard rv" style="--i:1" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil" style="--i:1"><img {{img:s-2}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-2-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Вечер</span><span class="vwho">Когда день уже позади</span><span class="vq">Тихие вечера дома, когда спешить некуда и можно просто быть рядом.</span></button>
+    <button type="button" aria-label="История «Вместе» — скоро" class="vcard rv" style="--i:2" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil" style="--i:2"><img {{img:s-3}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-3-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Вместе</span><span class="vwho">Больше лет — это каждый день</span><span class="vq">Истории о том, как меняется жизнь, когда о главном уже подумали.</span></button>
+    <button type="button" aria-label="История «Забота» — скоро" class="vcard rv" style="--i:3" data-toast="Видеоистории появятся после первых съёмок"><div class="vimg unveil" style="--i:3"><img {{img:s-4}} sizes="(min-width:900px) 290px, 66vw" alt="<!--ALT:s-4-->" loading="lazy"><span class="vplay"><i><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></i>Скоро</span></div><span class="vtag">Забота</span><span class="vwho">Культура, которую мы двигаем</span><span class="vq">Приюты, ужины клуба, закрытые дропы от дизайнеров — и люди, которые за этим стоят.</span></button>
+  </div>
+  <div class="sprog" id="st" aria-hidden="true"><i></i></div>
+</section>
+
+<!-- WAITLIST -->
+<section class="waitlist linen" id="waitlist" data-block="waitlist"><span class="blk" aria-hidden="true">06 · WAITLIST</span>
+  <div class="wrap wl-grid">
+    <div class="wl-copy">
+      <span class="kicker rv">Приглашение</span>
+      <h2 class="h-display rv" style="--i:1">Вход по заявке</h2>
+      <p class="lede rv" style="--i:2">Оставьте заявку — мы свяжемся, расскажем, как устроен клуб, и подберём программу для вашей кошки. Анкета займёт несколько минут.</p>
+    </div>
+    <div class="wl-cta rv" style="--i:2">
+      <div class="counter"><span class="cnum serif-num" id="cnum" data-base="312">312</span><span class="clbl">человек уже оставили заявку</span></div>
+      <button type="button" class="btn btn-primary" id="open-q">Заполнить анкету <span class="arr" aria-hidden="true">→</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- FINALE: аффирмация; из-за края экрана выглядывает та же рыжая кошка, что на первом экране -->
+<section class="finale" id="finale" data-block="finale"><span class="blk" aria-hidden="true">07 · FINALE</span>
+  <div class="wrap fin-in">
+    <h2 class="h-display fin-q rv">Её любовь — без условий.<br>Наша забота —&nbsp;тоже.</h2>
+    <a href="#waitlist" class="btn btn-primary fin-cta rv" style="--i:3">Вступить в клуб <span class="arr" aria-hidden="true">→</span></a>
+  </div>
+  <div class="peek" id="peek" aria-hidden="true"><img {{img:peek}} sizes="(min-width:900px) 340px, 48vw" alt="" loading="lazy" draggable="false"></div>
+</section>
+
+</main>
+
+<footer data-block="footer"><span class="blk" aria-hidden="true">08 · FOOTER</span>
+  <div class="wrap">
+    <div class="frow">
+      <a href="#product" class="flogo" aria-label="KOSH KUSÉ — на главную">
+        <svg class="f-cat" viewBox="<!--VB:cat-->" fill="currentColor" aria-hidden="true"><use href="#kk-cat"/></svg>
+        <svg class="f-word" viewBox="<!--VB:wordmark-->" fill="currentColor" aria-hidden="true"><use href="#kk-wordmark"/></svg>
+      </a>
+      <nav class="flinks" aria-label="Служебные ссылки"><a href="#">Политика данных</a><a href="#">Оферта</a><a href="#">Контакты</a></nav>
+      <span class="fcopy">© 2026 KOSH KUSÉ</span>
+    </div>
+  </div>
+</footer>
+
+<!-- анкета «Вступить в клуб»: 4 шага + благодарность; слова про неё/него переключаются по выбору «Кошка/Кот» -->
+<div class="qmodal" id="qmodal" role="dialog" aria-modal="true" aria-labelledby="q-title" aria-hidden="true">
+  <div class="qbox qf" id="qbox" data-sex="f">
+    <h2 class="sr" id="q-title">Анкета: вступить в клуб</h2>
+    <div class="qf-top">
+      <span class="qf-step" id="qf-step">Шаг 1 из 4 · О ней</span>
+      <button type="button" class="q-x" id="q-x" aria-label="Закрыть анкету">×</button>
+      <div class="qf-prog" aria-hidden="true"><i id="qf-prog"></i></div>
+    </div>
+    <form class="qf-form" id="qform" novalidate>
+      <div class="qf-body" id="qf-body">
+        <input class="qf-hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <section class="qf-pane" data-step="1" data-name="О ней" data-name-m="О нём">
+          <h3 class="qf-h" tabindex="-1"><span class="g-f">Расскажите о ней</span><span class="g-m">Расскажите о нём</span></h3>
+          <p class="qf-lead">Около двух минут. Ответы сохраняются — можно закрыть и вернуться позже.</p>
+          <div class="qf-seg" role="radiogroup" aria-label="Кошка или кот">
+            <label><input type="radio" name="sex" value="f" checked><span>Кошка</span></label>
+            <label><input type="radio" name="sex" value="m"><span>Кот</span></label>
+          </div>
+          <label class="qf-field" data-req><span class="qf-q"><span class="g-f">Как её зовут</span><span class="g-m">Как его зовут</span></span>
+            <input class="qf-in" name="cat_name" maxlength="40" autocomplete="off" autocapitalize="words" enterkeyhint="next">
+            <span class="qf-err" aria-live="polite"></span></label>
+          <fieldset class="qf-field" data-req>
+            <legend class="qf-q"><span class="g-f">Сколько ей лет</span><span class="g-m">Сколько ему лет</span></legend>
+            <div class="qf-chips">
+              <label><input type="radio" name="age" value="До года"><span>До года</span></label>
+              <label><input type="radio" name="age" value="1–7 лет"><span>1–7 лет</span></label>
+              <label><input type="radio" name="age" value="7–11 лет"><span>7–11 лет</span></label>
+              <label><input type="radio" name="age" value="Старше 11"><span>Старше 11</span></label>
+            </div>
+            <span class="qf-err" aria-live="polite"></span>
+          </fieldset>
+          <label class="qf-field"><span class="qf-q">Вес <small>если знаете</small></span>
+            <span class="qf-unit"><input class="qf-in" name="weight" inputmode="decimal" maxlength="5" autocomplete="off" placeholder="4,5" enterkeyhint="next"><em>кг</em></span>
+            <span class="qf-err" aria-live="polite"></span></label>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Что важно знать о здоровье</legend>
+            <div class="qf-chips" data-none="Всё хорошо">
+              <label><input type="checkbox" name="health" value="Всё хорошо"><span>Всё хорошо</span></label>
+              <label><input type="checkbox" name="health" value="Почки"><span>Почки</span></label>
+              <label><input type="checkbox" name="health" value="Пищеварение"><span>Пищеварение</span></label>
+              <label><input type="checkbox" name="health" value="Мочевыводящие пути"><span>Мочевыводящие пути</span></label>
+              <label><input type="checkbox" name="health" value="Аллергия"><span>Аллергия</span></label>
+              <label><input type="checkbox" name="health" value="Вес выше нормы"><span>Вес выше нормы</span></label>
+              <label><input type="checkbox" name="health" value="Другое"><span>Другое</span></label>
+            </div>
+            <input class="qf-in qf-more" name="health_note" maxlength="300" placeholder="Коротко о главном — если хотите" aria-label="Подробнее о здоровье" hidden>
+          </fieldset>
+        </section>
+
+        <section class="qf-pane" data-step="2" data-name="Рацион" hidden>
+          <h3 class="qf-h" tabindex="-1">Что <span data-cat>она</span> ест сейчас</h3>
+          <fieldset class="qf-field" data-req>
+            <legend class="qf-q">Основа рациона</legend>
+            <div class="qf-chips">
+              <label><input type="radio" name="diet" value="Сухие гранулы"><span>Сухие гранулы</span></label>
+              <label><input type="radio" name="diet" value="Паучи и консервы"><span>Паучи и консервы</span></label>
+              <label><input type="radio" name="diet" value="Домашняя еда"><span>Домашняя еда</span></label>
+              <label><input type="radio" name="diet" value="Всего понемногу"><span>Всего понемногу</span></label>
+            </div>
+            <span class="qf-err" aria-live="polite"></span>
+          </fieldset>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Сколько раз в день</legend>
+            <div class="qf-chips">
+              <label><input type="radio" name="meals" value="Один"><span>Один</span></label>
+              <label><input type="radio" name="meals" value="Два"><span>Два</span></label>
+              <label><input type="radio" name="meals" value="Три и больше"><span>Три и больше</span></label>
+              <label><input type="radio" name="meals" value="Миска всегда полная"><span>Миска всегда полная</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Как пьёт воду</legend>
+            <div class="qf-chips">
+              <label><input type="radio" name="water" value="Охотно"><span>Охотно</span></label>
+              <label><input type="radio" name="water" value="Мало"><span>Мало</span></label>
+              <label><input type="radio" name="water" value="Не знаю"><span>Не знаю</span></label>
+            </div>
+          </fieldset>
+          <label class="qf-field"><span class="qf-q">Чего <span class="g-f">ей</span><span class="g-m">ему</span> нельзя или что <span class="g-f">она</span><span class="g-m">он</span> не ест <small>если есть</small></span>
+            <input class="qf-in" name="avoid" maxlength="200" autocomplete="off" enterkeyhint="next"></label>
+        </section>
+
+        <section class="qf-pane" data-step="3" data-name="Характер" hidden>
+          <h3 class="qf-h" tabindex="-1"><span data-cat>Она</span> — <span class="g-f">какая она дома</span><span class="g-m">какой он дома</span></h3>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Темперамент</legend>
+            <div class="qf-cards">
+              <label><input type="radio" name="temper" value="Спокойный характер"><span><b><span class="g-f">Спокойная</span><span class="g-m">Спокойный</span></b><small>Любит плед и подоконник</small></span></label>
+              <label><input type="radio" name="temper" value="В меру активный"><span><b>В меру <span class="g-f">активная</span><span class="g-m">активный</span></b><small>Играет, когда есть настроение</small></span></label>
+              <label><input type="radio" name="temper" value="Охотник"><span><b><span class="g-f">Охотница</span><span class="g-m">Охотник</span></b><small>Всегда в движении</small></span></label>
+            </div>
+          </fieldset>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Где живёт</legend>
+            <div class="qf-chips">
+              <label><input type="radio" name="home" value="Только дома"><span>Только дома</span></label>
+              <label><input type="radio" name="home" value="Дом и прогулки"><span>Дом и прогулки</span></label>
+              <label><input type="radio" name="home" value="Летом на даче"><span>Летом на даче</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Кто ещё дома</legend>
+            <div class="qf-chips" data-none="Больше никого">
+              <label><input type="checkbox" name="others" value="Больше никого"><span>Больше никого</span></label>
+              <label><input type="checkbox" name="others" value="Другие кошки"><span>Другие кошки</span></label>
+              <label><input type="checkbox" name="others" value="Собака"><span>Собака</span></label>
+              <label><input type="checkbox" name="others" value="Дети"><span>Дети</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="qf-field">
+            <legend class="qf-q">Что для вас важнее всего</legend>
+            <div class="qf-chips">
+              <label><input type="checkbox" name="priority" value="Рацион"><span>Рацион</span></label>
+              <label><input type="checkbox" name="priority" value="Здоровье и анализы"><span>Здоровье и анализы</span></label>
+              <label><input type="checkbox" name="priority" value="Всё в одном месте"><span>Всё в одном месте</span></label>
+              <label><input type="checkbox" name="priority" value="Красивые вещи для дома"><span>Красивые вещи для дома</span></label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="qf-pane" data-step="4" data-name="Контакты" hidden>
+          <h3 class="qf-h" tabindex="-1">Как с вами связаться</h3>
+          <p class="qf-lead">Напишем, когда откроем места в клубе, и расскажем, как всё устроено.</p>
+          <label class="qf-field" data-req><span class="qf-q">Ваше имя</span>
+            <input class="qf-in" name="name" maxlength="60" autocomplete="given-name" autocapitalize="words" enterkeyhint="next">
+            <span class="qf-err" aria-live="polite"></span></label>
+          <div class="qf-seg" role="radiogroup" aria-label="Как удобнее связаться">
+            <label><input type="radio" name="method" value="telegram" checked><span>Telegram</span></label>
+            <label><input type="radio" name="method" value="phone"><span>Телефон</span></label>
+          </div>
+          <label class="qf-field" data-req data-m="telegram"><span class="qf-q">Ник в Telegram</span>
+            <span class="qf-unit qf-pre"><em>@</em><input class="qf-in" name="telegram" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="next"></span>
+            <span class="qf-err" aria-live="polite"></span></label>
+          <label class="qf-field" data-req data-m="phone" hidden><span class="qf-q">Телефон</span>
+            <input class="qf-in" name="phone" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" placeholder="+7 900 000-00-00" enterkeyhint="next">
+            <span class="qf-err" aria-live="polite"></span></label>
+          <label class="qf-field"><span class="qf-q">Город <small>если хотите</small></span>
+            <input class="qf-in" name="city" maxlength="60" autocomplete="address-level2" enterkeyhint="done"></label>
+          <div class="qf-field" data-req>
+            <label class="qf-check"><input type="checkbox" name="consent"><span>Соглашаюсь на обработку моих данных, чтобы со мной связались по заявке</span></label>
+            <span class="qf-err" aria-live="polite"></span>
+          </div>
+        </section>
+
+        <section class="qf-pane qf-done" data-step="5" data-name="Готово" hidden>
+          <div class="qf-lock" aria-hidden="true">
+            <svg class="qf-cat" viewBox="<!--VB:cat-->" fill="currentColor"><use href="#kk-cat"/></svg>
+            <svg class="qf-word" viewBox="<!--VB:wordmark-->" fill="currentColor"><use href="#kk-wordmark"/></svg>
+          </div>
+          <h3 class="qf-h" tabindex="-1">Спасибо, <span data-user></span></h3>
+          <p class="qf-lead"><span data-cat></span> — в листе ожидания. Мы <span data-how>напишем вам в Telegram</span>, когда откроем места, и расскажем, как устроен клуб.</p>
+          <button type="button" class="btn btn-primary" id="qf-close">Вернуться на сайт</button>
+          <button type="button" class="qf-again" id="qf-again">Заполнить ещё одну анкету</button>
+        </section>
+      </div>
+      <p class="qf-fail" id="qf-fail" role="alert" hidden></p>
+      <div class="qf-nav" id="qf-nav">
+        <button type="button" class="qf-back" id="qf-back" hidden>Назад</button>
+        <button type="submit" class="btn btn-primary qf-next" id="qf-next">Далее</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="dock" data-block="sticky_cta"><span class="blk" aria-hidden="true">STICKY-CTA</span>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="sticky-cta" id="sticky"><a href="#waitlist" class="btn btn-primary">Вступить в клуб</a></div>
+</div>
+
+</div></div></div>
+
+<!--SCRIPT-->
+</body>
+</html>

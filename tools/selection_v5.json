@@ -1,0 +1,8 @@
+[
+ {"id":"gen:g3-c-early","name":"c-early","tone":"natural","aspect":0.8,"focus":[0.5,0.3],"widths":[480,720]},
+ {"id":"gen:g3-c-move","name":"c-move","tone":"natural","aspect":0.8,"focus":[0.5,0.55],"widths":[480,720]},
+ {"id":"gen:g3-c-calm","name":"c-calm","tone":"natural","aspect":0.8,"focus":[0.5,0.45],"widths":[480,720]},
+ {"id":"gen:g3-p-vet","name":"p-vet","tone":"natural","aspect":1.5,"widths":[720,1200],"q":80},
+ {"id":"gen:g3-p-gear","name":"p-gear","tone":"natural","aspect":1.5,"widths":[720,1200],"q":80},
+ {"id":"gen:g3-p-food","name":"p-food","tone":"natural","aspect":1.5,"widths":[720,1200],"q":80}
+]

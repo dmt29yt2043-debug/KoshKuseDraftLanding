@@ -1,0 +1,23 @@
+[Unit]
+Description=KOSH KUSÉ — приём анкет «Вступить в клуб»
+After=network.target
+
+[Service]
+Environment=KK_PORT=8391
+ExecStart=/usr/bin/python3 /opt/kosh-kuse-forms/app.py
+DynamicUser=yes
+StateDirectory=kosh-kuse-forms
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=200M
+
+[Install]
+WantedBy=multi-user.target

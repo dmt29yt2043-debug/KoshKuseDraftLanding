@@ -1,0 +1,10 @@
+[
+ {"id":"gen:g02-hero-light","name":"hero","tone":"natural","aspect":null,"widths":[720,1080],"q":80},
+ {"id":"gen:g1-p-vet","name":"p-vet","tone":"natural","aspect":1.5,"widths":[720,1200],"q":80},
+ {"id":"gen:g1-clm-window","name":"clm-video","tone":"natural","aspect":0.8,"focus":[0.5,0.32],"widths":[640,960]},
+ {"id":"gen:g1-one2one","name":"one2one","tone":"natural","aspect":1.5,"focus":[0.5,0.5],"widths":[720,1200]},
+ {"id":"gen:g1-s-morning","name":"s-1","tone":"natural","aspect":0.5625,"focus":[0.55,0.5],"widths":[480,720]},
+ {"id":"gen:g1-c-food","name":"c-food","tone":"natural","aspect":0.8,"focus":[0.5,0.42],"widths":[480,720]},
+ {"id":"gen:g1-c-water","name":"c-water","tone":"natural","aspect":0.8,"focus":[0.5,0.6],"widths":[480,720]},
+ {"id":"gen:g1-c-move","name":"c-move","tone":"natural","aspect":0.8,"focus":[0.5,0.5],"widths":[480,720]}
+]
