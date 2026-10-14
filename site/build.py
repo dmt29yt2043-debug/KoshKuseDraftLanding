@@ -164,7 +164,7 @@ def main():
     s = open(os.path.join(HERE, 'site.src.html'), encoding='utf-8').read()
 
     symbols = []
-    for name in ['cat', 'wordmark']:
+    for name in ['cat', 'wordmark', 'tagline']:
         d, vb = logo_part(name)
         symbols.append(f'<symbol id="kk-{name}" viewBox="{vb}"><path fill-rule="evenodd" d="{d}"/></symbol>')
         _, _, w, h = vb.split()
@@ -214,6 +214,10 @@ def main():
     # служебные страницы (политика, условия, контакты) — как есть, в корень
     for f in glob.glob(os.path.join(HERE, 'pages', '*.html')):
         shutil.copy(f, DIST)
+    # иконка сайта — силуэт кошки бургунди (брендбук: силуэт как автономный элемент)
+    d, vb = logo_part('cat')
+    open(os.path.join(DIST, 'favicon.svg'), 'w', encoding='utf-8').write(
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}"><path fill="#4A1F27" fill-rule="evenodd" d="{d}"/></svg>')
 
     # версия для артефакта: шрифты внутри, без doctype/html/head/body — обёртку добавит хостинг
     a = re.sub(r'<!doctype html>\s*<html[^>]*>\s*<head>', '', art, flags=re.I)

@@ -18,6 +18,9 @@
   /* высота «экрана»: на телефоне её держит CSS (100svh), в стенде меряем рамку */
   function setAppH(){if(!native)site.style.setProperty('--app-h',frame.clientHeight+'px')}
   setAppH();window.addEventListener('resize',setAppH);
+  /* устойчивая высота экрана (100svh): сцены считаем по ней, а не по innerHeight, который меняется с панелью браузера */
+  var probe=document.createElement('div');probe.style.cssText='position:absolute;left:-9999px;top:0;width:1px;height:var(--app-h);visibility:hidden;pointer-events:none';site.appendChild(probe);
+  function stableH(){return probe.offsetHeight||viewH()}
 
   /* плавная прокрутка — только после загрузки, чтобы ссылка с #якорем не «пролетала» всю страницу */
   window.addEventListener('load',function(){setTimeout(function(){root.classList.add('smooth')},60)});
@@ -141,7 +144,7 @@
          и сами — при прокрутке страницы вниз; после свайпа страница доезжает до нужного места, так что обе стороны синхронны.
          На низком экране (телефон боком) — просто лента со свайпом --- */
   var hx=$('hx'),hxTrack=$('hx-track'),hxRail=$('hx-rail'),hxSlides=[].slice.call(hx.querySelectorAll('.hx-slide')),
-      HXN=hxSlides.length,hxBtns=[],hxOn=false,hxI=-2,hxZone=420,hxLock=0,hxUser=false,hxProg=0,hxT=null,hxLoaded=false;
+      HXN=hxSlides.length,hxBtns=[],hxOn=false,hxI=-2,hxZone=420,hxLock=0,hxUser=false,hxProg=0,hxT=null,hxLoaded=false,hxTouch=0,hxCard=hx.querySelector('.hx-card');
   hx.classList.add('live');
   hxSlides.forEach(function(sl,i){
     var b=document.createElement('button');b.type='button';
@@ -166,8 +169,13 @@
   }
   /* лента сдвинулась вбок не нами (палец, трекпад, клавиатура) — это свайп: ждём, пока успокоится, и подтягиваем страницу.
      Вертикальная прокрутка пальцем по карточке ленту вбок не двигает и сцене не мешает */
+  /* свайп узнаём по вводу (палец, колесо), а не по времени: иначе доезд ленты после resize/поворота считался бы свайпом */
+  hxTrack.addEventListener('touchstart',function(){hxTouch=Infinity},{passive:true});
+  hxTrack.addEventListener('touchend',function(){hxTouch=Date.now()+700},{passive:true});
+  hxTrack.addEventListener('touchcancel',function(){hxTouch=Date.now()+700},{passive:true});
+  hxTrack.addEventListener('wheel',function(){hxTouch=Date.now()+400},{passive:true});
   hxTrack.addEventListener('scroll',function(){
-    if(Date.now()>hxProg)hxUser=true;
+    if(Date.now()<hxTouch)hxUser=true;
     clearTimeout(hxT);
     hxT=setTimeout(function(){
       var j=Math.round(hxTrack.scrollLeft/hxW());
@@ -176,18 +184,23 @@
     },140);
   },{passive:true});
   function measureHealth(){
-    var on=viewH()>=560;
-    hxZone=Math.round(viewH()*.6);
+    var H=stableH(),on=H>=560,was=hxOn,inView=hxI>=0&&relTop(hx)<viewH()&&relBottom(hx)>0;
+    hxZone=Math.round(H*.6);
     hx.style.setProperty('--hx-zone',hxZone+'px');
-    hx.style.setProperty('--hx-card',hx.querySelector('.hx-card').offsetHeight+'px');
+    /* высоту карточки меряем уже в целевом состоянии (on/off): у ленты без закрепления другая высота */
     if(on!==hxOn){hxOn=on;hx.classList.toggle('on',on)}
+    hx.style.setProperty('--hx-card',hxCard.offsetHeight+'px');
     if(hxI>=0){hxProg=Date.now()+300;hxTrack.scrollTo({left:hxI*hxW(),behavior:'auto'})}
+    /* поворот экрана внутри сцены: страница остаётся на том же кадре */
+    if(inView&&was!==hxOn)scroller.scrollTo({top:Math.max(0,hxOn?hxY(hxI):scrollTop()+relTop(hx)-top.offsetHeight+1),behavior:'auto'});
   }
   function sceneHealth(vh){
     var t=relTop(hx);
     /* фото сбоку браузер сам не грузит, пока лента не доедет — заранее, когда блок на подходе */
     if(!hxLoaded&&t<vh*2.5){hxLoaded=true;hxSlides.forEach(function(sl){var im=sl.querySelector('img');if(im)im.loading='eager'})}
-    if(t>vh*.85||t+hx.offsetHeight<0){if(hxI!==-1&&!hxUser)hxSet(-1,false);return}   /* подписи проявляются, когда карточка входит в кадр */
+    /* подписи проявляются, когда карточка входит в кадр целиком (первый кадр — когда видна подпись внизу карточки) */
+    var enter=hxI<0?relBottom(hxCard)>vh+40&&t>top.offsetHeight+40:t>vh*.85;
+    if(enter||t+hx.offsetHeight<0){if(hxI!==-1&&!hxUser)hxSet(-1,false);return}
     if(hxI===-1){hxI=-2}
     if(!hxOn){if(hxI<0)hxSet(Math.round(hxTrack.scrollLeft/hxW()),false);return}
     if(Date.now()<hxLock||hxUser)return;
@@ -216,7 +229,7 @@
       if((calm||!(b.width>0))&&word.animate)word.animate([{opacity:1},{opacity:0}],{duration:calm?500:380,easing:'ease',fill:'forwards'});
       else if(word.animate){
         var s=b.width/a.width;
-        word.animate([{transform:'translate(0,0) scale(1)'},{transform:'translate('+(b.left-a.left)+'px,'+(b.top-a.top)+'px) scale('+s+')'}],{duration:1050,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'});
+        word.animate([{transform:'translate(0,0) scale(1)',color:'#F7F4EB'},{transform:'translate('+(b.left-a.left)+'px,'+(b.top-a.top)+'px) scale('+s+')',color:'#4A1F27'}],{duration:1050,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'});
       }
       [intro.querySelector('.i-cat'),intro.querySelector('.i-bar'),intro.querySelector('.i-skip')].forEach(function(el){el&&el.animate&&el.animate([{opacity:1},{opacity:0}],{duration:380,easing:'ease',fill:'forwards'})});
       var bg=intro.querySelector('.i-bg');
@@ -323,7 +336,7 @@
     };
     fBtns.forEach(function(b,k){b.addEventListener('click',function(){KKflowSet(k,true)})});
     /* телефон листается сам или вкладкой — подсвечиваем первый шаг с этим экраном */
-    window.KKflowFromTab=function(tab){var k=FLOWMAP.indexOf(tab);if(k>=0)fBtns.forEach(function(b,i){b.classList.toggle('on',i===k)})};
+    window.KKflowFromTab=function(tab){var k=FLOWMAP.indexOf(tab);if(k>=0)fBtns.forEach(function(b,i){b.classList.toggle('on',i===k);b.setAttribute('aria-pressed',i===k?'true':'false')})};
   }
 
   /* кнопки: мягкий круг от точки касания */
@@ -377,14 +390,21 @@
   phones.addEventListener('touchend',function(e){
     if(phX===null||!phLive)return;var t=e.changedTouches[0],dx=t.clientX-phX,dy=t.clientY-phY;phX=null;
     if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.3)phSet(phI+(dx<0?1:-1),true);
+    else if(Math.abs(dx)<10&&Math.abs(dy)<10){phTouched=true;phStop()}   /* тап — тоже «потрогали»: листать дальше само не будет */
   },{passive:true});
 
   /* прогресс лент */
-  site.querySelectorAll('.slider[data-prog]').forEach(function(s){
+  site.querySelectorAll('[data-prog]').forEach(function(s){
     var bar=$(s.getAttribute('data-prog'));if(!bar)return;var th=bar.querySelector('i');
     function upd(){var max=s.scrollWidth-s.clientWidth,vis=Math.min(1,s.clientWidth/s.scrollWidth);th.style.width=(vis*100)+'%';var p=max>0?s.scrollLeft/max:0;th.style.transform='translateX('+(p*(1/Math.max(vis,.01)-1)*100)+'%)'}
     s.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);upd();
   });
+
+  /* предметы клуба: стрелки на десктопе, водяные знаки-кошки чуть плывут */
+  var obT=$('ob-track');
+  if(obT){[['ob-prev',-1],['ob-next',1]].forEach(function(c){var b=$(c[0]);b&&b.addEventListener('click',function(){obT.scrollBy({left:c[1]*obT.clientWidth*.7,behavior:reduce?'auto':'smooth'})})})}
+  var marks=[].slice.call(site.querySelectorAll('[data-py]'));
+  function sceneMarks(vh){if(reduce)return;marks.forEach(function(m){var sec=m.parentElement,t=relTop(sec),h=sec.offsetHeight;if(t>vh||t+h<0)return;m.style.setProperty('--py',((t+h/2-vh/2)*parseFloat(m.dataset.py)).toFixed(1))})}
 
   /* =========================================================
      ЗАЯВКА: короткая первичная анкета на одном экране, черновик в браузере, отправка на /api/apply (form: v3)
@@ -405,7 +425,7 @@
   function cap(v){return v?v.charAt(0).toUpperCase()+v.slice(1):v}
   var REQ=['name','city','contact','cat_name','goal','consent'];
   function okField(n){
-    if(n==='contact')return val('method')==='phone'?val('phone').replace(/\D/g,'').length>=10:/^[A-Za-z0-9_]{5,32}$/.test(val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,''));
+    if(n==='contact'){if(val('method')==='phone')return val('phone').replace(/\D/g,'').length>=10;var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');return /^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t)}
     if(n==='consent')return val('consent')===true;
     return !!val(n);
   }
@@ -417,6 +437,7 @@
     var done=REQ.filter(okField).length;qProg.style.transform='scaleX('+(0.08+0.92*done/REQ.length).toFixed(3)+')';
   }
   function save(){
+    if(!qDone.hidden)return;   /* после отправки черновик не пересоздаём */
     try{
       var d={};
       [].forEach.call(qform.elements,function(el){
@@ -472,12 +493,19 @@
   }
   function showForm(){
     qDone.hidden=true;qPane.hidden=false;qNav.hidden=false;qFail.hidden=true;
-    qStepEl.textContent='Заявка · около минуты';qNext.textContent='Подать заявку';
+    qStepEl.textContent='Заявка · около минуты';if(!sending)qNext.textContent='Подать заявку';
     qBody.scrollTop=0;sync();
   }
-  qform.addEventListener('change',function(e){if(e.target.name)setErr(e.target.name,'');sync();save()});
+  qform.addEventListener('change',function(e){if(e.target.name)setErr(e.target.name,'');if(e.target.name==='sex'){var f=fieldOf('cat_name');if(f&&f.classList.contains('bad'))setErr('cat_name',isM()?'Напишите, как его зовут':'Напишите, как её зовут')}sync();save()});
   qform.addEventListener('input',function(e){if(e.target.name){setErr(e.target.name,'');sync();save()}});
   qform.addEventListener('submit',function(e){e.preventDefault();if(sending||!check())return;send()});
+  /* Enter («Далее» на клавиатуре телефона) в поле — к следующему полю, отправляет только кнопка */
+  qform.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'||e.target.tagName!=='INPUT'||e.target.type==='checkbox'||e.target.type==='radio')return;
+    e.preventDefault();
+    var f=[].filter.call(qform.querySelectorAll('.qf-in'),function(x){return x.offsetParent!==null&&!x.disabled}),i=f.indexOf(e.target);
+    if(i>=0&&i<f.length-1)f[i+1].focus();else e.target.blur();
+  });
   function send(){
     sending=true;qFail.hidden=true;qNext.disabled=true;qNext.textContent='Отправляем…';
     var q=new URLSearchParams(location.search),utm={};
@@ -498,8 +526,8 @@
         clearTimeout(to);sending=false;qNext.disabled=false;
         var info={cat:cap(body.cat.name),user:cap(body.contact.name),how:method};
         try{localStorage.removeItem(DRAFT);localStorage.setItem(SENT,JSON.stringify(info))}catch(e){}
-        qform.elements.consent.checked=false;
         showDone(info);
+        qform.reset();qform.querySelectorAll('.qf-field').forEach(function(f){f.classList.remove('bad')});qform.querySelectorAll('.qf-err').forEach(function(e){e.textContent=''});
       })
       .catch(function(j){
         clearTimeout(to);sending=false;qNext.disabled=false;qNext.textContent='Подать заявку';
@@ -528,16 +556,18 @@
     if(!qm.classList.contains('on'))return;
     qm.classList.remove('on');qm.setAttribute('aria-hidden','true');lockEl.style.overflow='';
     if(native){qm.style.top='';qm.style.height='';qm.style.bottom=''}
-    if(lastFocus)lastFocus.focus({preventScroll:true});
+    var back=(lastFocus&&lastFocus.offsetParent!==null&&getComputedStyle(lastFocus).visibility!=='hidden')?lastFocus:(burger.offsetParent!==null?burger:$('open-q'));
+    if(back)back.focus({preventScroll:true});
   }
   $('qf-again').addEventListener('click',function(){
     try{localStorage.removeItem(SENT);localStorage.removeItem(DRAFT)}catch(e){}
     qform.reset();qform.querySelectorAll('.qf-field').forEach(function(f){f.classList.remove('bad')});qform.querySelectorAll('.qf-err').forEach(function(e){e.textContent=''});
-    showForm();
+    showForm();var h=qPane.querySelector('.qf-h');setTimeout(function(){h&&h.focus({preventScroll:true})},60);
   });
   $('qf-close').addEventListener('click',closeQ);
   $('open-q').addEventListener('click',openQ);$('q-x').addEventListener('click',closeQ);
   qm.addEventListener('click',function(e){if(e.target===qm)closeQ()});
+  qm.addEventListener('touchmove',function(e){if(e.target===qm)e.preventDefault()},{passive:false});
   /* «Подать заявку» везде открывает анкету сразу; без JS ссылки ведут к блоку заявки */
   document.querySelectorAll('a[href="#waitlist"].btn-primary').forEach(function(a){
     a.addEventListener('click',function(e){e.preventDefault();if(menu.classList.contains('open'))setMenu(false);openQ()});
@@ -554,11 +584,11 @@
     var vh=viewH(),hh=top.offsetHeight,st=scrollTop();
     top.classList.toggle('scrolled',st>8);
     /* плашка: видна, когда кнопка героя за кадром, и прячется у блока заявки */
-    var passed=relTop(heroCta)+heroCta.offsetHeight<hh;
+    var ct=relTop(heroCta),passed=ct+heroCta.offsetHeight<hh||(ct>vh-8&&st>40);
     sticky.classList.toggle('show',passed&&!(relTop(wl)<vh-80));
     var max=(native?root.scrollHeight:frame.scrollHeight)-vh;
     topProg.style.transform='scaleX('+(max>0?clamp(st/max,0,1):0).toFixed(4)+')';
-    sceneHero(hh);sceneInk(vh);sceneOne(vh);sceneStack(hh);sceneParallax(vh);sceneHealth(vh);scenePhones(vh);
+    sceneHero(hh);sceneInk(vh);sceneOne(vh);sceneStack(hh);sceneParallax(vh);sceneHealth(vh);scenePhones(vh);sceneMarks(vh);
   }
   function req(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}}
   measureStack();measureHealth();measurePhones();
@@ -616,7 +646,7 @@
         c.querySelectorAll('.pcard').forEach(function(p){p.style.removeProperty('--s');p.style.removeProperty('--dim')});
         /* «Здоровье» в обзоре — без закрепления, подписи видны */
         c.querySelectorAll('.hx').forEach(function(h){h.classList.remove('on','live');h.style.removeProperty('--hx-card');h.style.removeProperty('--hx-zone')});
-        c.querySelectorAll('.finale').forEach(function(f){f.classList.add('seen')});
+        if(c.classList.contains('finale'))c.classList.add('seen');   /* клон — сама секция, querySelectorAll себя не видит */
         if(b.dataset.block==='header'){var m=c.querySelector('.menu');if(m)m.remove();c.classList.remove('menu-open');c.querySelectorAll('.b-word').forEach(function(w){w.style.opacity=''})}
         inner.appendChild(c);box.appendChild(inner);shot.appendChild(cap);shot.appendChild(box);shots.appendChild(shot);
         function size(){var h=inner.offsetHeight,w=inner.offsetWidth;box.style.width=Math.round(w*cfg[2])+'px';box.style.height=Math.round(h*cfg[2])+'px'}

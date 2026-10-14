@@ -81,6 +81,33 @@ try {
       await send('Runtime.evaluate', { expression: `(function(){var s=${el};if(s){s.scrollTo({top:${st.scroll},behavior:'instant'})}else{window.scrollTo({top:${st.scroll},behavior:'instant'})}})()` });
     }
     if (st.click) await send('Runtime.evaluate', { expression: `document.querySelector(${JSON.stringify(st.click)}).click()` });
+    // настоящие касания (нужен viewport.mobile): tap / swipe / key / type
+    //   {"tap":[x,y]}  {"swipe":{"x":200,"y":500,"dx":-240,"dy":0,"steps":12,"ms":260}}
+    //   {"key":"Escape"|"Tab"|"Enter"}  {"type":"текст"} (в элемент с фокусом)
+    if (st.tap) {
+      const [x, y] = st.tap;
+      await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+      await sleep(40);
+      await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    }
+    if (st.swipe) {
+      const { x, y, dx = 0, dy = 0, steps = 12, ms = 260 } = st.swipe;
+      await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+      for (let i = 1; i <= steps; i++) {
+        const t = i / steps, e = 1 - Math.pow(1 - t, 2);
+        await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x + dx * e, y: y + dy * e }] });
+        await sleep(ms / steps);
+      }
+      await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    }
+    if (st.key) {
+      const map = { Escape: { key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 }, Tab: { key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 }, Enter: { key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 }, ArrowDown: { key: 'ArrowDown', code: 'ArrowDown', windowsVirtualKeyCode: 40 } };
+      const k = map[st.key] || { key: st.key, code: st.key };
+      const mods = st.shift ? 8 : 0;
+      await send('Input.dispatchKeyEvent', { type: 'keyDown', modifiers: mods, ...k });
+      await send('Input.dispatchKeyEvent', { type: 'keyUp', modifiers: mods, ...k });
+    }
+    if (st.type) await send('Input.insertText', { text: st.type });
     if (st.eval) {
       const r = await send('Runtime.evaluate', { expression: st.eval, returnByValue: true, awaitPromise: true });
       results[st.label || `eval${Object.keys(results).length}`] = r.result?.value ?? r.exceptionDetails?.text;
