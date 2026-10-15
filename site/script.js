@@ -469,10 +469,10 @@
   function check(){
     var m=isM(),errs=[];
     function need(name,ok,msg){setErr(name,ok?'':msg);if(!ok)errs.push(name)}
-    need('name',!!val('name'),'Как к вам обращаться');
+    need('name',!!val('name'),'Напишите, как к вам обращаться');
     need('city',!!val('city'),'В каком вы городе');
     if(val('method')==='phone'){var dg=val('phone').replace(/\D/g,'');need('phone',dg.length>=10&&dg.length<=15,'Проверьте номер — в нём 10–15 цифр')}
-    else{var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');need('telegram',/^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t),'Имя в Telegram — латиница, цифры и _, от 5 символов')}
+    else{var t=val('telegram').replace(/^@/,'').replace(/^(https?:\/\/)?t(elegram)?\.me\//,'');need('telegram',/^[A-Za-z0-9_]{5,32}$/.test(t)||/^\+?[\d\s()-]{10,20}$/.test(t),'Проверьте имя — латиница, цифры и _, от 5 знаков')}
     need('cat_name',!!val('cat_name'),m?'Напишите, как его зовут':'Напишите, как её зовут');
     need('goal',!!val('goal'),'Выберите, что ближе всего');
     need('consent',val('consent')===true,'Без согласия мы не сможем с вами связаться');
